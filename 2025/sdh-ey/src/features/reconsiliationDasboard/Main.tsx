@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
 	Box,
 	Button,
@@ -6,8 +6,6 @@ import {
 	InputBase,
 	Menu,
 	MenuItem,
-	Pagination,
-	TextField,
 	ToggleButton,
 	ToggleButtonGroup,
 	Typography,
@@ -22,7 +20,7 @@ function ReconsiliationDashboard() {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
 	const handleToggle = (
-		event: React.MouseEvent<HTMLElement>,
+		_event: React.MouseEvent<HTMLElement>,
 		newTableType: string | null
 	) => {
 		if (newTableType !== null) setTableType(newTableType);
