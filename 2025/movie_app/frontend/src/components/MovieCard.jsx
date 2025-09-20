@@ -1,10 +1,18 @@
 import React from "react";
 import "../css/MovieCard.css";
+import { useMovieContext } from "../context/MovieContext";
 
 const MovieCard = ({ movies }) => {
+	const { favorites, addToFavorites, removeFromFavorites, isFavoriteMovie } =
+		useMovieContext();
+	const favorite = isFavoriteMovie(movies.id);
+
 	const onFavoriteClick = () => {
-		console.log("Favorite button clicked!");
-		alert(`You favorited`);
+		if (favorite) {
+			removeFromFavorites(movies.id);
+		} else {
+			addToFavorites(movies);
+		}
 	};
 
 	return (
@@ -16,7 +24,7 @@ const MovieCard = ({ movies }) => {
 				/>
 				<div>
 					<button className="favorite-btn" onClick={onFavoriteClick}>
-						🩵
+						{favorite ? <>❤️</> : <>🩵</>}
 					</button>
 				</div>
 			</div>
