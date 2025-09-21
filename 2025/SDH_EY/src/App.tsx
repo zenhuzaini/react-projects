@@ -2,6 +2,9 @@ import { useState } from "react";
 import "./css/App.css";
 import Navbar from "./components/Navbar/Navbar";
 import BannerHeader from "./components/BannerHeader/BannerHeader";
+import { Route, Routes } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import ReconciliationDashboard from "./pages/ReconciliationDashboard";
 
 function App() {
 	const [count, setCount] = useState(0);
@@ -9,8 +12,13 @@ function App() {
 	return (
 		<>
 			<Navbar></Navbar>
-			<BannerHeader></BannerHeader>
-			<main className="main-content"></main>
+			<main className="main-content">
+				<Routes>
+					<Route path="/" element={<Homepage></Homepage>} />
+					<Route path="/projectDetail/:id" element={<Homepage />} />
+					<Route path="/reconciliation" element={<ReconciliationDashboard />} />
+				</Routes>
+			</main>
 		</>
 	);
 }

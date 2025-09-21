@@ -2,8 +2,9 @@ import { Box } from "@mui/system";
 import headerBackground from "../../assets/Bg-Frame.png";
 import Typography from "@mui/material/Typography";
 import DropDownButton from "../Buttons/DropDownButton";
+import type { HeaderBannerType } from "../../types/components";
 
-const BannerHeader = () => {
+const BannerHeader = ({ bannerType, title, description }: HeaderBannerType) => {
 	return (
 		<Box
 			sx={{
@@ -23,9 +24,9 @@ const BannerHeader = () => {
 			<div>
 				<Box sx={{}}>Breadcrumbs</Box>
 				<Typography variant="h4" color="initial">
-					Reconciliation page
+					{title}
 				</Typography>
-				<p>Manage your project below-</p>
+				<p>{description}</p>
 			</div>
 
 			<div>
