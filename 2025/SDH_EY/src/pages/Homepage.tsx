@@ -6,10 +6,16 @@ import ToggleMenu from "../components/Menus/ToggleMenu";
 import { toggleMenuOptionsMock } from "../mocks/components";
 import { useState } from "react";
 import BasicSwitches from "../components/Switches/SwitchBasic";
+import { mockProjects } from "../mocks/api";
 
 const Homepage = () => {
 	const toggleMenuData = toggleMenuOptionsMock;
 	const [dataView, setDataView] = useState<boolean>(false);
+
+	// Normally it should be retrieved from api calls
+	const projects = mockProjects.map((project, i) => {
+		return <ProjectCards project={project} key={i} />;
+	});
 
 	return (
 		<div>
@@ -57,12 +63,7 @@ const Homepage = () => {
 								justifyContent: "space-between",
 								flexWrap: "wrap",
 							}}>
-							<ProjectCards />
-							<ProjectCards />
-							<ProjectCards />
-							<ProjectCards />
-							<ProjectCards />
-							<ProjectCards />
+							{projects}
 						</Box>
 					) : null}
 				</Box>

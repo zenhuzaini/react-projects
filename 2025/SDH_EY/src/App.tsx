@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./css/App.css";
 import Navbar from "./components/Navbar/Navbar";
-import BannerHeader from "./components/BannerHeader/BannerHeader";
 import { Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import ReconciliationDashboard from "./pages/ReconciliationDashboard";

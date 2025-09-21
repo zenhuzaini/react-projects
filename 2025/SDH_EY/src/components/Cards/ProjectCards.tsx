@@ -1,18 +1,37 @@
-import { Box, flex } from "@mui/system";
-import React from "react";
+import { Box } from "@mui/system";
 import "../../css/ProjectCard.css";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CircleIcon from "@mui/icons-material/Circle";
-import { projectStatusColor } from "../../constants/colors";
+import { pojectCard } from "../../constants/colors";
 import { Avatar } from "@mui/material";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 import avatarCard from "../../assets/Avatar.png";
+import SimpleAlert from "../Alert/SimpleAlert";
+import type { ProjectPropsType } from "../../types/api";
 
-const ProjectCards = () => {
+const ProjectCards = ({ project }: ProjectPropsType) => {
+	const onCardClick = () => {
+		console.log("card is being clicked");
+		return (
+			<SimpleAlert
+				message="this is still under development"
+				variant="outlined"
+				severity="info"></SimpleAlert>
+		);
+	};
 	return (
-		<div className="card-container">
+		<div
+			// intentionally adding 2 inlines with style and class
+			//for learning purposes
+			className="card-container"
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				justifyContent: "space-between",
+			}}
+			onClick={onCardClick}>
 			<Box
 				sx={{
 					display: "flex",
@@ -34,10 +53,19 @@ const ProjectCards = () => {
 					<CircleIcon
 						sx={{
 							fontSize: "small",
-							color: projectStatusColor.yellow,
+							color:
+								project.status !== "Completed"
+									? pojectCard.projectStatusColor.yellow
+									: pojectCard.projectStatusColor.green,
 						}}></CircleIcon>
-					<Typography variant="subtitle2" color={projectStatusColor.yellow}>
-						In Progress
+					<Typography
+						variant="subtitle2"
+						color={
+							project.status !== "Completed"
+								? pojectCard.projectStatusColor.yellow
+								: pojectCard.projectStatusColor.green
+						}>
+						{project.status}
 					</Typography>
 				</Box>
 			</Box>
@@ -45,27 +73,67 @@ const ProjectCards = () => {
 			<Box
 				sx={{
 					display: "flex",
-					gap: 1,
+					justifyContent: "space-between",
 				}}>
-				<Avatar alt="Travis Howard" src={avatarCard}></Avatar>
+				<Box
+					sx={{
+						display: "flex",
+						gap: 1,
+					}}>
+					<Avatar alt="Travis Howard" src={avatarCard}></Avatar>
 
-				<Box>
-					<h5>Ben House</h5>
-					<h6>Project Owner</h6>
+					<Box>
+						<h5>{project.name}</h5>
+						<h6>{project.occupation}</h6>
+					</Box>
 				</Box>
 
 				<Box>
-					<Box>
-						<TodayOutlinedIcon></TodayOutlinedIcon>
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+							gap: 1,
+						}}>
+						<TodayOutlinedIcon
+							sx={{
+								fontSize: "medium",
+								color: pojectCard.greyishIconAndText,
+							}}></TodayOutlinedIcon>
+						<Typography
+							variant="subtitle2"
+							sx={{ fontSize: 12, color: pojectCard.greyishIconAndText }}>
+							Created on:
+						</Typography>
+						<Typography variant="subtitle2" sx={{ fontSize: 12 }}>
+							{project.createdOn}
+						</Typography>
 					</Box>
-					<Box>
-						<LoopOutlinedIcon></LoopOutlinedIcon>
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+							gap: 1,
+						}}>
+						<LoopOutlinedIcon
+							sx={{
+								fontSize: "medium",
+								color: pojectCard.greyishIconAndText,
+							}}></LoopOutlinedIcon>
+						<Typography
+							variant="subtitle2"
+							sx={{ fontSize: 12, color: pojectCard.greyishIconAndText }}>
+							Last Modified:
+						</Typography>
+						<Typography variant="subtitle2" sx={{ fontSize: 12 }}>
+							{project.lastModified}
+						</Typography>
 					</Box>
 				</Box>
 			</Box>
 
 			<Box>
-				<p>matches financial transaction data between SAP and Oracle</p>
+				<p>{project.description}</p>
 			</Box>
 		</div>
 	);

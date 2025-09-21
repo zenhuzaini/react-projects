@@ -1,11 +1,5 @@
 // These types are meant tp be used to define the props for component
-export type BaseProp = {
-	id?: string;
-};
-
-export type PropEntity<T> = {
-	[K in keyof T]: T[K];
-} & BaseProp;
+import type { PropEntity } from "./main";
 
 export type HeaderBannerType = PropEntity<{
 	bannerType: "homepage" | "reconciliation";
@@ -27,4 +21,10 @@ export type ToggleMenuButtonType = {
 export type BasicSwitchType = {
 	setSwitch: React.Dispatch<React.SetStateAction<boolean>>;
 	defaultChecked: boolean;
+};
+
+export type BasicAlertType = {
+	message: string;
+	variant: "outlined" | "filled";
+	severity: "success" | "info" | "warning" | "error";
 };
