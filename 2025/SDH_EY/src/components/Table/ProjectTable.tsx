@@ -101,7 +101,7 @@ export default function ProjectTable({
 	));
 
 	return (
-		<TableContainer sx={{ borderRadius: 3 }}>
+		<TableContainer sx={{ borderRadius: 3 }} component={Paper}>
 			<Table sx={{ minWidth: 650 }} aria-label="simple table">
 				<TableHead
 					sx={{
