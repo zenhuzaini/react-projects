@@ -13,8 +13,8 @@ import type { ProjectPropsType } from "../../types/api";
 
 const ProjectCards = ({ project }: ProjectPropsType) => {
 	const onCardClick = () => {
-		console.log("card is being clicked");
 		return (
+			// doesnt work still lol
 			<SimpleAlert
 				message="this is still under development"
 				variant="outlined"
@@ -24,7 +24,7 @@ const ProjectCards = ({ project }: ProjectPropsType) => {
 	return (
 		<div
 			// intentionally adding 2 inlines with style and class
-			//for learning purposes
+			// for learning purposes
 			className="card-container"
 			style={{
 				display: "flex",
@@ -80,7 +80,9 @@ const ProjectCards = ({ project }: ProjectPropsType) => {
 						display: "flex",
 						gap: 1,
 					}}>
-					<Avatar alt="Travis Howard" src={avatarCard}></Avatar>
+					<Avatar
+						alt="Travis Howard"
+						src={project.userPhoto ?? avatarCard}></Avatar>
 
 					<Box>
 						<h5>{project.name}</h5>

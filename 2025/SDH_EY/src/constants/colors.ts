@@ -6,3 +6,8 @@ export const pojectCard = {
 		green: "#0ca647",
 	},
 };
+
+export const tableProjectColor = {
+	rowBackground: "#24242bff",
+	greyishIconAndText: "#e6e6e6ff",
+};

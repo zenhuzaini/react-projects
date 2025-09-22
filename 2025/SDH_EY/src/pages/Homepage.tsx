@@ -4,18 +4,103 @@ import ProjectCards from "../components/Cards/ProjectCards";
 import Typography from "@mui/material/Typography";
 import ToggleMenu from "../components/Menus/ToggleMenu";
 import { toggleMenuOptionsMock } from "../mocks/components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BasicSwitches from "../components/Switches/SwitchBasic";
 import { mockProjects } from "../mocks/api";
+import BasicPagination from "../components/Pagination/Pagination";
+import type { ProjectType } from "../types/api";
+import type { projectStatusCard } from "../types/components";
+import ProjectTable from "../components/Table/ProjectTable";
+import { projectColumn } from "../constants/table";
 
 const Homepage = () => {
-	const toggleMenuData = toggleMenuOptionsMock;
+	const [toggleOption, setToggleOption] = useState<projectStatusCard>("all");
 	const [dataView, setDataView] = useState<boolean>(false);
+	const [filteredProject, setFilteredProject] = useState<{
+		all: {
+			total: number;
+			projects: ProjectType[];
+		};
+		completed: {
+			total: number;
+			projects: ProjectType[];
+		};
+		inProgress: {
+			total: number;
+			projects: ProjectType[];
+		};
+	}>(); //this should have initial state to avoid undefined
+
+	useEffect(() => {
+		const completedProject = mockProjects.filter((data) => {
+			return data.status === "Completed";
+		});
+		const inProgressProject = mockProjects.filter((data) => {
+			return data.status === "In Progress";
+		});
+		setFilteredProject({
+			all: {
+				total: mockProjects.length,
+				projects: mockProjects,
+			},
+			completed: {
+				total: completedProject.length,
+				projects: completedProject,
+			},
+			inProgress: {
+				total: inProgressProject.length,
+				projects: inProgressProject,
+			},
+		});
+	}, []);
 
 	// Normally it should be retrieved from api calls
-	const projects = mockProjects.map((project, i) => {
-		return <ProjectCards project={project} key={i} />;
-	});
+	const projectCards = () => {
+		switch (toggleOption) {
+			case "completed":
+				return filteredProject?.completed.projects.map((project, i) => {
+					return <ProjectCards project={project} key={i} />;
+				});
+
+			case "inProgress":
+				return filteredProject?.inProgress.projects.map((project, i) => {
+					return <ProjectCards project={project} key={i} />;
+				});
+			default:
+				return mockProjects.map((project, i) => {
+					return <ProjectCards project={project} key={i} />;
+				});
+		}
+	};
+
+	const tableProject = () => {
+		let filteredProjects: ProjectType[] = filteredProject?.all?.projects ?? [];
+		switch (toggleOption) {
+			case "completed":
+				filteredProjects = (filteredProject?.completed.projects ?? []).map(
+					(project) => {
+						return project;
+					}
+				);
+				break;
+
+			case "inProgress":
+				filteredProjects = (filteredProject?.inProgress.projects ?? []).map(
+					(project) => {
+						return project;
+					}
+				);
+				break;
+
+			default:
+				filteredProjects = filteredProject?.all?.projects ?? [];
+				break;
+		}
+
+		return (
+			<ProjectTable column={projectColumn} projects={filteredProjects ?? []} />
+		);
+	};
 
 	return (
 		<div>
@@ -32,7 +117,14 @@ const Homepage = () => {
 						alignItems: "center",
 						justifyContent: "space-between",
 					}}>
-					<ToggleMenu toggleMenuData={toggleMenuData}></ToggleMenu>
+					<ToggleMenu
+						toggleOption={toggleOption}
+						setToggleOption={setToggleOption}
+						toggleMenuData={toggleMenuOptionsMock(
+							filteredProject?.all?.total,
+							filteredProject?.completed.total,
+							filteredProject?.inProgress.total
+						)}></ToggleMenu>
 					<Box
 						sx={{
 							display: "flex",
@@ -55,17 +147,28 @@ const Homepage = () => {
 						</Typography>
 					</Box>
 				</Box>
-				<Box>
-					{!dataView ? (
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "space-between",
-								flexWrap: "wrap",
-							}}>
-							{projects}
-						</Box>
-					) : null}
+				<Box
+					sx={{
+						marginTop: "1.5%",
+						display: "flex",
+						justifyContent: "flex-start",
+						gap: 2.2,
+						flexWrap: "wrap",
+					}}>
+					{!dataView ? projectCards() : tableProject()}
+				</Box>
+				<hr
+					style={{
+						marginTop: "2%",
+						marginBottom: "2%",
+						borderTop: `0.2px solid grey`,
+					}}></hr>
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "center",
+					}}>
+					<BasicPagination />
 				</Box>
 			</div>
 		</div>

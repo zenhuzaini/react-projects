@@ -3,9 +3,9 @@
 	height: 200px;
 	background-color: #32323c;
 	border-radius: 10px;
-	margin-top: 2%;
+	/* margin-top: 2%; this will be better to be added by the container that wrap this card*/
 	border: solid #2e3036;
-	padding: 2%;
+	padding: 1.5%;
 }
 
 .card-container:hover {

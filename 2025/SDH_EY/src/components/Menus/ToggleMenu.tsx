@@ -3,14 +3,19 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import { Icon } from "@mui/material";
-import type { ToggleMenuButtonType } from "../../types/components";
+import type {
+	projectStatusCard,
+	ToggleMenuButtonType,
+} from "../../types/components";
 
-export default function ToggleMenu({ toggleMenuData }: ToggleMenuButtonType) {
-	const [toggleOption, setToggleOption] = React.useState<string | null>("left");
-
+export default function ToggleMenu({
+	toggleOption,
+	setToggleOption,
+	toggleMenuData,
+}: ToggleMenuButtonType) {
 	const handleOption = (
 		_event: React.MouseEvent<HTMLElement>,
-		newOption: string | null
+		newOption: projectStatusCard //this type should be extendable in the future, by changing it to a more generic one
 	) => {
 		setToggleOption(newOption);
 	};
