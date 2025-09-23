@@ -7,6 +7,7 @@ export type HeaderBannerType = PropEntity<{
 	title: string;
 	description: string;
 	children?: React.ReactNode;
+	breadcrumbsData: breadcrumbLists[];
 }>;
 
 export type ToggleMenuType = PropEntity<{
@@ -59,3 +60,11 @@ export type snackBarProps = {
 	setOpenedSnackBar: React.Dispatch<React.SetStateAction<boolean>>;
 	openedSnackBar: boolean;
 } & snackTypes;
+
+export type breadcrumbLists = {
+	title: string;
+	link: string;
+};
+export type breadcrumbProps = {
+	breadcrumbsData: breadcrumbLists[];
+};

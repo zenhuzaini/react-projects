@@ -15,6 +15,7 @@ import { projectColumn } from "../constants/table";
 import { snacks, txt } from "../constants/text";
 import CustomizedButton from "../components/Buttons/CustomizedButton";
 import SnackBarCustomized from "../components/SnackBar/SnackBarCustomized";
+import { homepageBreadcrumbs } from "../constants/breadcrumbs";
 
 const Homepage = () => {
 	const firstRender = useRef(true);
@@ -123,7 +124,7 @@ const Homepage = () => {
 	};
 
 	// leave this in the bottom to avoid rendering snackbar in the first load
-	//and it will be false afterward
+	// and it will be false afterward
 	firstRender.current = false;
 	return (
 		<>
@@ -137,6 +138,7 @@ const Homepage = () => {
 
 			<div>
 				<BannerHeader
+					breadcrumbsData={homepageBreadcrumbs.home}
 					title={txt.homepage.title}
 					id="2"
 					description={txt.homepage.description}

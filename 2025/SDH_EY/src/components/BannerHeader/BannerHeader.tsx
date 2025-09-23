@@ -2,8 +2,14 @@ import { Box } from "@mui/system";
 import headerBackground from "../../assets/Bg-Frame.png";
 import Typography from "@mui/material/Typography";
 import type { HeaderBannerType } from "../../types/components";
+import BreadcrumbsWithSeparator from "../Breadcrumbs/BreadcrumbsWithSeparator";
 
-const BannerHeader = ({ title, description, children }: HeaderBannerType) => {
+const BannerHeader = ({
+	title,
+	description,
+	breadcrumbsData,
+	children,
+}: HeaderBannerType) => {
 	return (
 		<Box
 			sx={{
@@ -15,13 +21,19 @@ const BannerHeader = ({ title, description, children }: HeaderBannerType) => {
 				backgroundImage: `url(${headerBackground})`,
 				paddingLeft: "5%",
 				paddingRight: "5%",
-				paddingTop: "5%",
+				paddingTop: "3%",
 				display: "flex",
 				alignItems: "center",
 				justifyContent: "space-between",
 			}}>
 			<div>
-				<Box sx={{}}>Breadcrumbs</Box>
+				<Box
+					sx={{
+						marginBottom: "5%",
+					}}>
+					<BreadcrumbsWithSeparator
+						breadcrumbsData={breadcrumbsData}></BreadcrumbsWithSeparator>
+				</Box>
 				<Typography variant="h4" color="initial">
 					{title}
 				</Typography>
