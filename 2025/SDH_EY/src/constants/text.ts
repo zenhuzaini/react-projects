@@ -11,7 +11,7 @@ export const txt = {
 export const snacks: snackCategoryType = {
 	underDev: {
 		type: "info",
-		text: "Still under development 🏗️ 💅",
+		text: "Under development 🏗️ 💅",
 	},
 	somethingWentWrong: {
 		type: "warning",

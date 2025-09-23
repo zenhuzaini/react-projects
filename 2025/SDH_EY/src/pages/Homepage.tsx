@@ -4,7 +4,7 @@ import ProjectCards from "../components/Cards/ProjectCards";
 import Typography from "@mui/material/Typography";
 import ToggleMenu from "../components/Menus/ToggleMenu";
 import { toggleMenuOptionsMock } from "../mocks/components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BasicSwitches from "../components/Switches/SwitchBasic";
 import { mockProjects } from "../mocks/api";
 import BasicPagination from "../components/Pagination/Pagination";
@@ -17,6 +17,8 @@ import CustomizedButton from "../components/Buttons/CustomizedButton";
 import SnackBarCustomized from "../components/SnackBar/SnackBarCustomized";
 
 const Homepage = () => {
+	const firstRender = useRef(true);
+
 	const [toggleOption, setToggleOption] = useState<projectStatusCard>("all");
 	const [dataView, setDataView] = useState<boolean>(false);
 	const [buttonClicked, setButtonClicked] = useState<boolean>(false);
@@ -59,9 +61,17 @@ const Homepage = () => {
 		});
 	}, []);
 
+	// hooks to just set the current load.
+	// for the first load it has to be true.
+	// so the snackbar wont run.
+	// because for now, snackbar should only run when button is clicked
+	useEffect(() => {
+		firstRender.current = true;
+	}, []);
+
 	// only when button is clicked
 	useEffect(() => {
-		setOpenedSnackBar(true);
+		!firstRender.current && setOpenedSnackBar(true);
 	}, [buttonClicked]);
 
 	// Normally it should be retrieved from api calls
@@ -112,9 +122,12 @@ const Homepage = () => {
 		);
 	};
 
+	// leave this in the bottom to avoid rendering snackbar in the first load
+	//and it will be false afterward
+	firstRender.current = false;
 	return (
 		<>
-			{openedSnackBar ? (
+			{openedSnackBar === true ? (
 				<SnackBarCustomized
 					text={snacks.underDev.text}
 					type={snacks.underDev.type}
