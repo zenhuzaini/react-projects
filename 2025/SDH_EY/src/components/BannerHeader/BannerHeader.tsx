@@ -1,10 +1,9 @@
 import { Box } from "@mui/system";
 import headerBackground from "../../assets/Bg-Frame.png";
 import Typography from "@mui/material/Typography";
-import DropDownButton from "../Buttons/DropDownButton";
 import type { HeaderBannerType } from "../../types/components";
 
-const BannerHeader = ({ bannerType, title, description }: HeaderBannerType) => {
+const BannerHeader = ({ title, description, children }: HeaderBannerType) => {
 	return (
 		<Box
 			sx={{
@@ -30,7 +29,8 @@ const BannerHeader = ({ bannerType, title, description }: HeaderBannerType) => {
 			</div>
 
 			<div>
-				<DropDownButton></DropDownButton>
+				{/* <DropDownButton></DropDownButton>  */}
+				{children}
 			</div>
 		</Box>
 	);

@@ -3,11 +3,10 @@ import CheckIcon from "@mui/icons-material/Check";
 import type { BasicAlertType } from "../../types/components";
 
 export default function SimpleAlert({
-	message,
-	severity,
-	variant,
+	message = "this is still under development",
+	variant = "outlined",
+	severity = "info",
 }: BasicAlertType) {
-	console.log("is it being called or not ");
 	return (
 		<Alert
 			variant={variant}

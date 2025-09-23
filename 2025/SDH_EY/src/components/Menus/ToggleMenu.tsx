@@ -30,7 +30,7 @@ export default function ToggleMenu({
 			onChange={handleOption}
 			color="primary"
 			aria-label="text alignment">
-			{toggleMenuData.map((x) => {
+			{toggleMenuData?.map((x) => {
 				return (
 					<ToggleButton
 						key={x.id}

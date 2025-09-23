@@ -8,18 +8,11 @@ import { Avatar } from "@mui/material";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 import avatarCard from "../../assets/Avatar.png";
-import SimpleAlert from "../Alert/SimpleAlert";
 import type { ProjectPropsType } from "../../types/api";
 
 const ProjectCards = ({ project }: ProjectPropsType) => {
 	const onCardClick = () => {
-		return (
-			// doesnt work still lol
-			<SimpleAlert
-				message="this is still under development"
-				variant="outlined"
-				severity="info"></SimpleAlert>
-		);
+		return;
 	};
 	return (
 		<div

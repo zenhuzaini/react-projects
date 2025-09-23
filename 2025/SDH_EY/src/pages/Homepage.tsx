@@ -12,10 +12,15 @@ import type { ProjectType } from "../types/api";
 import type { projectStatusCard } from "../types/components";
 import ProjectTable from "../components/Table/ProjectTable";
 import { projectColumn } from "../constants/table";
+import { snacks, txt } from "../constants/text";
+import CustomizedButton from "../components/Buttons/CustomizedButton";
+import SnackBarCustomized from "../components/SnackBar/SnackBarCustomized";
 
 const Homepage = () => {
 	const [toggleOption, setToggleOption] = useState<projectStatusCard>("all");
 	const [dataView, setDataView] = useState<boolean>(false);
+	const [buttonClicked, setButtonClicked] = useState<boolean>(false);
+	const [openedSnackBar, setOpenedSnackBar] = useState<boolean>(false);
 	const [filteredProject, setFilteredProject] = useState<{
 		all: {
 			total: number;
@@ -53,6 +58,11 @@ const Homepage = () => {
 			},
 		});
 	}, []);
+
+	// only when button is clicked
+	useEffect(() => {
+		setOpenedSnackBar(true);
+	}, [buttonClicked]);
 
 	// Normally it should be retrieved from api calls
 	const projectCards = () => {
@@ -103,75 +113,91 @@ const Homepage = () => {
 	};
 
 	return (
-		<div>
-			<BannerHeader
-				title="Projects"
-				id="2"
-				description="These are the projects. You may see the details and update "
-				bannerType="homepage"></BannerHeader>
+		<>
+			{openedSnackBar ? (
+				<SnackBarCustomized
+					text={snacks.underDev.text}
+					type={snacks.underDev.type}
+					openedSnackBar={openedSnackBar}
+					setOpenedSnackBar={setOpenedSnackBar}></SnackBarCustomized>
+			) : null}
 
-			<div className="main-content-container">
-				<Box
-					sx={{
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "space-between",
-					}}>
-					<ToggleMenu
-						toggleOption={toggleOption}
-						setToggleOption={setToggleOption}
-						toggleMenuData={toggleMenuOptionsMock(
-							filteredProject?.all?.total,
-							filteredProject?.completed.total,
-							filteredProject?.inProgress.total
-						)}></ToggleMenu>
+			<div>
+				<BannerHeader
+					title={txt.homepage.title}
+					id="2"
+					description={txt.homepage.description}
+					bannerType="homepage">
+					<CustomizedButton
+						text={txt.homepage.createProject}
+						setButtonClicked={setButtonClicked}></CustomizedButton>
+				</BannerHeader>
+
+				<div className="main-content-container">
 					<Box
 						sx={{
 							display: "flex",
 							alignItems: "center",
+							justifyContent: "space-between",
 						}}>
-						<Typography
-							variant="subtitle2"
-							sx={{ display: "block" }}
-							color="initial">
-							Card View
-						</Typography>
-						<BasicSwitches
-							setSwitch={setDataView}
-							defaultChecked={false}></BasicSwitches>
-						<Typography
-							variant="subtitle2"
-							sx={{ display: "block" }}
-							color="initial">
-							List View
-						</Typography>
+						<ToggleMenu
+							toggleOption={toggleOption}
+							setToggleOption={setToggleOption}
+							toggleMenuData={toggleMenuOptionsMock(
+								filteredProject?.all?.total,
+								filteredProject?.completed.total,
+								filteredProject?.inProgress.total
+							)}></ToggleMenu>
+						<Box
+							sx={{
+								display: "flex",
+								alignItems: "center",
+							}}>
+							<Typography
+								variant="subtitle2"
+								sx={{ display: "block" }}
+								color="initial">
+								Card View
+							</Typography>
+							<BasicSwitches
+								setSwitch={setDataView}
+								defaultChecked={false}></BasicSwitches>
+							<Typography
+								variant="subtitle2"
+								sx={{ display: "block" }}
+								color="initial">
+								List View
+							</Typography>
+						</Box>
 					</Box>
-				</Box>
-				<Box
-					sx={{
-						marginTop: "1.5%",
-						display: "flex",
-						justifyContent: "flex-start",
-						gap: 2.2,
-						flexWrap: "wrap",
-					}}>
-					{!dataView ? projectCards() : tableProject()}
-				</Box>
-				<hr
-					style={{
-						marginTop: "2%",
-						marginBottom: "2%",
-						borderTop: `0.2px solid grey`,
-					}}></hr>
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "center",
-					}}>
-					<BasicPagination />
-				</Box>
+					<Box
+						sx={{
+							marginTop: "1.5%",
+							display: "flex",
+							justifyContent: "flex-start",
+							gap: 2.2,
+							flexWrap: "wrap",
+						}}>
+						{!dataView ? projectCards() : tableProject()}
+					</Box>
+					<hr
+						style={{
+							marginTop: "2%",
+							marginBottom: "2%",
+							borderTop: `0.2px solid grey`,
+						}}></hr>
+					<Box
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+						}}>
+						<BasicPagination />
+					</Box>
+				</div>
+
+				{/* Alert Let it be down here in the bottom*/}
 			</div>
-		</div>
+		</>
 	);
 };
 
