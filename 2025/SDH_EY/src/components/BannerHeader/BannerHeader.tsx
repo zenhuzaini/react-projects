@@ -40,10 +40,7 @@ const BannerHeader = ({
 				<p>{description}</p>
 			</div>
 
-			<div>
-				{/* <DropDownButton></DropDownButton>  */}
-				{children}
-			</div>
+			<div>{children}</div>
 		</Box>
 	);
 };

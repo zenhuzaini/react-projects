@@ -1,1 +1,12 @@
 /* this is the css for poject page -- the page when whe clickd project in the user homepage */
+
+.menuProject {
+	margin-left: 5%;
+	background-color: rgb(57, 56, 56);
+	margin-right: 5%;
+	/* height: 600px; */
+	max-height: fit-content;
+	padding: 0.5%;
+	position: relative;
+	top: -30px;
+}

@@ -17,11 +17,19 @@ export type ToggleMenuType = PropEntity<{
 	isDisabled: boolean;
 }>;
 
-export type projectStatusCard = "all" | "completed" | "inProgress";
+export type toggleOptionsType =
+	| "all"
+	| "completed"
+	| "inProgress"
+	// this is for  menu project. A bit messy. Needs to refactor
+	| "dataSource"
+	| "reconciliation"
+	| "audit";
+
 export type ToggleMenuButtonType = {
 	toggleMenuData?: ToggleMenuType[];
-	toggleOption: projectStatusCard;
-	setToggleOption: React.Dispatch<React.SetStateAction<projectStatusCard>>;
+	toggleOption: toggleOptionsType;
+	setToggleOption: React.Dispatch<React.SetStateAction<toggleOptionsType>>;
 };
 
 export type BasicSwitchType = {
@@ -68,3 +76,17 @@ export type breadcrumbLists = {
 export type breadcrumbProps = {
 	breadcrumbsData: breadcrumbLists[];
 };
+
+export type historyVersionType = {
+	id: number;
+	version: string;
+	date: string;
+};
+
+export type historyVersionPropsType = {
+	versions: historyVersionType[];
+	selectedIdVersion: string;
+	setSelectedIdVersion: React.Dispatch<string>;
+};
+
+export type projectMenusType = "upload" | "reconciliation" | "audit";

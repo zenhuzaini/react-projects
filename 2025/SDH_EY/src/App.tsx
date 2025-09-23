@@ -3,7 +3,7 @@ import "./css/App.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Homepage";
-import ReconciliationDashboard from "./pages/ReconciliationDashboard";
+import Project from "./pages/Project";
 
 function App() {
 	const [count, setCount] = useState(0);
@@ -14,8 +14,8 @@ function App() {
 			<main className="main-content">
 				<Routes>
 					<Route path="/" element={<Homepage></Homepage>} />
-					<Route path="/projectDetail/:id" element={<Homepage />} />
-					<Route path="/reconciliation" element={<ReconciliationDashboard />} />
+					{/* TODO: add id later */}
+					<Route path="/project" element={<Project />} />
 				</Routes>
 			</main>
 		</>

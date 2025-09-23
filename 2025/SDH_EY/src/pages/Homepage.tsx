@@ -9,7 +9,7 @@ import BasicSwitches from "../components/Switches/SwitchBasic";
 import { mockProjects } from "../mocks/api";
 import BasicPagination from "../components/Pagination/Pagination";
 import type { ProjectType } from "../types/api";
-import type { projectStatusCard } from "../types/components";
+import type { toggleOptionsType } from "../types/components";
 import ProjectTable from "../components/Table/ProjectTable";
 import { projectColumn } from "../constants/table";
 import { snacks, txt } from "../constants/text";
@@ -20,7 +20,7 @@ import { homepageBreadcrumbs } from "../constants/breadcrumbs";
 const Homepage = () => {
 	const firstRender = useRef(true);
 
-	const [toggleOption, setToggleOption] = useState<projectStatusCard>("all");
+	const [toggleOption, setToggleOption] = useState<toggleOptionsType>("all");
 	const [dataView, setDataView] = useState<boolean>(false);
 	const [buttonClicked, setButtonClicked] = useState<boolean>(false);
 	const [openedSnackBar, setOpenedSnackBar] = useState<boolean>(false);
@@ -144,7 +144,7 @@ const Homepage = () => {
 					description={txt.homepage.description}
 					bannerType="homepage">
 					<CustomizedButton
-						text={txt.homepage.createProject}
+						text={txt.homepage.buttons.createProject}
 						setButtonClicked={setButtonClicked}></CustomizedButton>
 				</BannerHeader>
 
