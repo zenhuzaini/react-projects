@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import type { ProjectType } from "../types/api";
 import { getRandomInt, randomBoolean } from "../services/utils";
+import type { dataTableRecordsType } from "../types/components";
 
 export const mockProjects: ProjectType[] = Array.from({ length: 30 }).map(
 	(_x) => {
@@ -26,3 +27,54 @@ export const mockProjects: ProjectType[] = Array.from({ length: 30 }).map(
 		};
 	}
 );
+
+export function mockMatchedRecords(): dataTableRecordsType {
+	const mockRows = Array.from({ length: 100 }).map((_data, i) => {
+		return {
+			id: i,
+			matchId: faker.string.nanoid(5),
+			companyCode: faker.company.name(),
+			profitCenter: faker.string.numeric(6),
+			inputID: faker.string.alpha({ length: { min: 5, max: 8 } }),
+			docType: faker.string.alphanumeric({
+				length: { min: 2, max: 3 },
+				casing: "upper",
+			}),
+			matchAmount: faker.finance.amount({
+				min: 5000,
+				max: 10000,
+				dec: 2,
+				symbol: "$",
+			}),
+		};
+	});
+	return {
+		columns: [
+			{
+				name: "matchId",
+				type: "num",
+			},
+			{
+				name: "companyCode",
+				type: "str",
+			},
+			{
+				name: "profitCenter",
+				type: "str",
+			},
+			{
+				name: "inputID",
+				type: "str",
+			},
+			{
+				name: "docType",
+				type: "str",
+			},
+			{
+				name: "matchAmount",
+				type: "cur",
+			},
+		],
+		rows: mockRows,
+	};
+}

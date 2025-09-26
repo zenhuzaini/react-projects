@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import "../../css/Navbar.css";
+import "../../style/css/Navbar.css";
 import EYLogo from "../../assets/EyLogo.png";
 import avatar from "../../assets/AvatarHeader.png";
 import {

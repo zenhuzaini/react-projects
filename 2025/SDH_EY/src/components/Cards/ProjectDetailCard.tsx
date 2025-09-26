@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import "../../css/ProjectDetailCard.css";
+import "../../style/css/ProjectDetailCard.css";
 import FolderIcon from "@mui/icons-material/Folder";
 import LaunchIcon from "@mui/icons-material/Launch";
 import CircleIcon from "@mui/icons-material/Circle";

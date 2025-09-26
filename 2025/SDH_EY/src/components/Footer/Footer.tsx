@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import Typography from "@mui/material/Typography";
 import EYLogo from "../../assets/FooterLogo.png";
-import "../../css/Footer.css";
+import "../../style/css/Footer.css";
 
 const Footer = () => {
 	return (

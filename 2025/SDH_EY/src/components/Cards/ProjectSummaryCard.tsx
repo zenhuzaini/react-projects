@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import "../../css/ProjectSummaryCard.css";
+import "../../style/css/ProjectSummaryCard.css";
 
 import {
 	StorageOutlined,

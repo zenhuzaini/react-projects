@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import "../../css/ProjectCard.css";
+import "../../style/css/ProjectCard.css";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CircleIcon from "@mui/icons-material/Circle";

@@ -105,4 +105,14 @@ export type DataTablePropsType = {
 	page?: number;
 	pageSize?: number;
 	rowsPerPage: number[];
+	sx?: any;
+	data: dataTableRecordsType;
+};
+
+export type dataTableRecordsType = {
+	columns: {
+		name: string;
+		type?: "num" | "str" | "cur" | undefined;
+	}[];
+	rows: any[];
 };

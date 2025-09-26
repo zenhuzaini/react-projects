@@ -7,8 +7,7 @@ import type {
 	toggleOptionsType,
 } from "../types/components";
 import { versionOptions } from "../mocks/versions";
-import "../css/Project.css";
-
+import "../style/css/Project.css";
 import SelectVersion from "../components/Select/SelectVersion";
 import ToggleMenu from "../components/Menus/ToggleMenu";
 import ProjectDetailCard from "../components/Cards/ProjectDetailCard";
@@ -19,6 +18,8 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { FilterAltOutlined, SettingsOutlined } from "@mui/icons-material";
 import SearchComponent from "../components/Search/Search";
 import DataTable from "../components/Table/DataTable";
+import { mockMatchedRecords } from "../mocks/api";
+import { matchedData } from "../style/other/dataTableStyling";
 
 const Project = () => {
 	const [version, _setVersion] = useState<historyVersionType[]>(versionOptions);
@@ -117,11 +118,13 @@ const Project = () => {
 								<SettingsOutlined></SettingsOutlined>
 							</Box>
 							<DataTable
+								data={mockMatchedRecords()}
 								checkboxSelection={false}
 								dataGridType="reconciliation_matched"
 								page={0}
 								pageSize={5}
-								rowsPerPage={[5, 10]}></DataTable>
+								rowsPerPage={[5, 10, 15, 20]}
+								sx={matchedData}></DataTable>
 						</Box>
 					</Box>
 				</main>
