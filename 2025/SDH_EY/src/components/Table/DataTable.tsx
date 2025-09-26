@@ -2,6 +2,9 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import type { DataTablePropsType } from "../../types/components";
 import { formatString } from "../../services/utils";
+import { Link } from "@mui/material";
+import { projectBreadcrumbs } from "../../constants/breadcrumbs";
+import { NavLink, useParams } from "react-router-dom";
 
 export default function DataTable({
 	checkboxSelection,
@@ -18,6 +21,17 @@ export default function DataTable({
 			headerName: formatString(column.name),
 			sortable: true,
 			width: id < 2 ? 200 : 150,
+			renderCell: (params) => {
+				const { projectId } = useParams();
+				return column.name === "matchId" ? (
+					<NavLink
+						to={`${projectBreadcrumbs.projectUpload[1].link}/${projectId}/matched-transaction/${params.value}`}>
+						{params.value}
+					</NavLink>
+				) : (
+					params.value
+				);
+			},
 		};
 	});
 	return (

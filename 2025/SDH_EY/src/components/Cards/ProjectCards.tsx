@@ -15,8 +15,8 @@ import { projectBreadcrumbs } from "../../constants/breadcrumbs";
 const ProjectCards = ({ project }: ProjectPropsType) => {
 	let navigate = useNavigate();
 
-	const onCardClick = () => {
-		navigate(projectBreadcrumbs.projectUpload[1].link);
+	const onCardClick = (id: string | undefined) => {
+		navigate(`${projectBreadcrumbs.projectUpload[1].link}/${id}`);
 	};
 	return (
 		<div
@@ -28,7 +28,9 @@ const ProjectCards = ({ project }: ProjectPropsType) => {
 				flexDirection: "column",
 				justifyContent: "space-between",
 			}}
-			onClick={onCardClick}>
+			onClick={(_event) => {
+				onCardClick(project.id);
+			}}>
 			<Box
 				sx={{
 					display: "flex",
