@@ -1,4 +1,4 @@
-import { Box, display } from "@mui/system";
+import { Box } from "@mui/system";
 import "../../css/Navbar.css";
 import EYLogo from "../../assets/EyLogo.png";
 import avatar from "../../assets/AvatarHeader.png";
@@ -7,9 +7,9 @@ import {
 	NotificationsNoneOutlined,
 	SettingsOutlined,
 	MoreHorizOutlined,
-	Search,
 } from "@mui/icons-material";
-import { Avatar, IconButton, InputBase } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
+import SearchComponent from "../Search/Search";
 
 const Navbar = () => {
 	return (
@@ -43,14 +43,7 @@ const Navbar = () => {
 					alignItems: "center",
 					justifyContent: "flex-end",
 				}}>
-				<Box
-					sx={{
-						display: "flex",
-						alignItems: "center",
-					}}>
-					<Search />
-					<InputBase placeholder="Search" sx={{ ml: 1, color: "inherit" }} />
-				</Box>
+				<SearchComponent></SearchComponent>
 				<IconButton size="small" color="inherit">
 					<NotificationsNoneOutlined></NotificationsNoneOutlined>
 				</IconButton>

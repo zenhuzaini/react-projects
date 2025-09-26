@@ -9,10 +9,14 @@ import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import LoopOutlinedIcon from "@mui/icons-material/LoopOutlined";
 import avatarCard from "../../assets/Avatar.png";
 import type { ProjectPropsType } from "../../types/api";
+import { useNavigate } from "react-router";
+import { projectBreadcrumbs } from "../../constants/breadcrumbs";
 
 const ProjectCards = ({ project }: ProjectPropsType) => {
+	let navigate = useNavigate();
+
 	const onCardClick = () => {
-		return;
+		navigate(projectBreadcrumbs.projectUpload[1].link);
 	};
 	return (
 		<div

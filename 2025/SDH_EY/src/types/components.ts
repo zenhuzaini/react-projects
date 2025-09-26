@@ -24,9 +24,14 @@ export type toggleOptionsType =
 	// this is for  menu project. A bit messy. Needs to refactor
 	| "dataSource"
 	| "reconciliation"
-	| "audit";
+	| "audit"
+	// Menu project table
+	| "unmatched"
+	| "matched"
+	| "partialMatched";
 
 export type ToggleMenuButtonType = {
+	size?: "small" | "large";
 	toggleMenuData?: ToggleMenuType[];
 	toggleOption: toggleOptionsType;
 	setToggleOption: React.Dispatch<React.SetStateAction<toggleOptionsType>>;
@@ -90,3 +95,14 @@ export type historyVersionPropsType = {
 };
 
 export type projectMenusType = "upload" | "reconciliation" | "audit";
+
+export type DataTablePropsType = {
+	checkboxSelection: boolean;
+	dataGridType:
+		| "reconciliation_matched"
+		| "reconciliation_unmatched"
+		| "reconciliation_partially_matched";
+	page?: number;
+	pageSize?: number;
+	rowsPerPage: number[];
+};

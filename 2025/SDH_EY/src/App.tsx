@@ -4,10 +4,9 @@ import Navbar from "./components/Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Project from "./pages/Project";
+import Footer from "./components/Footer/Footer";
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
 		<>
 			<Navbar></Navbar>
@@ -18,6 +17,7 @@ function App() {
 					<Route path="/project" element={<Project />} />
 				</Routes>
 			</main>
+			<Footer></Footer>
 		</>
 	);
 }

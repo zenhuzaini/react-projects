@@ -11,3 +11,10 @@ export const tableProjectColor = {
 	rowBackground: "#24242bff",
 	greyishIconAndText: "#e6e6e6ff",
 };
+
+export const projectDetailCard = {
+	icon: "#34b7eb",
+	cardBackground: "#32323c",
+	greyishIconAndText: "#919191ff",
+	text: "whitesmoke",
+};

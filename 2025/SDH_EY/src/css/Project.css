@@ -2,11 +2,19 @@
 
 .menuProject {
 	margin-left: 5%;
-	background-color: rgb(57, 56, 56);
+	/*  rgb(44, 43, 43); */
+	background-color: #32323c;
 	margin-right: 5%;
 	/* height: 600px; */
 	max-height: fit-content;
 	padding: 0.5%;
 	position: relative;
 	top: -30px;
+}
+
+.main-content-container-project {
+	margin-left: 5%;
+	margin-right: 5%;
+	min-height: fit-content;
+	margin-bottom: 20px;
 }

@@ -1,0 +1,13 @@
+.project-summary-card-container {
+	width: 50%;
+	height: 180px;
+	background: linear-gradient(90deg, #0d3a46, #231d47, #321c54);
+	border-radius: 10px;
+	/* margin-top: 2%; this will be better to be added by the container that wrap this card*/
+	border: solid #6b199b;
+	/* padding: 1%; */
+}
+
+.project-detail-card-container:hover {
+	background-color: #35353e;
+}

@@ -33,6 +33,23 @@ export const txt = {
 			},
 			{ text: "Audit Logs", isDisabled: false, value: "audit" },
 		],
+		projectDetail: {
+			project: "Project",
+			version: "Version",
+			createdOn: "Created On",
+			lastModified: "Last Modified",
+			sourceFile: "Source File",
+			targetFile: "Target File",
+		},
+		menuTable: [
+			{ text: "Matched", isDisabled: false, value: "matched" },
+			{
+				text: "Unmatched",
+				isDisabled: false,
+				value: "unmatched",
+			},
+			{ text: "Partial Match", isDisabled: false, value: "partialMatch" },
+		],
 	},
 };
 

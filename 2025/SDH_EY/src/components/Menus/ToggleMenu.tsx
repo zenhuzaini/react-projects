@@ -12,6 +12,7 @@ export default function ToggleMenu({
 	toggleOption,
 	setToggleOption,
 	toggleMenuData,
+	size,
 }: ToggleMenuButtonType) {
 	const handleOption = (
 		_event: React.MouseEvent<HTMLElement>,
@@ -24,6 +25,7 @@ export default function ToggleMenu({
 		<ToggleButtonGroup
 			value={toggleOption}
 			exclusive
+			size={size}
 			sx={{
 				backgroundColor: "whitesmoke",
 			}}
