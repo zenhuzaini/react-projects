@@ -78,3 +78,92 @@ export function mockMatchedRecords(): dataTableRecordsType {
 		rows: mockRows,
 	};
 }
+
+export function mockMatchedTransaction1(length: number): dataTableRecordsType {
+	const mockRows = Array.from({ length }).map((_data, i) => {
+		return {
+			id: i,
+			CocD: i,
+			status: true,
+			profitCenter: faker.string.numeric(6),
+			RE: faker.string.alphanumeric({
+				length: { min: 2, max: 2 },
+				casing: "upper",
+			}),
+			balance: faker.finance.amount({
+				min: 5000,
+				max: 10000,
+				dec: 2,
+				symbol: "$",
+			}),
+		};
+	});
+	return {
+		columns: [
+			{
+				name: "status",
+				type: "str",
+			},
+			{
+				name: "CoCd",
+				type: "str",
+			},
+			{
+				name: "profitCenter",
+				type: "str",
+			},
+			{
+				name: "balance",
+				type: "cur",
+			},
+			{
+				name: "Re",
+				type: "str",
+			},
+		],
+		rows: mockRows,
+	};
+}
+
+export function mockMatchedTransaction2(length: number): dataTableRecordsType {
+	const mockRows = Array.from({ length }).map((_data, i) => {
+		return {
+			id: i,
+			CocD: i,
+			status: true,
+			profitCenter: faker.string.numeric(6),
+			insurance: "-",
+			amount: faker.finance.amount({
+				min: 5000,
+				max: 10000,
+				dec: 2,
+				symbol: "$",
+			}),
+		};
+	});
+	return {
+		columns: [
+			{
+				name: "status",
+				type: "str",
+			},
+			{
+				name: "CoCd",
+				type: "str",
+			},
+			{
+				name: "profitCenter",
+				type: "str",
+			},
+			{
+				name: "amount",
+				type: "cur",
+			},
+			{
+				name: "insurance",
+				type: "str",
+			},
+		],
+		rows: mockRows,
+	};
+}

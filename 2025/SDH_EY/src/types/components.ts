@@ -4,8 +4,8 @@ import type { PropEntity } from "./main";
 
 export type HeaderBannerType = PropEntity<{
 	bannerType?: "homepage" | "reconciliation";
-	title: string;
-	description: string;
+	title?: string;
+	description?: string;
 	children?: React.ReactNode;
 	breadcrumbsData: breadcrumbLists[];
 }>;

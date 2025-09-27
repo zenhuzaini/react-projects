@@ -1,0 +1,23 @@
+.matched-transaction-content-container {
+	margin-left: 5%;
+	margin-right: 5%;
+	max-height: fit-content;
+	border-radius: 10px;
+	background-color: #34343e;
+	margin-bottom: 2%;
+}
+
+.summary-project {
+	margin-left: 5%;
+	margin-right: 5%;
+	height: 120px;
+	background-color: blanchedalmond;
+	background: linear-gradient(90deg, #0d3a46, #231d47, #321c54);
+	border-radius: 10px;
+	border: solid #6b199b;
+	position: relative;
+	top: -100px;
+	align-content: center;
+	/* Reclaims the extra space */
+	margin-bottom: -130px;
+}

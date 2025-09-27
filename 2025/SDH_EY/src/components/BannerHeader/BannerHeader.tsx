@@ -21,7 +21,7 @@ const BannerHeader = ({
 				backgroundImage: `url(${headerBackground})`,
 				paddingLeft: "5%",
 				paddingRight: "5%",
-				paddingTop: "3%",
+				paddingTop: title && description ? "3%" : "0",
 				display: "flex",
 				alignItems: "center",
 				justifyContent: "space-between",
@@ -34,12 +34,15 @@ const BannerHeader = ({
 					<BreadcrumbsWithSeparator
 						breadcrumbsData={breadcrumbsData}></BreadcrumbsWithSeparator>
 				</Box>
-				<Typography variant="h4" color="initial">
-					{title}
-				</Typography>
-				<p>{description}</p>
+				{title && description ? (
+					<>
+						<Typography variant="h4" color="initial">
+							{title}
+						</Typography>
+						<p>{description}</p>
+					</>
+				) : null}
 			</div>
-
 			<div>{children}</div>
 		</Box>
 	);
