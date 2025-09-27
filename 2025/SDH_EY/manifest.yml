@@ -1,0 +1,6 @@
+applications:
+  - name: sdh-react-vite-ts-test
+    path: dist/
+    instances: 1
+    buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
+    memory: 512M

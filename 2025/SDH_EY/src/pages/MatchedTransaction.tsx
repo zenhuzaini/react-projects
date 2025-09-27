@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BannerHeader from "../components/BannerHeader/BannerHeader";
 import { projectBreadcrumbs } from "../constants/breadcrumbs";
 import "../style/css/MatchedTransaction.css";
