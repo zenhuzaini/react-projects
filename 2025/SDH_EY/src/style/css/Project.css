@@ -18,3 +18,7 @@
 	min-height: fit-content;
 	margin-bottom: 20px;
 }
+
+.background-gradient {
+	background: linear-gradient(90deg, #463b6a 0%, #52477a 100%);
+}

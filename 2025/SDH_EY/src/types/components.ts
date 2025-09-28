@@ -1,6 +1,11 @@
 // These types are meant tp be used to define the props for component
+import type { OverridableStringUnion } from "@mui/types";
 import type { ProjectType } from "./api";
 import type { PropEntity } from "./main";
+import type {
+	TypographyPropsVariantOverrides,
+	TypographyVariant,
+} from "@mui/material";
 
 export type HeaderBannerType = PropEntity<{
 	bannerType?: "homepage" | "reconciliation";
@@ -116,3 +121,23 @@ export type dataTableRecordsType = {
 	}[];
 	rows: any[];
 };
+
+// Carsd basic
+export type BasicCardDetailType = {
+	value: string;
+	valueVariant: OverridableStringUnion<
+		TypographyVariant | "inherit",
+		TypographyPropsVariantOverrides
+	>;
+	description: string;
+	descriptionVariant: OverridableStringUnion<
+		TypographyVariant | "inherit",
+		TypographyPropsVariantOverrides
+	>;
+	backgroundColor: string;
+	textColor: string;
+};
+
+export type BasicCardDetailPropsType = PropEntity<{
+	data: BasicCardDetailType[][];
+}>;

@@ -7,6 +7,7 @@ import {
 	StorageOutlined,
 	FileDownloadOutlined,
 	FilterAltOutlined,
+	SettingsOutlined,
 } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
@@ -225,6 +226,47 @@ const MatchedTransaction = () => {
 						</Box>
 					</Box>
 
+					{/* File A / B typography */}
+					<Box
+						sx={{
+							display: "flex",
+							gap: 2,
+							marginBottom: "1%",
+						}}>
+						<Box
+							sx={{
+								alignItems: "center",
+								paddingLeft: "3%",
+								paddingRight: "5%",
+								flex: 1,
+								minWidth: 0,
+								display: "flex",
+								justifyContent: "space-between",
+							}}>
+							<Typography variant="body2" color="initial">
+								File A
+							</Typography>
+							<SettingsOutlined></SettingsOutlined>
+						</Box>
+
+						<Box
+							sx={{
+								alignItems: "center",
+								paddingLeft: "3%",
+								paddingRight: "3%",
+								flex: 1,
+								minWidth: 0,
+								display: "flex",
+								justifyContent: "space-between",
+							}}>
+							<Typography variant="body2" color="initial">
+								File b
+							</Typography>
+							<SettingsOutlined></SettingsOutlined>
+						</Box>
+					</Box>
+
+					{/* Table A / B  */}
 					<Box sx={{ display: "flex", gap: 2 }}>
 						<Box sx={{ flex: 1, minWidth: 0 }}>
 							<div style={{ height: "100%" }}>
@@ -241,6 +283,7 @@ const MatchedTransaction = () => {
 									}}></DataTable>
 							</div>
 						</Box>
+
 						<Box sx={{ flex: 1, minWidth: 0 }}>
 							<div style={{ height: "100%" }}>
 								<DataTable

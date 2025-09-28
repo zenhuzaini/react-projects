@@ -12,7 +12,12 @@ export default function BreadcrumbsWithSeparator({
 			return <NavLink to={bc.link}>{bc.title}</NavLink>;
 		} else {
 			return (
-				<Typography key={i} sx={{ color: "text.primary" }}>
+				<Typography
+					key={i}
+					sx={{
+						color:
+							i === breadcrumbsData.length - 1 ? "whitesmoke" : "text.primary",
+					}}>
 					{bc.title}
 				</Typography>
 			);

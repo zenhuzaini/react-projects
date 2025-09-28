@@ -7,17 +7,26 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import type { ProjectTablePropsType } from "../../types/components";
-import { Avatar, Box, Link, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import { tableProjectColor, pojectCard } from "../../constants/colors";
+import { useNavigate } from "react-router-dom";
+import { projectBreadcrumbs } from "../../constants/breadcrumbs";
 
 export default function ProjectTable({
 	projects,
 	column,
 }: ProjectTablePropsType) {
-	const tableColumnCell = column.map((col) => {
+	let navigate = useNavigate();
+
+	const onRowClick = (id: string | undefined) => {
+		navigate(`${projectBreadcrumbs.projectUpload[1].link}/${id}`);
+	};
+
+	const tableColumnCell = column.map((col, i) => {
 		return (
 			<TableCell
+				key={i}
 				sx={{ color: tableProjectColor.greyishIconAndText }}
 				align="left">
 				{col}
@@ -38,9 +47,12 @@ export default function ProjectTable({
 				sx={{ color: tableProjectColor.greyishIconAndText }}
 				component="th"
 				scope="row">
-				<Link href="#" underline="hover">
-					{row.title}
-				</Link>
+				<div
+					onClick={() => {
+						onRowClick(row.id);
+					}}>
+					<a>{row.title}</a>
+				</div>
 			</TableCell>
 			<TableCell
 				sx={{ color: tableProjectColor.greyishIconAndText }}

@@ -43,7 +43,7 @@ const ProjectCards = ({ project }: ProjectPropsType) => {
 						alignItems: "center",
 					}}>
 					<Typography variant="body1" color="initial">
-						Q2 Final reconciliation
+						{project.title}
 					</Typography>
 					<ArrowForwardIcon sx={{ fontSize: "small" }}></ArrowForwardIcon>
 				</Box>

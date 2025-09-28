@@ -1,7 +1,11 @@
 import { faker } from "@faker-js/faker";
 import type { ProjectType } from "../types/api";
 import { getRandomInt, randomBoolean } from "../services/utils";
-import type { dataTableRecordsType } from "../types/components";
+import type {
+	BasicCardDetailType,
+	dataTableRecordsType,
+} from "../types/components";
+import { tableProjectColor } from "../constants/colors";
 
 export const mockProjects: ProjectType[] = Array.from({ length: 30 }).map(
 	(_x) => {
@@ -167,3 +171,43 @@ export function mockMatchedTransaction2(length: number): dataTableRecordsType {
 		rows: mockRows,
 	};
 }
+
+export const dataCardMock: BasicCardDetailType[][] = [
+	[
+		{
+			value: "38",
+			valueVariant: "h4",
+			description: "Total Unmatched Records",
+			descriptionVariant: "body2",
+			backgroundColor: tableProjectColor.rowBackground,
+			textColor: "whitesmoke",
+		},
+		{
+			value: "$11178.90",
+			valueVariant: "h4",
+			description: "Total Unmatched amount",
+			descriptionVariant: "body2",
+			backgroundColor: tableProjectColor.rowBackground,
+			textColor: "whitesmoke",
+		},
+	],
+
+	[
+		{
+			value: "38",
+			valueVariant: "h4",
+			description: "Total Unmatched Records",
+			descriptionVariant: "body2",
+			backgroundColor: "linear-gradient(90deg, #463b6a 0%, #52477a 100%)",
+			textColor: "whitesmoke",
+		},
+		{
+			value: "$11178.90",
+			valueVariant: "h4",
+			description: "Total Unmatched amount",
+			descriptionVariant: "body2",
+			backgroundColor: "linear-gradient(90deg, #463b6a 0%, #52477a 100%)",
+			textColor: "whitesmoke",
+		},
+	],
+];

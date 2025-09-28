@@ -18,19 +18,316 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { FilterAltOutlined, SettingsOutlined } from "@mui/icons-material";
 import SearchComponent from "../components/Search/Search";
 import DataTable from "../components/Table/DataTable";
-import { mockMatchedRecords } from "../mocks/api";
+import {
+	dataCardMock,
+	mockMatchedRecords,
+	mockMatchedTransaction1,
+} from "../mocks/api";
 import { matchedData } from "../style/other/dataTableStyling";
+import CustomizedButton from "../components/Buttons/CustomizedButton";
+import { tableProjectColor } from "../constants/colors";
+import ProjectCardBasic from "../components/Cards/ProjectCardBasic";
 
 const Project = () => {
 	const [version, _setVersion] = useState<historyVersionType[]>(versionOptions);
 	const [selectedIdVersion, setSelectedIdVersion] = useState<string>("");
 	const [toggleOption, setToggleOption] =
 		useState<toggleOptionsType>("reconciliation");
-
-	const [menuTableOption, setMenuTableOption] =
+	const [menuDataTableOption, setMenuDataTableOption] =
 		useState<toggleOptionsType>("matched");
+	const [_buttonClicked, setButtonClicked] = useState<boolean>(false);
 
-	// todo, check the active tab and change the title value
+	//to
+	const dataTableViewOption = () => {
+		switch (menuDataTableOption) {
+			case "matched":
+				return (
+					<div>
+						<Box
+							sx={{
+								padding: "1%",
+								marginBottom: "5px",
+								display: "flex",
+								justifyContent: "space-between",
+							}}>
+							<Typography>Matched Records</Typography>
+							<SettingsOutlined></SettingsOutlined>
+						</Box>
+						<DataTable
+							data={mockMatchedRecords()}
+							checkboxSelection={false}
+							dataGridType="reconciliation_matched"
+							page={0}
+							pageSize={5}
+							rowsPerPage={[5, 10, 15, 20]}
+							sx={matchedData}></DataTable>
+					</div>
+				);
+				break;
+			case "unmatched":
+				return (
+					<div>
+						<Box
+							sx={{
+								padding: "1%",
+								marginBottom: "5px",
+								display: "flex",
+								justifyContent: "space-between",
+							}}>
+							<Typography>Unmatched Records</Typography>
+							<CustomizedButton
+								text={"Action"}
+								setButtonClicked={setButtonClicked}></CustomizedButton>
+						</Box>
+
+						<Box
+							sx={{
+								marginLeft: "1%",
+								marginBottom: "2%",
+								display: "flex",
+								gap: 3,
+							}}>
+							<ProjectCardBasic data={dataCardMock}></ProjectCardBasic>
+						</Box>
+
+						{/* File A / B typography */}
+						<Box
+							sx={{
+								display: "flex",
+								gap: 2,
+								marginBottom: "1%",
+							}}>
+							<Box
+								sx={{
+									alignItems: "center",
+									paddingLeft: "3%",
+									paddingRight: "5%",
+									flex: 1,
+									minWidth: 0,
+									display: "flex",
+									justifyContent: "space-between",
+								}}>
+								<Typography variant="body2" color="initial">
+									File A
+								</Typography>
+								<SettingsOutlined></SettingsOutlined>
+							</Box>
+
+							<Box
+								sx={{
+									alignItems: "center",
+									paddingLeft: "3%",
+									paddingRight: "3%",
+									flex: 1,
+									minWidth: 0,
+									display: "flex",
+									justifyContent: "space-between",
+								}}>
+								<Typography variant="body2" color="initial">
+									File b
+								</Typography>
+								<SettingsOutlined></SettingsOutlined>
+							</Box>
+						</Box>
+
+						{/* Table A / B  */}
+						<Box sx={{ display: "flex", gap: 2 }}>
+							<Box sx={{ flex: 1, minWidth: 0 }}>
+								<div style={{ height: "100%" }}>
+									<DataTable
+										data={mockMatchedTransaction1(15)}
+										checkboxSelection={false}
+										dataGridType="reconciliation_matched"
+										rowsPerPage={[5, 10, 15]}
+										page={0}
+										pageSize={5}
+										sx={{
+											// width: "50%",
+											...matchedData,
+										}}></DataTable>
+								</div>
+							</Box>
+
+							<Box sx={{ flex: 1, minWidth: 0 }}>
+								<div style={{ height: "100%" }}>
+									<DataTable
+										data={mockMatchedTransaction1(15)}
+										checkboxSelection={false}
+										dataGridType="reconciliation_matched"
+										rowsPerPage={[5, 10, 15]}
+										page={0}
+										pageSize={5}
+										sx={{
+											// width: "50%",
+											...matchedData,
+										}}></DataTable>
+								</div>
+							</Box>
+						</Box>
+					</div>
+				);
+				break;
+			case "partialMatched":
+				break;
+			default:
+				break;
+		}
+	};
+
+	// this is to shew if the user wants to pick data source, reconciliation or audit
+	const projectViewOptions = () => {
+		switch (toggleOption) {
+			case "reconciliation":
+				return (
+					<div>
+						<Box
+							sx={{
+								display: "flex",
+								gap: 3,
+							}}>
+							<ProjectDetailCard></ProjectDetailCard>
+							<ProjectSummaryCard></ProjectSummaryCard>
+						</Box>
+						{/* Table */}
+
+						<Box
+							sx={{
+								marginTop: "20px",
+								backgroundColor: "#34343e",
+								borderRadius: "10px",
+							}}>
+							{/* First Option --title and some option */}
+							<Box
+								sx={{
+									padding: "1%",
+								}}>
+								<Box sx={{ justifyContent: "space-between", display: "flex" }}>
+									{/* left */}
+									<Box>
+										<Typography variant="body1">
+											Compare Source and target Data
+										</Typography>
+										<Typography variant="body2">
+											Analyze differences between source and target records, and
+											review matches.
+										</Typography>
+									</Box>
+									{/* right */}
+									<Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+										<SearchComponent></SearchComponent>
+										<ToggleMenu
+											toggleOption={menuDataTableOption}
+											setToggleOption={setMenuDataTableOption}
+											size="small"
+											toggleMenuData={txt.project.menuTable}></ToggleMenu>
+										<Box sx={{ display: "flex" }}>
+											<FileDownloadOutlinedIcon></FileDownloadOutlinedIcon>
+											<Typography variant="body1" color="initial">
+												Export
+											</Typography>
+										</Box>
+										<FilterAltOutlined></FilterAltOutlined>
+									</Box>
+								</Box>
+							</Box>
+
+							{/* Second option -- based on selected menu option */}
+							<Box sx={{}}>{dataTableViewOption()}</Box>
+						</Box>
+					</div>
+				);
+				break;
+			case "dataSource":
+				return <div>Needs to add</div>;
+				break;
+			case "audit":
+				return (
+					<div>
+						<div>
+							<Box
+								sx={{
+									display: "flex",
+									gap: 3,
+								}}>
+								<ProjectDetailCard></ProjectDetailCard>
+								<ProjectSummaryCard></ProjectSummaryCard>
+							</Box>
+							{/* Table */}
+
+							<Box
+								sx={{
+									marginTop: "20px",
+									backgroundColor: "#34343e",
+									borderRadius: "10px",
+								}}>
+								{/* First Option --title and some option */}
+								<Box
+									sx={{
+										padding: "1%",
+									}}>
+									<Box
+										sx={{ justifyContent: "space-between", display: "flex" }}>
+										{/* left */}
+										<Box>
+											<Typography variant="body1">
+												Compare Source and target Data
+											</Typography>
+											<Typography variant="body2">
+												Analyze differences between source and target records,
+												and review matches.
+											</Typography>
+										</Box>
+										{/* right */}
+										<Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+											<SearchComponent></SearchComponent>
+											<ToggleMenu
+												toggleOption={menuDataTableOption}
+												setToggleOption={setMenuDataTableOption}
+												size="small"
+												toggleMenuData={txt.project.menuTable}></ToggleMenu>
+											<Box sx={{ display: "flex" }}>
+												<FileDownloadOutlinedIcon></FileDownloadOutlinedIcon>
+												<Typography variant="body1" color="initial">
+													Export
+												</Typography>
+											</Box>
+											<FilterAltOutlined></FilterAltOutlined>
+										</Box>
+									</Box>
+								</Box>
+
+								{/* Second option -- based on selected option */}
+								<Box sx={{}}>
+									<Box
+										sx={{
+											padding: "1%",
+											marginBottom: "5px",
+											display: "flex",
+											justifyContent: "space-between",
+										}}>
+										<Typography>Unmatched Records</Typography>
+										<CustomizedButton
+											text={"Action"}
+											setButtonClicked={setButtonClicked}></CustomizedButton>
+									</Box>
+									<DataTable
+										data={mockMatchedRecords()}
+										checkboxSelection={false}
+										dataGridType="reconciliation_matched"
+										page={0}
+										pageSize={5}
+										rowsPerPage={[5, 10, 15, 20]}
+										sx={matchedData}></DataTable>
+								</Box>
+							</Box>
+						</div>
+					</div>
+				);
+				break;
+			default:
+				return null;
+		}
+	};
 	return (
 		<div>
 			<BannerHeader
@@ -52,80 +349,9 @@ const Project = () => {
 			</div>
 
 			{/* This will depend on the content */}
+
 			<main className="main-content-container-project">
-				<Box
-					sx={{
-						display: "flex",
-						gap: 3,
-					}}>
-					<ProjectDetailCard></ProjectDetailCard>
-					<ProjectSummaryCard></ProjectSummaryCard>
-				</Box>
-				{/* Table */}
-
-				<Box
-					sx={{
-						marginTop: "20px",
-						backgroundColor: "#34343e",
-						borderRadius: "10px",
-					}}>
-					{/* First Option --title and some option */}
-					<Box
-						sx={{
-							padding: "1%",
-						}}>
-						<Box sx={{ justifyContent: "space-between", display: "flex" }}>
-							{/* left */}
-							<Box>
-								<Typography variant="body1">
-									Compare Source and target Data
-								</Typography>
-								<Typography variant="body2">
-									Analyze differences between source and target records, and
-									review matches.
-								</Typography>
-							</Box>
-							{/* right */}
-							<Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-								<SearchComponent></SearchComponent>
-								<ToggleMenu
-									toggleOption={menuTableOption}
-									setToggleOption={setMenuTableOption}
-									size="small"
-									toggleMenuData={txt.project.menuTable}></ToggleMenu>
-								<Box sx={{ display: "flex" }}>
-									<FileDownloadOutlinedIcon></FileDownloadOutlinedIcon>
-									<Typography variant="body1" color="initial">
-										Export
-									</Typography>
-								</Box>
-								<FilterAltOutlined></FilterAltOutlined>
-							</Box>
-						</Box>
-					</Box>
-
-					{/* Second option -- based on selected option */}
-					<Box sx={{}}>
-						<Box
-							sx={{
-								padding: "1%",
-								marginBottom: "5px",
-								display: "flex",
-								justifyContent: "space-between",
-							}}>
-							<Typography>Matched Records</Typography>
-							<SettingsOutlined></SettingsOutlined>
-						</Box>
-						<DataTable
-							data={mockMatchedRecords()}
-							checkboxSelection={false}
-							dataGridType="reconciliation_matched"
-							page={0}
-							pageSize={5}
-							rowsPerPage={[5, 10, 15, 20]}
-							sx={matchedData}></DataTable>
-					</Box>
-				</Box>
+				{projectViewOptions()}
 			</main>
 		</div>
 	);
