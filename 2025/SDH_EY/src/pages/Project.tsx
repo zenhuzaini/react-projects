@@ -25,7 +25,6 @@ import {
 } from "../mocks/api";
 import { matchedData } from "../style/other/dataTableStyling";
 import CustomizedButton from "../components/Buttons/CustomizedButton";
-import { tableProjectColor } from "../constants/colors";
 import ProjectCardBasic from "../components/Cards/ProjectCardBasic";
 
 const Project = () => {
