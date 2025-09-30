@@ -87,10 +87,10 @@ export function mockMatchedTransaction1(length: number): dataTableRecordsType {
 	const mockRows = Array.from({ length }).map((_data, i) => {
 		return {
 			id: i,
-			CocD: i,
-			status: true,
+			CoompanyCode: i,
+			status: "❌",
 			profitCenter: faker.string.numeric(6),
-			RE: faker.string.alphanumeric({
+			Re: faker.string.alphanumeric({
 				length: { min: 2, max: 2 },
 				casing: "upper",
 			}),
@@ -109,7 +109,7 @@ export function mockMatchedTransaction1(length: number): dataTableRecordsType {
 				type: "str",
 			},
 			{
-				name: "CoCd",
+				name: "CoompanyCode",
 				type: "str",
 			},
 			{
@@ -172,10 +172,47 @@ export function mockMatchedTransaction2(length: number): dataTableRecordsType {
 	};
 }
 
+export const summaryDataSource = {
+	recordsInSource: faker.number.float({ min: 1, max: 10, fractionDigits: 3 }),
+	matchedRecords: faker.number.int({ min: 100000, max: 150000 }),
+	recordsInTarget: faker.number.float({ min: 10, max: 100, fractionDigits: 3 }),
+	unmatchedRecords: faker.number.int({ min: 500, max: 10000 }),
+	processingTime: `00:${faker.number.int({
+		min: 10,
+		max: 60,
+	})}:${faker.number.int({ min: 10, max: 60 })}`,
+	totalUnmatchedRecords: faker.number.int({ min: 100, max: 10000 }),
+	totalUnmatchedAmount: faker.finance.amount({
+		min: 5000,
+		max: 100000,
+		dec: 2,
+		symbol: "$",
+	}),
+	calculatedAmount: faker.finance.amount({
+		min: 100,
+		max: 1000,
+		dec: 2,
+		symbol: "$",
+	}),
+	differenceAmount: faker.finance.amount({
+		min: 100,
+		max: 500,
+		dec: 2,
+		symbol: "$",
+	}),
+	totalPartialUnmatchedRecords: faker.number.int({ min: 100, max: 10000 }),
+	totalPartialUnmatchedAmount: faker.finance.amount({
+		min: 5000,
+		max: 100000,
+		dec: 2,
+		symbol: "$",
+	}),
+};
+
 export const dataCardMock: BasicCardDetailType[][] = [
 	[
 		{
-			value: "38",
+			value: `${faker.number.int({ min: 10, max: 60 })}`,
 			valueVariant: "h4",
 			description: "Total Unmatched Records",
 			descriptionVariant: "body2",
@@ -183,7 +220,12 @@ export const dataCardMock: BasicCardDetailType[][] = [
 			textColor: "whitesmoke",
 		},
 		{
-			value: "$11178.90",
+			value: `${faker.finance.amount({
+				min: 100,
+				max: 1000,
+				dec: 2,
+				symbol: "$",
+			})}`,
 			valueVariant: "h4",
 			description: "Total Unmatched amount",
 			descriptionVariant: "body2",
@@ -194,17 +236,27 @@ export const dataCardMock: BasicCardDetailType[][] = [
 
 	[
 		{
-			value: "38",
+			value: `${faker.finance.amount({
+				min: 100,
+				max: 1000,
+				dec: 2,
+				symbol: "$",
+			})}`,
 			valueVariant: "h4",
-			description: "Total Unmatched Records",
+			description: "Calculated Amount",
 			descriptionVariant: "body2",
 			backgroundColor: "linear-gradient(90deg, #463b6a 0%, #52477a 100%)",
 			textColor: "whitesmoke",
 		},
 		{
-			value: "$11178.90",
+			value: `${faker.finance.amount({
+				min: 100,
+				max: 1000,
+				dec: 2,
+				symbol: "$",
+			})}`,
 			valueVariant: "h4",
-			description: "Total Unmatched amount",
+			description: "Difference amount",
 			descriptionVariant: "body2",
 			backgroundColor: "linear-gradient(90deg, #463b6a 0%, #52477a 100%)",
 			textColor: "whitesmoke",

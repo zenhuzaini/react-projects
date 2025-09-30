@@ -57,7 +57,7 @@ const MatchedTransaction = () => {
 									fontSize: "45px",
 									color: "whitesmoke",
 								}}>
-								13.445
+								10
 							</Typography>
 						</Box>
 						<Box
@@ -70,7 +70,7 @@ const MatchedTransaction = () => {
 							<Typography
 								variant="caption"
 								sx={{ color: projectDetailCard.greyishIconAndText }}>
-								Records in Source
+								Total records from file A
 							</Typography>
 						</Box>
 					</Box>
@@ -92,7 +92,7 @@ const MatchedTransaction = () => {
 									fontSize: "45px",
 									color: "whitesmoke",
 								}}>
-								13.445
+								15
 							</Typography>
 						</Box>
 						<Box
@@ -105,7 +105,7 @@ const MatchedTransaction = () => {
 							<Typography
 								variant="caption"
 								sx={{ color: projectDetailCard.greyishIconAndText }}>
-								Records in Source
+								Total records from file B
 							</Typography>
 						</Box>
 					</Box>
@@ -127,7 +127,7 @@ const MatchedTransaction = () => {
 									fontSize: "45px",
 									color: "whitesmoke",
 								}}>
-								13.445
+								25
 							</Typography>
 						</Box>
 						<Box
@@ -140,7 +140,7 @@ const MatchedTransaction = () => {
 							<Typography
 								variant="caption"
 								sx={{ color: projectDetailCard.greyishIconAndText }}>
-								Records in Source
+								Total Records
 							</Typography>
 						</Box>
 					</Box>
@@ -162,7 +162,7 @@ const MatchedTransaction = () => {
 									fontSize: "45px",
 									color: "whitesmoke",
 								}}>
-								13.445
+								$3638
 							</Typography>
 						</Box>
 						<Box
@@ -175,7 +175,7 @@ const MatchedTransaction = () => {
 							<Typography
 								variant="caption"
 								sx={{ color: projectDetailCard.greyishIconAndText }}>
-								Records in Source
+								Matched Amount
 							</Typography>
 						</Box>
 					</Box>

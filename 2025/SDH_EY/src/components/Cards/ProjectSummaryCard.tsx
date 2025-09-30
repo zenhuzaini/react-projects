@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 
 import { projectDetailCard } from "../../constants/colors";
+import { summaryDataSource } from "../../mocks/api";
 
 const ProjectSummaryCard = () => {
 	return (
@@ -32,12 +33,12 @@ const ProjectSummaryCard = () => {
 						}}>
 						<StorageOutlined
 							sx={{
-								fontSize: "40px",
+								fontSize: "30px",
 								color: "whitesmoke",
 							}}></StorageOutlined>
 						<Typography
 							sx={{
-								fontSize: "45px",
+								fontSize: "40px",
 								color: "whitesmoke",
 							}}>
 							13.445
@@ -67,15 +68,15 @@ const ProjectSummaryCard = () => {
 						}}>
 						<ShowChartOutlined
 							sx={{
-								fontSize: "40px",
+								fontSize: "30px",
 								color: "whitesmoke",
 							}}></ShowChartOutlined>
 						<Typography
 							sx={{
-								fontSize: "45px",
+								fontSize: "40px",
 								color: "whitesmoke",
 							}}>
-							44.056
+							{summaryDataSource.recordsInSource}
 						</Typography>
 					</Box>
 					<Box
@@ -103,15 +104,15 @@ const ProjectSummaryCard = () => {
 						}}>
 						<AccessTimeOutlined
 							sx={{
-								fontSize: "40px",
+								fontSize: "30px",
 								color: "whitesmoke",
 							}}></AccessTimeOutlined>
 						<Typography
 							sx={{
-								fontSize: "45px",
+								fontSize: "40px",
 								color: "whitesmoke",
 							}}>
-							11.445
+							{summaryDataSource.processingTime}
 						</Typography>
 					</Box>
 					<Box
@@ -147,15 +148,15 @@ const ProjectSummaryCard = () => {
 						}}>
 						<DoneAllOutlined
 							sx={{
-								fontSize: "40px",
+								fontSize: "30px",
 								color: "whitesmoke",
 							}}></DoneAllOutlined>
 						<Typography
 							sx={{
-								fontSize: "45px",
+								fontSize: "40px",
 								color: "whitesmoke",
 							}}>
-							6789
+							{summaryDataSource.matchedRecords}
 						</Typography>
 					</Box>
 					<Box
@@ -183,15 +184,15 @@ const ProjectSummaryCard = () => {
 						}}>
 						<CancelOutlined
 							sx={{
-								fontSize: "40px",
+								fontSize: "30px",
 								color: "whitesmoke",
 							}}></CancelOutlined>
 						<Typography
 							sx={{
-								fontSize: "45px",
+								fontSize: "40px",
 								color: "whitesmoke",
 							}}>
-							6789
+							{summaryDataSource.unmatchedRecords}
 						</Typography>
 					</Box>
 					<Box

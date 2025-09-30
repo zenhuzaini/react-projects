@@ -334,10 +334,12 @@ const Project = () => {
 				title={txt.project.reconciliation.title}
 				id="3"
 				description={txt.project.reconciliation.description}>
-				<SelectVersion
-					versions={version}
-					selectedIdVersion={selectedIdVersion}
-					setSelectedIdVersion={setSelectedIdVersion}></SelectVersion>
+				{toggleOption === "reconciliation" && (
+					<SelectVersion
+						versions={version}
+						selectedIdVersion={selectedIdVersion}
+						setSelectedIdVersion={setSelectedIdVersion}></SelectVersion>
+				)}
 			</BannerHeader>
 
 			<div className="menuProject">
