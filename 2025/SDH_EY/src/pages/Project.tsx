@@ -13,7 +13,7 @@ import ToggleMenu from "../components/Menus/ToggleMenu";
 import ProjectDetailCard from "../components/Cards/ProjectDetailCard";
 import ProjectSummaryCard from "../components/Cards/ProjectSummaryCard";
 import { Box } from "@mui/system";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { FilterAltOutlined, SettingsOutlined } from "@mui/icons-material";
 import SearchComponent from "../components/Search/Search";
@@ -26,12 +26,14 @@ import {
 import { matchedData } from "../style/other/dataTableStyling";
 import CustomizedButton from "../components/Buttons/CustomizedButton";
 import ProjectCardBasic from "../components/Cards/ProjectCardBasic";
+import { StorageOutlined } from "@mui/icons-material";
+import FileUploadComponent from "../components/FileUpload/FileUploadComponent";
 
 const Project = () => {
 	const [version, _setVersion] = useState<historyVersionType[]>(versionOptions);
 	const [selectedIdVersion, setSelectedIdVersion] = useState<string>("");
 	const [toggleOption, setToggleOption] =
-		useState<toggleOptionsType>("reconciliation");
+		useState<toggleOptionsType>("dataSource");
 	const [menuDataTableOption, setMenuDataTableOption] =
 		useState<toggleOptionsType>("matched");
 	const [_buttonClicked, setButtonClicked] = useState<boolean>(false);
@@ -237,7 +239,38 @@ const Project = () => {
 				);
 				break;
 			case "dataSource":
-				return <div>Needs to add</div>;
+				return (
+					<div>
+						<Box
+							sx={{
+								padding: "1%",
+								// width: "100px",
+								height: "max-content",
+								backgroundColor: "#32323dff",
+								borderRadius: "10px",
+							}}>
+							<Typography variant="body2" color="initial">
+								Upload Data
+							</Typography>
+							<Box sx={{ marginTop: "2%" }}>
+								<Box
+									sx={{
+										display: "flex",
+										gap: 1,
+										alignItems: "center",
+										marginBottom: "1%",
+									}}>
+									<StorageOutlined></StorageOutlined>
+									<Typography variant="body2" color="initial">
+										File upload section
+									</Typography>
+								</Box>
+								<Divider></Divider>
+								<FileUploadComponent />
+							</Box>
+						</Box>
+					</div>
+				);
 				break;
 			case "audit":
 				return (
