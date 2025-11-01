@@ -1,0 +1,7 @@
+# This is only to use when we want to check for testing - with cf push
+applications:
+  - name: heyzenex
+    path: dist/
+    instances: 1
+    buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
+    memory: 512M
