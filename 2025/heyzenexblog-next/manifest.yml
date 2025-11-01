@@ -1,0 +1,9 @@
+# This is only to use when we want to check for testing - with cf push
+applications:
+  - name: heyzenex
+    path: .
+    instances: 1
+    buildpacks:
+      - nodejs_buildpack
+    command: npm run start
+    random-route: true
