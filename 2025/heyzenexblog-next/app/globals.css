@@ -1,1 +1,69 @@
 @import "tailwindcss";
+
+/* this needs to be added for dark or light */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* https://www.canva.com/colors/color-palettes/mellow-barnyard/ */
+
+@theme {
+	--color-mybackground: #f8faf9;
+
+	/* Navbar */
+	--color-navbar: #015d53;
+	--color-navbartext: #f8efe4;
+
+	--color-primarywhite: #f8faf9;
+	--color-secondarywhite: #f4f5f4;
+
+	/* cream */
+	--color-primarycream: #f9f0e4;
+	--color-primarychampagne: #ffeed5;
+
+	/* black */
+	--color-primarymidnight: #282120;
+	--color-primaryebony: #2f362f;
+	--color-primarygrey: #4e514f;
+
+	/* blue */
+	--color-primaryblue: #0074b7;
+	--color-secondaryblue: #68bbe3;
+
+	--color-primaryred: #c84d60;
+
+	--color-primaryorange: #f5631a;
+
+	/* chocolate and brown */
+	--color-primarybrown: #634f40;
+	--color-primarychocolate: #56382d;
+
+	/* green */
+	--color-primaryforestgreen: #2b5434;
+	--color-secondaryforestgreen: #015d53;
+	--color-secondarytealgreen: #028476;
+
+	/* yellow */
+	--color-primaryyellow: #fad02c;
+	--color-secondaryyellow: #ebaf30;
+
+	/* this is for accent */
+	--color-accentbackground: #015d53;
+	--color-accenttext: #f8efe4;
+}
+
+.dark {
+	--color-mybackground: #2a2a2a;
+
+	--color-navbar: #282120;
+	--color-navbartext: #f8efe4;
+
+	--color-accentbackground: #0074b7;
+	--color-accenttext: #f8faf9;
+}
+
+/* layers  */
+/* base  --- basic style, heading paragraph, imagem etc, h1, button */
+@layer base {
+	body {
+		@apply bg-primarycream;
+	}
+}
