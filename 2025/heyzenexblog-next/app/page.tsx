@@ -14,7 +14,7 @@ export default function Home() {
 						</h1>
 					</div>
 				</div>
-				<div className="col-span-2 col-start-3 col-end-4">
+				<div className="col-span-2 col-start-2 col-end-3">
 					<div>
 						<nav>
 							<a>Home</a>
@@ -28,7 +28,6 @@ export default function Home() {
 				<div className="col-start-6 col-end-7 ">
 					<div className="flex">
 						<Sun></Sun>
-
 						<Moon></Moon>
 					</div>
 				</div>
