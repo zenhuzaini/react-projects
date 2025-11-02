@@ -24,7 +24,7 @@ const StoryPost = () => {
 						TELL YOU
 					</>
 				}
-				right={<>STORIES.</>}></SectionTitle>
+				right={<>STORIES</>}></SectionTitle>
 
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col">{postContentLong}</div>

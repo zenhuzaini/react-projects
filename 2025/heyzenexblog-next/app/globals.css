@@ -61,6 +61,8 @@
 	--color-primarytextInvert: var(--color-primarymidnight);
 
 	--color-primarycardbg: var(--color-primarywhite);
+
+	--color-dot: var(--color-primaryyellow)
 }
 
 .dark {
@@ -68,6 +70,8 @@
 	--color-primaryText: var(--color-primarycream);
 	--color-primaryaccent: var(--color-primaryblue);
 	--color-mybackground: var(--color-primarymidnight);
+
+	--color-dot: var(--color-primaryorange)
 	/* I KNOW THIS WILL BE USED */
 
 	/*  */
@@ -200,5 +204,20 @@
 
 	body {
 		@apply bg-mybackground text-foreground;
+
+		
 	}
 }
+
+/* Smooth global theme transition */
+/* Smooth global theme transition */
+html.theme-transition,
+html.theme-transition * {
+	transition:
+		background-color 0.4s ease,
+		color 0.4s ease,
+		border-color 0.4s ease,
+		fill 0.4s ease,
+		stroke 0.4s ease;
+}
+

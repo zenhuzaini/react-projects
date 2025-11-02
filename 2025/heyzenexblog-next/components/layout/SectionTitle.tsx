@@ -11,7 +11,7 @@ const SectionTitle = ({
 			THROUGH
 		</>
 	),
-	right = <>MY EYES.</>,
+	right = <>MY EYES</>,
 }: SectionTitleProps) => {
 	return (
 		<div className="grid grid-cols-8">
@@ -22,6 +22,7 @@ const SectionTitle = ({
 
 				<div className="text-primaryaccent flex justify-center items-end  text-2xl sm:text-5xl font-extrabold tracking-tighter  leading-[0.8]">
 					{right}
+					<span className="text-dot">.</span>
 				</div>
 			</h2>
 

@@ -10,7 +10,7 @@ const Hero = () => {
 					<h2>
 						ME{" "}
 						<span className="text-primaryaccent">
-							HERE<span className="text-primaryyellow">.</span>
+							HERE<span className="text-dot">.</span>
 						</span>
 					</h2>
 				</div>
