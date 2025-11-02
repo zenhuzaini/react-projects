@@ -1,11 +1,19 @@
 import Header from "@/components/layout/Header";
 import Hero from "@/components/layout/Hero";
+import PhotoCardsSection from "@/components/layout/PhotoCards";
+import SectionTitle from "@/components/layout/SectionTitle";
+import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
+import { faker } from "@faker-js/faker";
 
 export default function Home() {
 	return (
-		<div className="ml-2 mr-2 flex flex-col gap-2 sm:ml-20 sm:mr-20 sm:gap-10">
+		<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 sm:gap-10">
 			<Header></Header>
 			<Hero></Hero>
+			{/* section container */}
+			<div className="mt-5">
+				<PhotoCardsSection></PhotoCardsSection>
+			</div>
 		</div>
 	);
 }
