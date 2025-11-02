@@ -23,7 +23,7 @@
 
 	/* black */
 	--color-primarymidnight: #282120;
-	--color-secondarymidnight: #3f4146;
+	--color-secondarymidnight: rgb(56, 53, 53);
 	--color-primaryebony: #2f362f;
 	--color-primarygrey: #4e514f;
 
@@ -62,7 +62,7 @@
 
 	--color-primarycardbg: var(--color-primarywhite);
 
-	--color-dot: var(--color-primaryyellow)
+	--color-dot: var(--color-primaryyellow);
 }
 
 .dark {
@@ -71,7 +71,7 @@
 	--color-primaryaccent: var(--color-primaryblue);
 	--color-mybackground: var(--color-primarymidnight);
 
-	--color-dot: var(--color-primaryorange)
+	--color-dot: var(--color-primaryyellow);
 	/* I KNOW THIS WILL BE USED */
 
 	/*  */
@@ -204,8 +204,6 @@
 
 	body {
 		@apply bg-mybackground text-foreground;
-
-		
 	}
 }
 
@@ -213,11 +211,6 @@
 /* Smooth global theme transition */
 html.theme-transition,
 html.theme-transition * {
-	transition:
-		background-color 0.4s ease,
-		color 0.4s ease,
-		border-color 0.4s ease,
-		fill 0.4s ease,
-		stroke 0.4s ease;
+	transition: background-color 0.4s ease, color 0.4s ease,
+		border-color 0.4s ease, fill 0.4s ease, stroke 0.4s ease;
 }
-

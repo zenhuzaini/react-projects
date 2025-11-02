@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import ArrowRight from "@/icons/ArrowRight";
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
 import { PhotoCardDetailType } from "@/types/components";
 
