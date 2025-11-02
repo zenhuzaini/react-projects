@@ -30,7 +30,7 @@ const Header = () => {
 				<h1 className="flex flex-col text-2xl sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
 					<span>HEY</span>
 					<span>
-						ZENEX<span>.</span>
+						ZENEX<span className="text-primaryaccent">.</span>
 					</span>
 				</h1>
 			</div>

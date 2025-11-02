@@ -1,5 +1,3 @@
-import React from "react";
-
 const ArrowRight = ({ size = 6 }: { size?: number }) => {
 	const px = size * 4;
 	return (

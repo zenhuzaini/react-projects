@@ -2,14 +2,20 @@ import { ArrowRight } from "lucide-react";
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
 import { PhotoCardDetailType } from "@/types/components";
 
-const PostCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
+const PostCardsLong = ({
+	photoDetail,
+}: {
+	photoDetail: PhotoCardDetailType;
+}) => {
 	return (
 		<div className="grid grid-cols-5 h-[30vh] rounded-2xl overflow-hidden  bg-primarycardbg">
+			{/* I want this to be full */}
 			<div className="col-start-1 col-end-4 sm:col-end-5 w-full h-full">
 				<ImageWithSkeleton src={photoDetail.photoUrl}></ImageWithSkeleton>
 			</div>
+			{/* but when I hover, it will open this. so the image above will have only 80%. I want this only for dekstop */}
 			<div className="pl-3 pr-3 col-start-4 col-end-6 sm:col-start-5  m:pl-5 flex flex-col gap-5 justify-center">
-				<h2 className="text-2xl sm:4xl text-primarytextInvert font-bold tracking-tighter leading-[0.8]">
+				<h2 className="text-2xl sm:text-4xl text-primarytextInvert font-bold tracking-tighter leading-[0.8]">
 					{photoDetail?.title}
 					<span className="text-primaryaccent">.</span>
 				</h2>
@@ -37,4 +43,4 @@ const PostCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 	);
 };
 
-export default PostCards;
+export default PostCardsLong;

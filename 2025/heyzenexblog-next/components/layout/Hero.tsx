@@ -7,7 +7,12 @@ const Hero = () => {
 			<div className="col-span-1 row-span-2">
 				<div className="text-primaryText text-5xl sm:text-9xl font-extrabold tracking-tighter leading-[0.8]">
 					<h2>YOU FOUND</h2>
-					<h2>ME HERE.</h2>
+					<h2>
+						ME{" "}
+						<span className="text-primaryaccent">
+							HERE<span className="text-primaryyellow">.</span>
+						</span>
+					</h2>
 				</div>
 			</div>
 			<div className="col-span-1 row-span-2 relative rounded-2xl overflow-hidden">

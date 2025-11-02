@@ -57,7 +57,7 @@
 	--color-accenttext: #f8efe4;
 
 	--color-primaryText: var(--color-primarymidnight);
-	--color-primaryaccent: var(--color-primaryorange);
+	--color-primaryaccent: var(--color-secondaryforestgreen);
 	--color-primarytextInvert: var(--color-primarymidnight);
 
 	--color-primarycardbg: var(--color-primarywhite);
