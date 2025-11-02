@@ -1,6 +1,7 @@
 import React from "react";
 
-const ArrowRight = () => {
+const ArrowRight = ({ size = 6 }: { size?: number }) => {
+	const px = size * 4;
 	return (
 		<div>
 			<svg
@@ -9,7 +10,9 @@ const ArrowRight = () => {
 				viewBox="0 0 24 24"
 				strokeWidth="1.5"
 				stroke="currentColor"
-				className="size-6">
+				className="text-primarytextInvert"
+				width={px}
+				height={px}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"

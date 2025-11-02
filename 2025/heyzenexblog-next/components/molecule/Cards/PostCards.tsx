@@ -8,8 +8,8 @@ const PostCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 			<div className="col-start-1 col-end-4 sm:col-end-5 w-full h-full">
 				<ImageWithSkeleton src={photoDetail.photoUrl}></ImageWithSkeleton>
 			</div>
-			<div className="pl-3 col-start-4 col-end-6 sm:col-start-5 pr-3 sm:pl-5 flex flex-col gap-5 justify-center">
-				<h2 className="text-base text-primarytextInvert sm:text-3xl md:text-3xl font-bold tracking-tighter leading-[0.8]">
+			<div className="pl-3 pr-3 col-start-4 col-end-6 sm:col-start-5  m:pl-5 flex flex-col gap-5 justify-center">
+				<h2 className="text-2xl sm:4xl text-primarytextInvert font-bold tracking-tighter leading-[0.8]">
 					{photoDetail?.title}
 					<span className="text-primaryaccent">.</span>
 				</h2>
@@ -18,9 +18,9 @@ const PostCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 					{photoDetail?.description}
 				</p>
 
-				<div className="flex justify-between">
+				<div className="flex justify-between gap-2 sm:gap-0">
 					<div className="flex-row text-xs text-primarytextInvert font-extralight text-left">
-						<h2 className="font-semibold tracking-tight leading-[0.8]">
+						<h2 className="font-extralight tracking-tight sm:leading-[0.8]">
 							{photoDetail.city}, {photoDetail.country}
 						</h2>
 						<p className="text-[9px] sm:text-xs font-normal tracking-tight">

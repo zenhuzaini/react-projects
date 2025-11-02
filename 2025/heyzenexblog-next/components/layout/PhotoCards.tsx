@@ -3,7 +3,7 @@ import { photoMock } from "@/mock/photo";
 import PhotoCards from "../molecule/Cards/PhotoCards";
 
 const PhotoCardsSection = () => {
-	const photoContent = photoMock({ length: 8 }).map((photoDetail, idx) => {
+	const photoContent = photoMock({ length: 9 }).map((photoDetail, idx) => {
 		if (idx === 0) {
 			return (
 				<div

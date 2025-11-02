@@ -15,12 +15,12 @@ const SectionTitle = ({
 }: SectionTitleProps) => {
 	return (
 		<div className="grid grid-cols-8">
-			<h2 className="col-span-3 flex gap-2 sm:gap-2 items-center">
+			<h2 className="col-span-4 flex gap-2 sm:gap-2 sm:items-center">
 				<div className=" text-primaryText text-2xl sm:text-2xl font-light  leading-[0.8]">
 					{left}
 				</div>
 
-				<div className="text-primaryaccent text-2xl sm:text-5xl font-extrabold tracking-tighter  leading-[0.8]">
+				<div className="text-primaryaccent flex justify-center items-end  text-2xl sm:text-5xl font-extrabold tracking-tighter  leading-[0.8]">
 					{right}
 				</div>
 			</h2>
