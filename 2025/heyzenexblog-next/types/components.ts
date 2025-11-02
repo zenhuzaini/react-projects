@@ -5,4 +5,6 @@ export type PhotoCardDetailType = {
 	month: string;
 	country: string;
 	photoUrl: string;
+	title?: string;
+	description?: string;
 };

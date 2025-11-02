@@ -1,11 +1,11 @@
 "use client";
 
-import Sun from "@/app/icons/Sun";
+import Sun from "@/icons/Sun";
 import { Switch } from "../ui/switch";
-import Moon from "@/app/icons/Moon";
+import Moon from "@/icons/Moon";
 import { useEffect, useState } from "react";
-import ThreeBars from "@/app/icons/ThreeBars";
-import XMark from "@/app/icons/XMark";
+import ThreeBars from "@/icons/ThreeBars";
+import XMark from "@/icons/XMark";
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState<boolean>(false);

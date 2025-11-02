@@ -49,6 +49,7 @@
 
 	--color-background: var(--color-primarycream);
 	--color-mybackground: var(--color-primarycream);
+	--color-mybackgroundinvert: var(--color-primarymidnight);
 
 	/* this is for accent */
 	--color-accentbackground: #015d53;
@@ -56,6 +57,9 @@
 
 	--color-primaryText: var(--color-primarymidnight);
 	--color-primaryaccent: var(--color-primaryorange);
+	--color-primarytextInvert: var(--color-primarymidnight);
+
+	--color-primarycardbg: var(--color-primarywhite);
 }
 
 .dark {
@@ -67,6 +71,9 @@
 
 	/*  */
 	--color-background: var(--color-primarymidnight);
+	--color-mybackgroundinvert: var(--color-primarycream);
+	--color-primarytextInvert: var(--color-primarycream);
+	--color-primarycardbg: var(--color-primaryebony);
 
 	/* UNUSED */
 	--foreground: oklch(0.985 0 0);

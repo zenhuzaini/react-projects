@@ -2,8 +2,11 @@ import Header from "@/components/layout/Header";
 import Hero from "@/components/layout/Hero";
 import PhotoCardsSection from "@/components/layout/PhotoCards";
 import SectionTitle from "@/components/layout/SectionTitle";
+
+import ArrowRight from "../icons/ArrowRight";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { faker } from "@faker-js/faker";
+import StoryPost from "@/components/layout/StoryPost";
 
 export default function Home() {
 	return (
@@ -14,6 +17,7 @@ export default function Home() {
 			<div className="mt-5">
 				<PhotoCardsSection></PhotoCardsSection>
 			</div>
+			<StoryPost></StoryPost>
 		</div>
 	);
 }
