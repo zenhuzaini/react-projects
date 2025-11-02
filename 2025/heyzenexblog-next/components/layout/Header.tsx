@@ -3,12 +3,23 @@
 import Sun from "@/app/icons/Sun";
 import { Switch } from "../ui/switch";
 import Moon from "@/app/icons/Moon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ThreeBars from "@/app/icons/ThreeBars";
 import XMark from "@/app/icons/XMark";
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState<boolean>(false);
+	const [isDark, setIsDark] = useState(false);
+	const toggleDarkMode = () => {
+		document.documentElement.classList.toggle("dark");
+		setIsDark(document.documentElement.classList.contains("dark"));
+	};
+
+	useEffect(() => {
+		// Check if html element has the 'dark' class on mount
+		setIsDark(document.documentElement.classList.contains("dark"));
+	}, []);
+
 	const toggleMenu = () => {
 		setIsBurgerMenuOpen((prev) => !prev);
 	};
@@ -60,9 +71,8 @@ const Header = () => {
 					<a href="#" className="block py-2 text-primaryText ">
 						Contact
 					</a>
-					<button
-						onClick={() => document.documentElement.classList.toggle("dark")}>
-						<Moon></Moon>
+					<button onClick={toggleDarkMode}>
+						{isDark ? <Sun /> : <Moon />}
 					</button>
 				</div>
 			</div>

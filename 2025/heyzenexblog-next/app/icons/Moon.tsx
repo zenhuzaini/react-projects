@@ -1,4 +1,5 @@
 const Moon = ({ size = 6 }: { size?: number }) => {
+	const px = size * 4; // Tailwind scale: 1 = 4px
 	return (
 		<div>
 			<svg
@@ -7,7 +8,9 @@ const Moon = ({ size = 6 }: { size?: number }) => {
 				viewBox="0 0 24 24"
 				strokeWidth="1.5"
 				stroke="currentColor"
-				className={`size-6 text-primaryText`}>
+				className="text-primaryText"
+				width={px}
+				height={px}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
