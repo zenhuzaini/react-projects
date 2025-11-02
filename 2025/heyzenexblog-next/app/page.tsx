@@ -14,10 +14,10 @@ export default function Home() {
 			<Header></Header>
 			<Hero></Hero>
 			{/* section container */}
-			<div className="mt-5">
+			<div className="mt-8 sm:mt-5 flex flex-col gap-10 sm:gap-15">
 				<PhotoCardsSection></PhotoCardsSection>
+				<StoryPost></StoryPost>
 			</div>
-			<StoryPost></StoryPost>
 		</div>
 	);
 }

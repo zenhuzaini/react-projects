@@ -23,6 +23,7 @@
 
 	/* black */
 	--color-primarymidnight: #282120;
+	--color-secondarymidnight: #3f4146;
 	--color-primaryebony: #2f362f;
 	--color-primarygrey: #4e514f;
 
@@ -73,7 +74,7 @@
 	--color-background: var(--color-primarymidnight);
 	--color-mybackgroundinvert: var(--color-primarycream);
 	--color-primarytextInvert: var(--color-primarycream);
-	--color-primarycardbg: var(--color-primaryebony);
+	--color-primarycardbg: var(--color-secondarymidnight);
 
 	/* UNUSED */
 	--foreground: oklch(0.985 0 0);
