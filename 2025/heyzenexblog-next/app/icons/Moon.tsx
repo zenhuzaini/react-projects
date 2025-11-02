@@ -7,7 +7,7 @@ const Moon = ({ size = 6 }: { size?: number }) => {
 				viewBox="0 0 24 24"
 				strokeWidth="1.5"
 				stroke="currentColor"
-				className={`size-${size}`}>
+				className={`size-6 text-primaryText`}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"

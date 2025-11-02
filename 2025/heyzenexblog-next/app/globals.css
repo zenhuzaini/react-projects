@@ -7,14 +7,15 @@
 /* https://www.canva.com/colors/color-palettes/mellow-barnyard/ */
 
 @theme {
-	--color-mybackground: #f8faf9;
-
 	/* Navbar */
 	--color-navbar: #015d53;
 	--color-navbartext: #f8efe4;
 
 	--color-primarywhite: #f8faf9;
 	--color-secondarywhite: #f4f5f4;
+
+	/* orange */
+	--color-fierceorange: #fc6e20;
 
 	/* cream */
 	--color-primarycream: #f9f0e4;
@@ -46,20 +47,28 @@
 	--color-primaryyellow: #fad02c;
 	--color-secondaryyellow: #ebaf30;
 
+	--color-background: var(--color-primarycream);
+	--color-mybackground: var(--color-primarycream);
+
 	/* this is for accent */
 	--color-accentbackground: #015d53;
 	--color-accenttext: #f8efe4;
+
+	--color-primaryText: var(--color-primarymidnight);
+	--color-primaryaccent: var(--color-primaryorange);
 }
 
 .dark {
-	--color-mybackground: #2a2a2a;
+	/* I KNOW THIS WILL BE USED */
+	--color-primaryText: var(--color-primarycream);
+	--color-primaryaccent: var(--color-primaryblue);
+	--color-mybackground: var(--color-primarymidnight);
+	/* I KNOW THIS WILL BE USED */
 
-	--color-navbar: #282120;
-	--color-navbartext: #f8efe4;
+	/*  */
+	--color-background: var(--color-primarymidnight);
 
-	--color-accentbackground: #0074b7;
-	--color-accenttext: #f8faf9;
-	--background: oklch(0.145 0 0);
+	/* UNUSED */
 	--foreground: oklch(0.985 0 0);
 	--card: oklch(0.205 0 0);
 	--card-foreground: oklch(0.985 0 0);
@@ -90,14 +99,6 @@
 	--sidebar-accent-foreground: oklch(0.985 0 0);
 	--sidebar-border: oklch(1 0 0 / 10%);
 	--sidebar-ring: oklch(0.556 0 0);
-}
-
-/* layers  */
-/* base  --- basic style, heading paragraph, imagem etc, h1, button */
-@layer base {
-	body {
-		@apply bg-primarycream;
-	}
 }
 
 @theme inline {
@@ -140,16 +141,18 @@
 
 :root {
 	--radius: 0.625rem;
-	--background: oklch(1 0 0);
-	--foreground: oklch(0.145 0 0);
+	--background: var(--color-primarycream);
+	--foreground: var(--color-primarymidnight);
+
+	/* UNUSED */
 	--card: oklch(1 0 0);
 	--card-foreground: oklch(0.145 0 0);
 	--popover: oklch(1 0 0);
 	--popover-foreground: oklch(0.145 0 0);
 	--primary: oklch(0.205 0 0);
-	--primary-foreground: oklch(0.985 0 0);
+	--primary-foreground: var(--color-primarycream);
 	--secondary: oklch(0.97 0 0);
-	--secondary-foreground: oklch(0.205 0 0);
+	--secondary-foreground: var(--color-primarymidnight);
 	--muted: oklch(0.97 0 0);
 	--muted-foreground: oklch(0.556 0 0);
 	--accent: oklch(0.97 0 0);
@@ -174,10 +177,20 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+	* {
+		@apply border-border outline-ring/50;
 	}
-  body {
-    @apply bg-background text-foreground;
+
+	h1,
+	span {
+		@apply text-primaryText;
+	}
+
+	a {
+		@apply text-primaryText;
+	}
+
+	body {
+		@apply bg-mybackground text-foreground;
 	}
 }

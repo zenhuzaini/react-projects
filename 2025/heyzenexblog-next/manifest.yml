@@ -6,4 +6,5 @@ applications:
     buildpacks:
       - nodejs_buildpack
     command: npm run start
-    random-route: true
+    memory: 512M
+    disk_quota: 10G
