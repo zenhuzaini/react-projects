@@ -17,7 +17,7 @@ export const photoMock = ({
 			month: faker.date.month({ abbreviated: true }),
 			country: faker.location.country(),
 			photoUrl: faker.image.url(),
-			title: faker.lorem.words({ min: 2, max: 5 }).slice(0, 27),
+			title: faker.book.series(),
 			description: descriptionWords,
 		};
 	});

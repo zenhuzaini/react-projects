@@ -6,12 +6,14 @@ const Footer = () => {
 					<p className=" font-light tracking-tight">
 						simply built with{" "}
 						<span className="text-primaryaccent sm:font-extrabold font-semibold ">
-							LOVE.
+							LOVE<span className="text-dot">.</span>
 						</span>
 					</p>
 				</div>
-				<div className=" flex-row text-[8px] sm:text-sm font-extralight text-right">
-					<p>copyright 2025 @heyzenex</p>
+				<div className=" flex-row text-[9px] sm:text-sm font-extralight text-right">
+					<p>
+						copyright 2025 @heyzenex<span className="text-dot">.</span>
+					</p>
 					<div>
 						<p>
 							all design, photos & articles are property of{" "}

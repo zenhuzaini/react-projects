@@ -21,15 +21,20 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 							<span className="text-primaryaccent">.</span>
 						</h2>
 
-						<div className="text-primarytextInvert text-xs sm:text-base font-extralight tracking-tight flex justify-between">
+						<div className="text-primarytextInvert text-xs sm:text-sm  font-extralight tracking-tight flex justify-between">
 							<p className="flex gap-3">
 								<span className="flex gap-1 items-center">
-									<Map size={4} />
+									<span className="hidden lg:flex">
+										<Map size={4} />
+									</span>
 									<span>{photoDetail.country}</span>
 								</span>
 
 								<span className="flex gap-1 items-center">
-									<Calendar size={4}></Calendar>
+									<span className="hidden lg:flex">
+										<Calendar size={4}></Calendar>
+									</span>
+
 									<span>
 										{photoDetail.month} {photoDetail.year}
 									</span>
