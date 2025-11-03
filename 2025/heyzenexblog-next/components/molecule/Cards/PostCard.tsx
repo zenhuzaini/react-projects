@@ -15,7 +15,7 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 			<div className="bg-primarycardbg h-[30%] sm:h-[6vw]">
 				<div className="flex justify-between items-center p-4 sm:p-6">
 					<div className="flex flex-col gap-2">
-						<h2 className="text-primarytextInvert text-base sm:text-3xl md:text-3xl font-semibold tracking-tighter leading-[0.8]">
+						<h2 className="text-primarytextInvert text-2xl sm:text-3xl md:text-3xl font-semibold tracking-tighter leading-[0.8]">
 							{photoDetail.title}
 							<span className="text-primaryaccent">.</span>
 						</h2>
