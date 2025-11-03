@@ -53,7 +53,7 @@ const Header = () => {
 				</h1>
 			</div>
 
-			<div className="hidden sm:flex col-span-2 col-start-2 col-end-4 place-self-center">
+			<div className="hidden lg:flex col-span-2 col-start-2 col-end-4 place-self-center">
 				<nav className="flex gap-4">
 					<a>Home</a>
 					<a>Photography</a>
@@ -63,7 +63,7 @@ const Header = () => {
 			</div>
 
 			{/* Mobile menu toggle */}
-			<div className="sm:hidden col-start-8 col-end-8 flex justify-center items-center">
+			<div className="lg:hidden flex col-start-8 col-end-8  justify-center items-center">
 				<button onClick={toggleMenu}>
 					{!isBurgerMenuOpen ? <ThreeBars /> : <XMark />}
 				</button>
@@ -93,7 +93,7 @@ const Header = () => {
 			</div>
 
 			{/* Desktop switch */}
-			<div className="hidden sm:flex col-start-8 col-end-8 justify-center items-center bg-primaryaccent rounded-b-2xl">
+			<div className="hidden lg:flex col-start-8 col-end-8 justify-center items-center bg-primaryaccent rounded-b-2xl">
 				<div className="flex gap-3 items-center">
 					<Sun />
 					<Switch checked={isDark} onCheckedChange={toggleDarkMode} />

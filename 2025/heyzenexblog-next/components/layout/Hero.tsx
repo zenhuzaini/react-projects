@@ -5,7 +5,7 @@ const Hero = () => {
 	return (
 		<div className="grid grid-flow-col grid-rows-4 gap-4">
 			<div className="col-span-1 row-span-2">
-				<div className="text-primaryText text-5xl sm:text-9xl font-extrabold tracking-tighter leading-[0.8]">
+				<div className="text-primaryText text-5xl lg:text-9xl font-extrabold tracking-tighter leading-[0.8]">
 					<h2>YOU FOUND</h2>
 					<h2>
 						ME{" "}
