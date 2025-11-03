@@ -10,6 +10,8 @@ import XMark from "@/icons/XMark";
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 	const [isDark, setIsDark] = useState(false);
+	const [showHeader, setShowHeader] = useState(true);
+	const [lastScrollY, setLastScrollY] = useState(0);
 
 	const toggleDarkMode = () => {
 		const html = document.documentElement;
@@ -42,8 +44,36 @@ const Header = () => {
 
 	const toggleMenu = () => setIsBurgerMenuOpen((prev) => !prev);
 
+	useEffect(() => {
+		let ticking = false;
+		function handleScroll() {
+			const currentScrollY = window.scrollY;
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					if (currentScrollY < 80 || currentScrollY < lastScrollY) {
+						setShowHeader(true);
+					} else {
+						setShowHeader(false);
+					}
+					setLastScrollY(currentScrollY);
+					ticking = false;
+				});
+				ticking = true;
+			}
+		}
+		window.addEventListener("scroll", handleScroll);
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, [lastScrollY]);
+
 	return (
-		<div className="grid grid-cols-8 h-15 sm:h-20 transition-colors duration-500">
+		<div
+			className={`
+				bg-mybackground grid grid-cols-8 h-15 sm:h-20
+				z-50 sticky top-0 
+				transition-transform duration-700 ease-in-out
+				lg:rounded-br-2xl
+				${showHeader ? "translate-y-0 bg-mybackground" : "-translate-y-full"}
+  			`}>
 			<div className="flex items-center">
 				<h1 className="flex flex-col text-2xl sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
 					<span>HEY</span>
@@ -63,7 +93,7 @@ const Header = () => {
 			</div>
 
 			{/* Mobile menu toggle */}
-			<div className="lg:hidden flex col-start-8 col-end-8  justify-center items-center">
+			<div className="lg:hidden flex col-start-8 col-end-8 justify-center items-center">
 				<button onClick={toggleMenu}>
 					{!isBurgerMenuOpen ? <ThreeBars /> : <XMark />}
 				</button>
@@ -71,7 +101,7 @@ const Header = () => {
 				{/* Mobile menu */}
 				<div
 					id="mobile-menu"
-					className={`sm:hidden absolute top-16 left-0 w-full bg-mybackground px-4 py-2 z-50 transition-all duration-300 ${
+					className={`sm:hidden absolute top-15 left-0 w-full bg-mybackground px-4 py-2 z-50 transition-all duration-300 ${
 						!isBurgerMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"
 					}`}>
 					<a href="#" className="block py-2 text-primaryText">
