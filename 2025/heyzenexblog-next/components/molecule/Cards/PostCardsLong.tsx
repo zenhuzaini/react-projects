@@ -1,6 +1,7 @@
 import ArrowRight from "@/icons/ArrowRight";
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
 import { PhotoCardDetailType } from "@/types/components";
+import { animationForArrow } from "@/animation/animation";
 
 const PostCardsLong = ({
 	photoDetail,
@@ -15,7 +16,7 @@ const PostCardsLong = ({
 			</div>
 			{/* but when I hover, it will open this. so the image above will have only 80%. I want this only for dekstop */}
 			<div className="pl-3 pr-3 col-start-4 col-end-6 sm:col-start-5  m:pl-5 flex flex-col gap-5 justify-center">
-				<h2 className="text-2xl sm:text-4xl text-primarytextInvert font-bold tracking-tighter leading-[0.8]">
+				<h2 className="text-2xl sm:text-4xl text-primarytextInvert font-bold tracking-tight sm:tracking-tighter leading-[0.8]">
 					{photoDetail?.title}
 					<span className="text-primaryaccent">.</span>
 				</h2>
@@ -24,12 +25,12 @@ const PostCardsLong = ({
 					{photoDetail?.description}
 				</p>
 
-				<div className="flex justify-between gap-2 sm:gap-0">
-					<div className="flex-row text-xs text-primarytextInvert font-extralight text-left">
+				<div className="flex sm:justify-between gap-2 sm:gap-0">
+					<div className="sm:flex-col sm:flex gap-0.5 sm:gap-0   sm:text-xs text-primarytextInvert font-extralight text-left">
 						<h2 className="font-extralight tracking-tight sm:leading-[0.8]">
 							{photoDetail.city}, {photoDetail.country}
 						</h2>
-						<p className="text-[9px] sm:text-xs font-normal tracking-tight">
+						<p className="text-[10px] sm:text-sm font-light tracking-tight">
 							{photoDetail.month} {photoDetail.year}
 						</p>
 					</div>
@@ -37,6 +38,10 @@ const PostCardsLong = ({
 					<div className="hidden sm:flex flex-row text-xs font-extralight text-right">
 						<ArrowRight />
 					</div>
+				</div>
+
+				<div className="sm:hidden flex text-xs font-extralight self-end">
+					<ArrowRight />
 				</div>
 			</div>
 		</div>

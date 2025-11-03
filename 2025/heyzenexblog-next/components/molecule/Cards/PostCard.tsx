@@ -5,6 +5,7 @@ import Map from "@/icons/Map";
 import Calendar from "@/icons/Calendar";
 import ArrowRight from "@/icons/ArrowRight";
 import { PhotoCardDetailType } from "@/types/components";
+import { Separator } from "@/components/ui/separator";
 
 const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 	return (
@@ -13,30 +14,32 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 				<ImageWithSkeleton src={faker.image.url()}></ImageWithSkeleton>
 			</div>
 			<div className="bg-primarycardbg h-[30%] sm:h-[6vw]">
-				<div className="flex justify-between items-center p-4 sm:p-6">
+				<div className="items-center p-4 sm:p-6">
 					<div className="flex flex-col gap-2">
-						<h2 className="text-primarytextInvert text-2xl sm:text-3xl md:text-3xl font-semibold tracking-tighter leading-[0.8]">
+						<h2 className="text-primarytextInvert text-lg sm:text-3xl md:text-3xl tracking-tight font-semibold leading-[0.8]">
 							{photoDetail.title}
 							<span className="text-primaryaccent">.</span>
 						</h2>
 
-						<p className="text-primarytextInvert text-[9px] sm:text-xs font-normal tracking-tight flex gap-4">
-							<span className="tracking-tight text-xs sm:text-sm font-light flex gap-1 items-center">
-								<Map size={4} />
-								<span>{photoDetail.country}</span>
-							</span>
-
-							<span className="tracking-tight text-xs sm:text-sm font-light flex gap-1 items-center">
-								<Calendar size={4}></Calendar>
-								<span>
-									{photoDetail.month} {photoDetail.year}
+						<div className="text-primarytextInvert text-xs sm:text-base font-extralight tracking-tight flex justify-between">
+							<p className="flex gap-3">
+								<span className="flex gap-1 items-center">
+									<Map size={4} />
+									<span>{photoDetail.country}</span>
 								</span>
-							</span>
-						</p>
-					</div>
 
-					<div className="flex-row text-xs font-extralight text-right">
-						<ArrowRight />
+								<span className="flex gap-1 items-center">
+									<Calendar size={4}></Calendar>
+									<span>
+										{photoDetail.month} {photoDetail.year}
+									</span>
+								</span>
+							</p>
+
+							<div className=" text-xs font-extralight text-right">
+								<ArrowRight />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

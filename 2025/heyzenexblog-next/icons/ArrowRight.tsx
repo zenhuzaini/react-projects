@@ -1,7 +1,9 @@
+import { animationForArrow } from "@/animation/animation";
+
 const ArrowRight = ({ size = 6 }: { size?: number }) => {
 	const px = size * 4;
 	return (
-		<div>
+		<div className={`${animationForArrow}`}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"

@@ -21,7 +21,7 @@ const PhotoCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 						<h2 className="text-accenttext font-semibold tracking-tight leading-[0.8]">
 							{photoDetail.country}
 						</h2>
-						<p className="text-accenttext text-[9px] sm:text-xs font-normal tracking-tight">
+						<p className="text-accenttext text-[9px] sm:text-xs  font-normal tracking-tight">
 							{photoDetail.month} {photoDetail.year}
 						</p>
 					</div>
