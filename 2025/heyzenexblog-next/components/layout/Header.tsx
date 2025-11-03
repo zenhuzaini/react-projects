@@ -68,11 +68,13 @@ const Header = () => {
 	return (
 		<div
 			className={`
-				bg-mybackground grid grid-cols-8 h-15 sm:h-20
+				bg-mybackground
+				grid grid-cols-8 h-15 sm:h-20
 				z-50 sticky top-0 
-				transition-transform duration-700 ease-in-out
+				transition-all
+				duration-700 ease-in-out
 				lg:rounded-br-2xl
-				${showHeader ? "translate-y-0 bg-mybackground" : "-translate-y-full"}
+				${showHeader ? "translate-y-0 " : "-translate-y-full"}
   			`}>
 			<div className="flex items-center">
 				<h1 className="flex flex-col text-2xl sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
@@ -101,7 +103,7 @@ const Header = () => {
 				{/* Mobile menu */}
 				<div
 					id="mobile-menu"
-					className={`sm:hidden absolute top-15 left-0 w-full bg-mybackground px-4 py-2 z-50 transition-all duration-300 ${
+					className={`sm:hidden absolute top-15 left-0 w-full bg-mybackground py-2 z-50 transition-all duration-400 ${
 						!isBurgerMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"
 					}`}>
 					<a href="#" className="block py-2 text-primaryText">
