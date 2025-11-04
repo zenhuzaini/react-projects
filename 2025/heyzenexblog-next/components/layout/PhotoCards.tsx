@@ -1,25 +1,30 @@
 import SectionTitle from "./SectionTitle";
 import { photoMock } from "@/mock/photo";
 import PhotoCards from "../molecule/Cards/PhotoCards";
+import Link from "next/link";
 
 const PhotoCardsSection = () => {
 	const photoContent = photoMock({ length: 9 }).map((photoDetail, idx) => {
 		if (idx === 0) {
 			return (
-				<div
-					key={idx}
-					className="col-span-2 relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
-					<PhotoCards key={idx} photoDetail={photoDetail} />
-				</div>
+				<Link key={idx} href={`/photobook/${photoDetail.id}`}>
+					<div
+						key={idx}
+						className="col-span-2 relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
+						<PhotoCards key={idx} photoDetail={photoDetail} />
+					</div>
+				</Link>
 			);
 		}
 
 		return (
-			<div
-				key={idx}
-				className="relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
-				<PhotoCards key={idx} photoDetail={photoDetail} />
-			</div>
+			<Link key={idx} href={`/photobook/${photoDetail.id}`}>
+				<div
+					key={idx}
+					className="relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
+					<PhotoCards key={idx} photoDetail={photoDetail} />
+				</div>
+			</Link>
 		);
 	});
 	return (

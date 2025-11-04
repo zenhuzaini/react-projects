@@ -10,6 +10,7 @@ import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { faker } from "@faker-js/faker";
 import ArrowRight from "@/icons/ArrowRight";
 import Link from "next/link";
+import ScrollToTop from "@/components/layout/ScrollToTop";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				<ScrollToTop></ScrollToTop>
 				<div className="flex flex-col gap-10 min-h-screen w-screen">
 					{/* this is to wrap not full frame */}
 					<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 sm:gap-10 grow">
