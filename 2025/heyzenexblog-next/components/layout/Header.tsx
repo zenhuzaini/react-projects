@@ -6,12 +6,14 @@ import Moon from "@/icons/Moon";
 import { useEffect, useState } from "react";
 import ThreeBars from "@/icons/ThreeBars";
 import XMark from "@/icons/XMark";
+import Link from "next/link";
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 	const [isDark, setIsDark] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [lastScrollY, setLastScrollY] = useState(0);
+	const [bg, setBG] = useState("");
 
 	const toggleDarkMode = () => {
 		const html = document.documentElement;
@@ -52,6 +54,7 @@ const Header = () => {
 				window.requestAnimationFrame(() => {
 					if (currentScrollY < 80 || currentScrollY < lastScrollY) {
 						setShowHeader(true);
+						setBG("bg-mybackground"); //this is done to avoid blinking if I add this directly to the classname and do reload
 					} else {
 						setShowHeader(false);
 						if (isBurgerMenuOpen) {
@@ -70,22 +73,24 @@ const Header = () => {
 
 	return (
 		<div
-			className={`
-				bg-mybackground
+			className={`	
 				grid grid-cols-8 h-15 sm:h-20
 				z-50 sticky top-0 
 				transition-all
 				duration-700 ease-in-out
 				lg:rounded-br-2xl
-				${showHeader ? "translate-y-0 " : "-translate-y-full"}
+				${showHeader ? "translate-y-0 " + bg : "-translate-y-full"}
   			`}>
 			<div className="flex items-center">
-				<h1 className="flex flex-col text-2xl sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
-					<span>HEY</span>
-					<span>
-						ZENEX<span className="text-primaryaccent">.</span>
-					</span>
-				</h1>
+				<Link href={"/"}>
+					<h1 className="flex flex-col text-2xl sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
+						<span>HEY</span>
+						<span>
+							<span className="text-primaryaccent">ZENEX</span>
+							<span className="text-dot">.</span>
+						</span>
+					</h1>
+				</Link>
 			</div>
 
 			<div className="hidden lg:flex col-span-2 col-start-2 col-end-4 place-self-center">
