@@ -1,6 +1,12 @@
 import { animationForArrow } from "@/animation/animation";
 
-const ArrowRight = ({ size = 6 }: { size?: number }) => {
+const ArrowRight = ({
+	size = 6,
+	className = "text-primarytextInvert",
+}: {
+	size?: number;
+	className?: string;
+}) => {
 	const px = size * 4;
 	return (
 		<div className={`${animationForArrow}`}>
@@ -10,7 +16,7 @@ const ArrowRight = ({ size = 6 }: { size?: number }) => {
 				viewBox="0 0 24 24"
 				strokeWidth="1.5"
 				stroke="currentColor"
-				className="text-primarytextInvert"
+				className={className}
 				width={px}
 				height={px}>
 				<path

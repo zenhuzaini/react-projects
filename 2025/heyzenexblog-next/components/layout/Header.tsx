@@ -54,6 +54,9 @@ const Header = () => {
 						setShowHeader(true);
 					} else {
 						setShowHeader(false);
+						if (isBurgerMenuOpen) {
+							setIsBurgerMenuOpen((prev) => !prev);
+						}
 					}
 					setLastScrollY(currentScrollY);
 					ticking = false;
@@ -95,7 +98,7 @@ const Header = () => {
 			</div>
 
 			{/* Mobile menu toggle */}
-			<div className="lg:hidden flex col-start-8 col-end-8 justify-center items-center">
+			<div className="lg:hidden flex col-start-8 col-end-8 justify-end items-center">
 				<button onClick={toggleMenu}>
 					{!isBurgerMenuOpen ? <ThreeBars /> : <XMark />}
 				</button>
@@ -103,7 +106,8 @@ const Header = () => {
 				{/* Mobile menu */}
 				<div
 					id="mobile-menu"
-					className={`sm:hidden absolute top-15 left-0 w-full bg-mybackground py-2 z-50 transition-all duration-400 ${
+					className={`lg:hidden absolute top-15 sm:top-16 left-0 w-full bg-mybackground py-2 z-50 transition-all
+					duration-300 ease-in-out ${
 						!isBurgerMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"
 					}`}>
 					<a href="#" className="block py-2 text-primaryText">

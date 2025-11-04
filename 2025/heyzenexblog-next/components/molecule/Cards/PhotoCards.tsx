@@ -1,11 +1,19 @@
 import React from "react";
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
 import { PhotoCardDetailType } from "@/types/components";
+import ArrowRight from "@/icons/ArrowRight";
+import { animationForArrow } from "@/animation/animation";
 
 const PhotoCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 	return (
-		<div className="w-full h-full">
+		<div className="w-full h-full hover:pointer-none:">
 			<ImageWithSkeleton src={photoDetail.photoUrl}></ImageWithSkeleton>
+			<div className="hidden absolute top-0 m-1 justify-end w-full  pt-3 pr-6">
+				<div
+					className={`bg-accenttext h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
+					<ArrowRight size={4} />
+				</div>
+			</div>
 			<div className={`absolute bottom-0 left-0 w-full p-2 rounded-b-sm`}>
 				{/* Black fade background */}
 				<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-b-sm z-0"></div>
