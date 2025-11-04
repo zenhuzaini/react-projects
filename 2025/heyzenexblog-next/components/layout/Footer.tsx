@@ -1,7 +1,7 @@
 const Footer = () => {
 	return (
 		<div>
-			<div className=" p-4 sm:pl-20 sm:pr-20 py-4 items-center text-primarytextInvert flex justify-between">
+			<div className="p-4 sm:pl-20 sm:pr-20 py-4 items-center text-primarytextInvert flex justify-between">
 				<div className="flex gap-1 text-xs sm:text-sm">
 					<p className=" font-light tracking-tight">
 						simply built with{" "}
