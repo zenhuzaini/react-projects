@@ -6,14 +6,16 @@ import { useState } from "react";
 export const ImageWithSkeleton = ({
 	src,
 	alt = "Just an image",
+	rounded = "rounded-2xl",
 }: {
 	src: string;
 	alt?: string;
+	rounded?: string;
 }) => {
 	const [loading, setLoading] = useState(true);
 
 	return (
-		<div className="relative h-full w-full rounded-2xl overflow-hidden">
+		<div className={`relative h-full w-full overflow-hidden ${rounded}`}>
 			{loading && (
 				<>
 					<Skeleton className="absolute inset-0 h-full w-full" />

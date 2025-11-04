@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker";
 
 const UnderDevelopment = () => {
 	return (
-		<div className="w-full h-[80vh] flex">
+		<div className="w-full h-[70vh] lg:h-[80vh] flex">
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4 w-full">
 				<div className="rounded-2xl w-full h-full">
 					<ImageWithSkeleton src={faker.image.url()}></ImageWithSkeleton>
