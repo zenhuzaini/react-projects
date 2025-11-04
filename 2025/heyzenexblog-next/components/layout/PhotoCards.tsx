@@ -7,24 +7,24 @@ const PhotoCardsSection = () => {
 	const photoContent = photoMock({ length: 9 }).map((photoDetail, idx) => {
 		if (idx === 0) {
 			return (
-				<Link key={idx} href={`/photobook/${photoDetail.id}`}>
-					<div
-						key={idx}
-						className="col-span-2 relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
+				<div
+					key={idx}
+					className="col-span-2 relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
+					<Link key={idx} href={`/photobook/${photoDetail.id}`}>
 						<PhotoCards key={idx} photoDetail={photoDetail} />
-					</div>
-				</Link>
+					</Link>
+				</div>
 			);
 		}
 
 		return (
-			<Link key={idx} href={`/photobook/${photoDetail.id}`}>
-				<div
-					key={idx}
-					className="relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
+			<div
+				key={idx}
+				className="relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh]">
+				<Link key={idx} href={`/photobook/${photoDetail.id}`}>
 					<PhotoCards key={idx} photoDetail={photoDetail} />
-				</div>
-			</Link>
+				</Link>
+			</div>
 		);
 	});
 	return (

@@ -10,12 +10,12 @@ import Link from "next/link";
 
 const StoryPost = () => {
 	const postContentLong = photoMock({ length: 1 }).map((photoDetail, idx) => (
-		<Link key={idx} href={`/story/${photoDetail.id}`}>
+		<Link key={idx} href={`/storybook/${photoDetail.id}`}>
 			<PostCardsLong key={idx} photoDetail={photoDetail} />
 		</Link>
 	));
 	const postContent = photoMock({ length: 4 }).map((photoDetail, idx) => (
-		<Link key={idx} href={`/story/${photoDetail.id}`}>
+		<Link key={idx} href={`/storybook/${photoDetail.id}`}>
 			<PostCard key={idx} photoDetail={photoDetail} />
 		</Link>
 	));
