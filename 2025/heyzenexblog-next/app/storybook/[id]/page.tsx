@@ -1,4 +1,5 @@
 import { animationForArrow } from "@/animation/animation";
+import ShortDescription from "@/components/layout/StoryBookLayouts/ShortDescription";
 import UnderDevelopment from "@/components/layout/UnderDevelopment";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { Separator } from "@/components/ui/separator";
@@ -43,22 +44,11 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 						</div>
 					</div>
 				</div>
+
+				{/* content */}
 				<div className="md:ml-[15vw] md:mr-[15vw] flex flex-col gap-2 mt-[3%] ">
-					<div className="flex">
-						<p className="text-2xl md:text-4xl font-extralight text-primarytextInvert">
-							<span className="text-2xl md:text-4xl font-bold text-primaryaccent">
-								"
-							</span>
-							I never thought I could go this far{" "}
-							<span className="text-primaryaccent">alone</span>
-							<span className="text-dot">.</span> But little did I know, I was
-							braver than I thought I was
-							<span className="text-dot">.</span>
-							<span className="text-2xl md:text-4xl font-bold text-primaryaccent">
-								"
-							</span>
-						</p>
-					</div>
+					<ShortDescription></ShortDescription>
+					<div></div>
 				</div>
 			</div>
 		</div>

@@ -73,7 +73,6 @@ const Header = () => {
 
 	return (
 		<div
-			// z-50 sticky top-0
 			className={`	
 				grid grid-cols-8 h-15 sm:h-20
 				transition-all
