@@ -4,6 +4,9 @@ import UnderDevelopment from "@/components/layout/OtherLayouts/UnderDevelopment"
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { Separator } from "@/components/ui/separator";
 import { faker } from "@faker-js/faker";
+import PhotoPharagraph from "@/components/layout/StoryBookBlockLayouts/3_PhotoParagraph/PhotoPharagraph";
+import PharagraphPhoto from "@/components/layout/StoryBookBlockLayouts/4_PharagraphPhoto/PharagraphPhoto";
+import FullPhoto from "@/components/layout/StoryBookBlockLayouts/5_FullPhoto/FullPhoto";
 
 const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = await params;
@@ -46,9 +49,11 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 				</div>
 
 				{/* content */}
-				<div className="md:ml-[15vw] md:mr-[15vw] flex flex-col gap-2 mt-[3%] ">
+				<div className="md:ml-[20%] md:mr-[20%] flex flex-col gap-10 mt-[3%] ">
 					<ShortDescription></ShortDescription>
-					<div></div>
+					<PhotoPharagraph></PhotoPharagraph>
+					<PharagraphPhoto></PharagraphPhoto>
+					<FullPhoto></FullPhoto>
 				</div>
 			</div>
 		</div>

@@ -1,9 +1,6 @@
-import Header from "@/components/layout/MainSections/Header";
 import Hero from "@/components/layout/HomepageBlockLayouts/Hero";
 import PhotoCardsSection from "@/components/layout/HomepageBlockLayouts/PhotoCards";
 import StoryPost from "@/components/layout/HomepageBlockLayouts/StoryPost";
-
-import Footer from "@/components/layout/MainSections/Footer";
 
 export default function Home() {
 	return (
