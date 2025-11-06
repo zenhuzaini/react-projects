@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Skeleton } from "@/components/ui/skeleton"; // shadcn skeleton
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 
 export const ImageWithSkeleton = ({
@@ -16,11 +16,7 @@ export const ImageWithSkeleton = ({
 
 	return (
 		<div className={`relative h-full w-full overflow-hidden ${rounded}`}>
-			{loading && (
-				<>
-					<Skeleton className="absolute inset-0 h-full w-full" />
-				</>
-			)}
+			{loading && <Skeleton className="absolute inset-0 h-full w-full" />}
 			<Image
 				src={src}
 				alt={alt}
@@ -29,10 +25,8 @@ export const ImageWithSkeleton = ({
 					loading ? "opacity-0" : "opacity-100"
 				}`}
 				sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-				priority
-				onLoad={() => {
-					setLoading(false);
-				}}
+				onLoad={() => setLoading(false)}
+				loading="lazy"
 			/>
 		</div>
 	);

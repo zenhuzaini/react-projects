@@ -205,6 +205,24 @@
 	body {
 		@apply bg-mybackground text-foreground;
 	}
+
+	/* to reuse in the future */
+	/* h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	blockquote {
+		font-family: var(--font-heading), serif;
+	}
+
+	p,
+	li,
+	span,
+	a {
+		font-family: var(--font-body), sans-serif;
+	} */
 }
 
 /* Smooth global theme transition */
@@ -214,3 +232,14 @@ html.theme-transition * {
 	transition: background-color 0.4s ease, color 0.4s ease,
 		border-color 0.4s ease, fill 0.4s ease, stroke 0.4s ease;
 }
+
+/* to reuse in the future -- to use font-style-heading in the classname */
+/* @layer utilities {
+	.font-style-heading {
+		font-family: var(--font-heading), serif;
+	}
+
+	.font-style-body {
+		font-family: var(--font-body), sans-serif;
+	}
+} */
