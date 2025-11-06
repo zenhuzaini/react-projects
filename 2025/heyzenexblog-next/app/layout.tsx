@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+	Fleur_De_Leah,
+	Geist,
+	Geist_Mono,
+	Playfair_Display,
+} from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
-import Hero from "@/components/layout/Hero";
-import PhotoCardsSection from "@/components/layout/PhotoCards";
-import StoryPost from "@/components/layout/StoryPost";
-import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
-import { faker } from "@faker-js/faker";
-import ArrowRight from "@/icons/ArrowRight";
-import Link from "next/link";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 
 const geistSans = Geist({
@@ -20,6 +18,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
+});
+
+// 💐 Add Fleur De Leah
+const fleurDeLeah = Fleur_De_Leah({
+	variable: "--font-fleur",
+	subsets: ["latin"],
+	weight: "400", // Only one weight available
 });
 
 export const metadata: Metadata = {
@@ -36,11 +41,11 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				className={`${geistSans.variable} ${geistMono.variable} ${fleurDeLeah.variable}  antialiased`}>
 				<ScrollToTop></ScrollToTop>
 				<div className="flex flex-col gap-10 min-h-screen w-screen">
 					{/* this is to wrap not full frame */}
-					<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 sm:gap-10 grow">
+					<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
 						<Header></Header>
 						{children}
 					</div>
