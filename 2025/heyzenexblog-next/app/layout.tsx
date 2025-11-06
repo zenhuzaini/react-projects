@@ -43,10 +43,10 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${fleurDeLeah.variable}  antialiased`}>
 				<ScrollToTop></ScrollToTop>
-				<div className="flex flex-col gap-10 min-h-screen w-screen">
+				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
+					<Header></Header>
 					{/* this is to wrap not full frame */}
 					<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
-						<Header></Header>
 						{children}
 					</div>
 					<Footer></Footer>

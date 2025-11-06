@@ -73,12 +73,13 @@ const Header = () => {
 
 	return (
 		<div
+			// z-50 sticky top-0
 			className={`	
 				grid grid-cols-8 h-15 sm:h-20
-				z-50 sticky top-0 
 				transition-all
 				duration-700 ease-in-out
 				lg:rounded-br-2xl
+				ml-4 mr-4 sm:ml-20 sm:mr-20 sticky top-0 z-50
 				${showHeader ? "translate-y-0 " + bg : "-translate-y-full"}
   			`}>
 			<div className="flex items-center">
