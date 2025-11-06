@@ -1,7 +1,7 @@
 "use client";
 
 import Sun from "@/icons/Sun";
-import { Switch } from "../ui/switch";
+import { Switch } from "../../ui/switch";
 import Moon from "@/icons/Moon";
 import { useEffect, useState } from "react";
 import ThreeBars from "@/icons/ThreeBars";

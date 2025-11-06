@@ -1,6 +1,6 @@
 import ArrowRight from "@/icons/ArrowRight";
 import Link from "next/link";
-import { ImageWithSkeleton } from "../molecule/ImageWithSkeleton";
+import { ImageWithSkeleton } from "../../molecule/ImageWithSkeleton";
 import { faker } from "@faker-js/faker";
 
 const UnderDevelopment = () => {

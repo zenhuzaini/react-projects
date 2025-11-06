@@ -1,4 +1,4 @@
-import UnderDevelopment from "@/components/layout/UnderDevelopment";
+import UnderDevelopment from "@/components/layout/OtherLayouts/UnderDevelopment";
 import React from "react";
 
 const Photo = () => {

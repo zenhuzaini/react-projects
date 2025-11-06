@@ -6,9 +6,9 @@ import {
 	Playfair_Display,
 } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
-import ScrollToTop from "@/components/layout/ScrollToTop";
+import Footer from "@/components/layout/MainSections/Footer";
+import Header from "@/components/layout/MainSections/Header";
+import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",

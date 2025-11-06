@@ -1,6 +1,6 @@
 import SectionTitle from "./SectionTitle";
 import { photoMock } from "@/mock/photo";
-import PhotoCards from "../molecule/Cards/PhotoCards";
+import PhotoCards from "../../molecule/Cards/PhotoCards";
 import Link from "next/link";
 
 const PhotoCardsSection = () => {

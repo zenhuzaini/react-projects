@@ -1,4 +1,4 @@
-import { ImageWithSkeleton } from "../molecule/ImageWithSkeleton";
+import { ImageWithSkeleton } from "../../molecule/ImageWithSkeleton";
 import { faker } from "@faker-js/faker";
 
 const Hero = () => {

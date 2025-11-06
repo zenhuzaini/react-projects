@@ -1,6 +1,6 @@
 import { animationForArrow } from "@/animation/animation";
-import ShortDescription from "@/components/layout/StoryBookLayouts/ShortDescription";
-import UnderDevelopment from "@/components/layout/UnderDevelopment";
+import ShortDescription from "@/components/layout/StoryBookBlockLayouts/1_ShortDescription/ShortDescription";
+import UnderDevelopment from "@/components/layout/OtherLayouts/UnderDevelopment";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { Separator } from "@/components/ui/separator";
 import { faker } from "@faker-js/faker";
@@ -27,7 +27,7 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 							</h3>
 						</div>
 					</div>
-					<Separator className="bg-primarytextInvert dark:hidden"></Separator>
+					<Separator className="bg-primaryaccent"></Separator>
 				</div>
 
 				{/* hero title */}
