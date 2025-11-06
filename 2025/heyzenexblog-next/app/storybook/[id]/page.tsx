@@ -7,6 +7,8 @@ import { faker } from "@faker-js/faker";
 import PhotoPharagraph from "@/components/layout/StoryBookBlockLayouts/3_PhotoParagraph/PhotoPharagraph";
 import PharagraphPhoto from "@/components/layout/StoryBookBlockLayouts/4_PharagraphPhoto/PharagraphPhoto";
 import FullPhoto from "@/components/layout/StoryBookBlockLayouts/5_FullPhoto/FullPhoto";
+import Paragraph from "@/components/layout/StoryBookBlockLayouts/2_BasicPharagraph/Paragraph";
+import PhotoCollectionGrid from "@/components/layout/StoryBookBlockLayouts/6_PhotoCollectionGrid/PhotoCollectionGrid";
 
 const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = await params;
@@ -49,11 +51,13 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 				</div>
 
 				{/* content */}
-				<div className="md:ml-[20%] md:mr-[20%] flex flex-col gap-10 mt-[3%] ">
+				<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-10 mt-[3%] ">
 					<ShortDescription></ShortDescription>
 					<PhotoPharagraph></PhotoPharagraph>
+					<PhotoCollectionGrid photoUrls={8}></PhotoCollectionGrid>
 					<PharagraphPhoto></PharagraphPhoto>
 					<FullPhoto></FullPhoto>
+					<Paragraph></Paragraph>
 				</div>
 			</div>
 		</div>
