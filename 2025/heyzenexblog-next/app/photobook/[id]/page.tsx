@@ -8,6 +8,8 @@ import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
 
 const PhotoBook = () => {
+	const photoUrls = Array.from({ length: 8 }, () => faker.image.url());
+
 	return (
 		<div>
 			<div>
@@ -54,7 +56,7 @@ const PhotoBook = () => {
 					{/* content */}
 					<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-4 mt-[3%] ">
 						{/* <PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid> */}
-						<PhotoCollectionGrid photoUrls={8}></PhotoCollectionGrid>
+						<PhotoCollectionGrid photoUrls={photoUrls}></PhotoCollectionGrid>
 
 						<div className="flex justify-between mt-10">
 							<Link href={`/`}>

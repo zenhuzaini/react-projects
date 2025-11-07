@@ -19,12 +19,10 @@ export default function PhotoDialog({
 }) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className=" bg-mybackground border-0 [&>button]:text-primarytextInvert p-3">
-				<DialogHeader className="gap-[5%]">
-					<DialogTitle className="text-primarytextInvert">
-						Some photo
-					</DialogTitle>
-					<div className="h-[60vh] w-full">
+			<DialogContent className=" bg-transparent border-0 [&>button]:text-primarytextInvert p-0">
+				<DialogHeader className="">
+					<DialogTitle className="text-primarytextInvert"></DialogTitle>
+					<div className="h-[50vh] w-full">
 						<ImageWithSkeleton src={src}></ImageWithSkeleton>
 					</div>
 				</DialogHeader>

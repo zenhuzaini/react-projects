@@ -94,11 +94,19 @@ const Header = () => {
 			</div>
 
 			<div className="hidden lg:flex col-span-2 col-start-2 col-end-4 place-self-center">
-				<nav className="flex gap-4">
-					<a>Home</a>
-					<a>Photography</a>
-					<a>Adventures</a>
-					<a>Contact</a>
+				<nav className="flex gap-4 text-primaryText">
+					<Link href="/" className="block py-2 ">
+						Home
+					</Link>
+					<Link href="/error/construction" className="block py-2 ">
+						PhotoBook
+					</Link>
+					<Link href="/error/construction" className="block py-2">
+						StoryBook
+					</Link>
+					<Link href="/error/construction" className="block py-2">
+						Me
+					</Link>
 				</nav>
 			</div>
 
@@ -115,18 +123,33 @@ const Header = () => {
 					duration-300 ease-in-out ${
 						!isBurgerMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"
 					}`}>
-					<a href="#" className="block py-2 text-primaryText">
-						Home
-					</a>
-					<a href="#" className="block py-2 text-primaryText">
-						Photography
-					</a>
-					<a href="#" className="block py-2 text-primaryText">
-						Adventure
-					</a>
-					<a href="#" className="block py-2 text-primaryText">
-						Contact
-					</a>
+					<nav className="text-primaryText">
+						<Link
+							href="/"
+							className="block py-2 "
+							onClick={() => setIsBurgerMenuOpen((prev) => !prev)}>
+							Home
+						</Link>
+						<Link
+							href="/error/construction"
+							className="block py-2 "
+							onClick={() => setIsBurgerMenuOpen((prev) => !prev)}>
+							PhotoBook
+						</Link>
+						<Link
+							href="/error/construction"
+							className="block py-2 "
+							onClick={() => setIsBurgerMenuOpen((prev) => !prev)}>
+							StoryBook
+						</Link>
+						<Link
+							href="/error/construction"
+							className="block py-2 "
+							onClick={() => setIsBurgerMenuOpen((prev) => !prev)}>
+							Me
+						</Link>
+					</nav>
+
 					<button onClick={toggleDarkMode} className="mt-3">
 						{isDark ? <Sun /> : <Moon />}
 					</button>

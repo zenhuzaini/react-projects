@@ -14,6 +14,7 @@ import ChevronRight from "@/icons/ChevronRight";
 import Link from "next/link";
 
 const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
+	const photoUrls = Array.from({ length: 8 }, () => faker.image.url());
 	const { id } = await params;
 	return (
 		<div>
@@ -60,7 +61,8 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 				<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-5 sm:gap-10 mt-[3%] ">
 					<ShortDescription></ShortDescription>
 					<PhotoPharagraph></PhotoPharagraph>
-					<PhotoCollectionGrid photoUrls={8}></PhotoCollectionGrid>
+					<PhotoCollectionGrid photoUrls={photoUrls}></PhotoCollectionGrid>
+
 					<PharagraphPhoto></PharagraphPhoto>
 					<FullPhoto></FullPhoto>
 					<Paragraph></Paragraph>

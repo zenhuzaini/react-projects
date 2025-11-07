@@ -77,8 +77,8 @@ const getLayout = (n: number) => {
 	}
 };
 
-const PhotoCollectionGrid = ({ photoUrls = 5 }: { photoUrls: number }) => {
-	const { grid, items } = getLayout(photoUrls);
+const PhotoCollectionGrid = ({ photoUrls }: { photoUrls: string[] }) => {
+	const { grid, items } = getLayout(photoUrls.length);
 	// State to track modal open and src of clicked image
 	const [selectedImage, setSelectedImage] = useState<string>();
 	const [isDialogPhotoOpen, setIsDialogPhotoOpen] = useState<boolean>(false);
@@ -86,30 +86,23 @@ const PhotoCollectionGrid = ({ photoUrls = 5 }: { photoUrls: number }) => {
 		setIsDialogPhotoOpen((prev) => !prev);
 		setSelectedImage(imageUrl);
 	};
-	// Replace faker.image.url() with your actual image URLs
-	const images = Array.from({ length: photoUrls }).map(() => {
-		return { imageUrl: faker.image.url() };
-	});
 
 	return (
 		<>
 			<div className={`grid grid-cols-2 md:${grid} gap-2 sm:gap-4`}>
-				{images.map((image, idx) => {
+				{photoUrls.map((image, idx) => {
 					const colSpan = items[idx]?.colSpan || 1;
 					let spanClass = "";
 					if (colSpan === 2) spanClass = "col-span-2";
 					if (colSpan === 3) spanClass = "lg:col-span-3";
 					return (
 						<div
-							onClick={() => clickImage(image.imageUrl)}
+							onClick={() => clickImage(image)}
 							key={idx}
 							className={`rounded-2xl w-full overflow-hidden h-[30vh] sm:h-[40vh] ${
 								colSpan > 1 ? `${spanClass}` : ""
 							}`}>
-							<ImageWithSkeleton
-								src={image.imageUrl}
-								alt={`Photo ${idx + 1}`}
-							/>
+							<ImageWithSkeleton src={image} alt={`Photo ${idx + 1}`} />
 						</div>
 					);
 				})}
