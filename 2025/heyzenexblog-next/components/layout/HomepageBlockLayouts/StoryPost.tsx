@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { ArrowRight } from "lucide-react";
 import React from "react";
-import { ImageWithSkeleton } from "../molecule/ImageWithSkeleton";
+import { ImageWithSkeleton } from "../../molecule/ImageWithSkeleton";
 import SectionTitle from "./SectionTitle";
 import { photoMock } from "@/mock/photo";
-import PostCardsLong from "../molecule/Cards/PostCardsLong";
-import PostCard from "../molecule/Cards/PostCard";
+import PostCardsLong from "../../molecule/Cards/PostCardsLong";
+import PostCard from "../../molecule/Cards/PostCard";
 import Link from "next/link";
 
 const StoryPost = () => {

@@ -1,9 +1,6 @@
-import Header from "@/components/layout/Header";
-import Hero from "@/components/layout/Hero";
-import PhotoCardsSection from "@/components/layout/PhotoCards";
-import StoryPost from "@/components/layout/StoryPost";
-
-import Footer from "@/components/layout/Footer";
+import Hero from "@/components/layout/HomepageBlockLayouts/Hero";
+import PhotoCardsSection from "@/components/layout/HomepageBlockLayouts/PhotoCards";
+import StoryPost from "@/components/layout/HomepageBlockLayouts/StoryPost";
 
 export default function Home() {
 	return (

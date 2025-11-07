@@ -1,4 +1,4 @@
-import { ImageWithSkeleton } from "../molecule/ImageWithSkeleton";
+import { ImageWithSkeleton } from "../../molecule/ImageWithSkeleton";
 import { faker } from "@faker-js/faker";
 
 const Hero = () => {
@@ -9,7 +9,7 @@ const Hero = () => {
 					<h2>YOU FOUND</h2>
 					<h2>
 						ME{" "}
-						<span className="text-primaryaccent">
+						<span className="text-primaryaccent font-style-heading">
 							HERE<span className="text-dot">.</span>
 						</span>
 					</h2>

@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+	Fleur_De_Leah,
+	Geist,
+	Geist_Mono,
+	Inter,
+	Lato,
+	Libre_Baskerville,
+	Playfair_Display,
+} from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
-import Hero from "@/components/layout/Hero";
-import PhotoCardsSection from "@/components/layout/PhotoCards";
-import StoryPost from "@/components/layout/StoryPost";
-import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
-import { faker } from "@faker-js/faker";
-import ArrowRight from "@/icons/ArrowRight";
-import Link from "next/link";
-import ScrollToTop from "@/components/layout/ScrollToTop";
+import Footer from "@/components/layout/MainSections/Footer";
+import Header from "@/components/layout/MainSections/Header";
+import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -20,6 +21,25 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
+});
+
+// 💐 Add Fleur De Leah
+const fleurDeLeah = Fleur_De_Leah({
+	variable: "--font-fleur",
+	subsets: ["latin"],
+	weight: "400", // Only one weight available
+});
+
+const playfair = Playfair_Display({
+	subsets: ["latin"],
+	variable: "--font-heading",
+	weight: ["900", "400", "500", "600", "700"],
+});
+
+const inter = Inter({
+	subsets: ["latin"],
+	variable: "--font-body",
+	weight: ["100", "200", "800", "900", "400", "500", "600", "700"], // optional
 });
 
 export const metadata: Metadata = {
@@ -36,12 +56,12 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				className={`${geistSans.variable} ${geistMono.variable} ${fleurDeLeah.variable} ${playfair.variable} ${inter.variable}  antialiased`}>
 				<ScrollToTop></ScrollToTop>
-				<div className="flex flex-col gap-10 min-h-screen w-screen">
+				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
+					<Header></Header>
 					{/* this is to wrap not full frame */}
-					<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 sm:gap-10 grow">
-						<Header></Header>
+					<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
 						{children}
 					</div>
 					<Footer></Footer>

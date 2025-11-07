@@ -1,6 +1,6 @@
 import ArrowRight from "@/icons/ArrowRight";
 import Link from "next/link";
-import { ImageWithSkeleton } from "../molecule/ImageWithSkeleton";
+import { ImageWithSkeleton } from "../../molecule/ImageWithSkeleton";
 import { faker } from "@faker-js/faker";
 
 const UnderDevelopment = () => {
@@ -23,12 +23,17 @@ const UnderDevelopment = () => {
 							<span className="line-through">
 								<span className="text-primaryaccent">construction</span>
 							</span>{" "}
-							<span className="text-primaryaccent">development</span>
+							<span className="text-primaryaccent font-style-heading">
+								development
+							</span>
 							<span className="text-dot">.</span>
 						</h2>
 						<Link href="/" className="flex gap-2 items-center">
-							<h2 className="text-2xl font-extralight lg:text-4xl">
-								lesshhgo<span className="text-primaryaccent">home</span>
+							<h2 className="text-2xl font-extralight  lg:text-4xl">
+								lesshhgo
+								<span className="text-primaryaccent font-style-heading">
+									home
+								</span>
 							</h2>
 							<ArrowRight />
 						</Link>
