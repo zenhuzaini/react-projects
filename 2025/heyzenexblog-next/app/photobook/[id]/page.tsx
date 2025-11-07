@@ -30,7 +30,9 @@ const PhotoBook = () => {
 								</h3>
 							</div>
 						</div>
-						<Separator className="bg-primaryaccent"></Separator>
+						<div className="hidden md:flex">
+							<Separator className="bg-primaryaccent"></Separator>
+						</div>
 					</div>
 
 					{/* hero title */}
@@ -51,7 +53,7 @@ const PhotoBook = () => {
 
 					{/* content */}
 					<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-4 mt-[3%] ">
-						<PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid>
+						{/* <PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid> */}
 						<PhotoCollectionGrid photoUrls={8}></PhotoCollectionGrid>
 
 						<div className="flex justify-between mt-10">

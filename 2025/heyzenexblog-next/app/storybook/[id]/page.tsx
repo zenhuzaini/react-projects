@@ -35,7 +35,9 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 							</h3>
 						</div>
 					</div>
-					<Separator className="bg-primaryaccent"></Separator>
+					<div className="hidden md:flex">
+						<Separator className="bg-primaryaccent"></Separator>
+					</div>
 				</div>
 
 				{/* hero title */}
@@ -55,7 +57,7 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 				</div>
 
 				{/* content */}
-				<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-10 mt-[3%] ">
+				<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-5 sm:gap-10 mt-[3%] ">
 					<ShortDescription></ShortDescription>
 					<PhotoPharagraph></PhotoPharagraph>
 					<PhotoCollectionGrid photoUrls={8}></PhotoCollectionGrid>

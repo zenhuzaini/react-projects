@@ -48,7 +48,7 @@ const getLayout = (n: number) => {
 			};
 		case 8:
 			return {
-				grid: "grid-cols-4 grid-rows-3",
+				grid: "grid-cols-3 grid-rows-3",
 				items: [
 					{ colSpan: 2 },
 					{ colSpan: 1 },
@@ -77,7 +77,7 @@ const getLayout = (n: number) => {
 const PhotoCollectionGrid = ({ photoUrls = 5 }: { photoUrls: number }) => {
 	const { grid, items } = getLayout(photoUrls);
 	return (
-		<div className={`grid grid-cols-2 md:${grid} gap-4`}>
+		<div className={`grid grid-cols-2 md:${grid} gap-2 sm:gap-4`}>
 			{Array.from({ length: photoUrls }).map((_, idx) => {
 				const colSpan = items[idx]?.colSpan || 1;
 				let spanClass = "";
@@ -86,7 +86,7 @@ const PhotoCollectionGrid = ({ photoUrls = 5 }: { photoUrls: number }) => {
 				return (
 					<div
 						key={idx}
-						className={`rounded-2xl w-full overflow-hidden h-[40vh] ${
+						className={`rounded-2xl w-full overflow-hidden h-[30vh] sm:h-[40vh] ${
 							colSpan > 1 ? `${spanClass}` : ""
 						}`}>
 						<ImageWithSkeleton
