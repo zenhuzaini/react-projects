@@ -12,6 +12,7 @@ import PhotoCollectionGrid from "@/components/layout/StoryBookBlockLayouts/6_Pho
 import ChevronLeft from "@/icons/ChevronLeft";
 import ChevronRight from "@/icons/ChevronRight";
 import Link from "next/link";
+import SectioonTitle from "@/components/layout/StoryBookBlockLayouts/9_SectionTitle/SectioonTitle";
 
 const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const photoUrls = Array.from({ length: 8 }, () => faker.image.url());
@@ -61,6 +62,7 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 				<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-5 sm:gap-10 mt-[3%] ">
 					<ShortDescription></ShortDescription>
 					<PhotoPharagraph></PhotoPharagraph>
+					<SectioonTitle></SectioonTitle>
 					<PhotoCollectionGrid photoUrls={photoUrls}></PhotoCollectionGrid>
 
 					<PharagraphPhoto></PharagraphPhoto>

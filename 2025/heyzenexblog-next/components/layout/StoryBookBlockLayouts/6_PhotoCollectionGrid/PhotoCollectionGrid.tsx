@@ -89,7 +89,7 @@ const PhotoCollectionGrid = ({ photoUrls }: { photoUrls: string[] }) => {
 
 	return (
 		<>
-			<div className={`grid grid-cols-2 md:${grid} gap-2 sm:gap-4`}>
+			<div className={`grid grid-cols-2 sm:${grid} gap-2 sm:gap-4`}>
 				{photoUrls.map((image, idx) => {
 					const colSpan = items[idx]?.colSpan || 1;
 					let spanClass = "";
@@ -110,6 +110,7 @@ const PhotoCollectionGrid = ({ photoUrls }: { photoUrls: string[] }) => {
 
 			{isDialogPhotoOpen && (
 				<PhotoDialog
+					fadeSpeed="fast"
 					open={isDialogPhotoOpen}
 					onOpenChange={setIsDialogPhotoOpen}
 					src={selectedImage as string}

@@ -19,7 +19,10 @@ const Hero = () => {
 				<ImageWithSkeleton src={faker.image.url()}></ImageWithSkeleton>
 			</div>
 			<div className="col-span-10 sm:col-span-20 row-span-4 relative rounded-2xl overflow-hidden">
-				<ImageWithSkeleton src={faker.image.url()}></ImageWithSkeleton>
+				<ImageWithSkeleton
+					src={
+						"https://res.cloudinary.com/djufavji1/image/upload/v1762550965/pexels-dariuskrs-2228178_hmawff.jpg"
+					}></ImageWithSkeleton>
 			</div>
 		</div>
 	);

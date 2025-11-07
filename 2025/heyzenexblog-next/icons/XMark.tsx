@@ -1,4 +1,4 @@
-const XMark = () => {
+const XMark = ({ color = "stroke-primaryText" }: { color?: string }) => {
 	return (
 		<div>
 			<svg
@@ -7,7 +7,7 @@ const XMark = () => {
 				viewBox="0 0 24 24"
 				strokeWidth="1.5"
 				stroke="currentColor"
-				className="size-6 stroke-primaryText">
+				className={`size-6 ${color}`}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
