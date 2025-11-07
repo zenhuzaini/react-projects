@@ -48,7 +48,7 @@ const getLayout = (n: number) => {
 			};
 		case 8:
 			return {
-				grid: "grid-cols-3 grid-rows-3",
+				grid: "grid-cols-4 grid-rows-3",
 				items: [
 					{ colSpan: 2 },
 					{ colSpan: 1 },
@@ -82,7 +82,7 @@ const PhotoCollectionGrid = ({ photoUrls = 5 }: { photoUrls: number }) => {
 				const colSpan = items[idx]?.colSpan || 1;
 				let spanClass = "";
 				if (colSpan === 2) spanClass = "col-span-2";
-				if (colSpan === 3) spanClass = "col-span-3";
+				if (colSpan === 3) spanClass = "lg:col-span-3";
 				return (
 					<div
 						key={idx}

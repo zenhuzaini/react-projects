@@ -9,6 +9,9 @@ import PharagraphPhoto from "@/components/layout/StoryBookBlockLayouts/4_Pharagr
 import FullPhoto from "@/components/layout/StoryBookBlockLayouts/5_FullPhoto/FullPhoto";
 import Paragraph from "@/components/layout/StoryBookBlockLayouts/2_BasicPharagraph/Paragraph";
 import PhotoCollectionGrid from "@/components/layout/StoryBookBlockLayouts/6_PhotoCollectionGrid/PhotoCollectionGrid";
+import ChevronLeft from "@/icons/ChevronLeft";
+import ChevronRight from "@/icons/ChevronRight";
+import Link from "next/link";
 
 const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = await params;
@@ -44,7 +47,8 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 						<div
 							className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
 							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.8]">
-								Solo Bikepacking Velo Dunajec<span className="text-dot">.</span>
+								{faker.book.title()}
+								<span className="text-dot">.</span>
 							</h1>
 						</div>
 					</div>
@@ -58,6 +62,21 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 					<PharagraphPhoto></PharagraphPhoto>
 					<FullPhoto></FullPhoto>
 					<Paragraph></Paragraph>
+
+					<div className="flex justify-between">
+						<Link href={`/`}>
+							<div className="text-primaryText flex gap-1">
+								<ChevronLeft />
+								Home
+							</div>
+						</Link>
+
+						<Link href={`/storybook/${faker.string.uuid()}`}>
+							<div className="text-primaryText flex gap-1">
+								Next Story<ChevronRight></ChevronRight>
+							</div>
+						</Link>
+					</div>
 				</div>
 			</div>
 		</div>
