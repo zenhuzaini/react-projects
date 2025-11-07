@@ -1,6 +1,9 @@
+"use client";
+
+import PhotoDialog from "@/components/molecule/Dialog/PhotoDialog";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
-import { faker } from "@faker-js/faker";
-import React from "react";
+import { faker, ur } from "@faker-js/faker";
+import React, { useState } from "react";
 
 // Each pattern returns a "grid-template" and an array of item configs (spans, row starts, etc)
 const getLayout = (n: number) => {
@@ -76,27 +79,51 @@ const getLayout = (n: number) => {
 
 const PhotoCollectionGrid = ({ photoUrls = 5 }: { photoUrls: number }) => {
 	const { grid, items } = getLayout(photoUrls);
+	// State to track modal open and src of clicked image
+	const [selectedImage, setSelectedImage] = useState<string>();
+	const [isDialogPhotoOpen, setIsDialogPhotoOpen] = useState<boolean>(false);
+	const clickImage = (imageUrl: string) => {
+		setIsDialogPhotoOpen((prev) => !prev);
+		setSelectedImage(imageUrl);
+	};
+	// Replace faker.image.url() with your actual image URLs
+	const images = Array.from({ length: photoUrls }).map(() => {
+		return { imageUrl: faker.image.url() };
+	});
+
 	return (
-		<div className={`grid grid-cols-2 md:${grid} gap-2 sm:gap-4`}>
-			{Array.from({ length: photoUrls }).map((_, idx) => {
-				const colSpan = items[idx]?.colSpan || 1;
-				let spanClass = "";
-				if (colSpan === 2) spanClass = "col-span-2";
-				if (colSpan === 3) spanClass = "lg:col-span-3";
-				return (
-					<div
-						key={idx}
-						className={`rounded-2xl w-full overflow-hidden h-[30vh] sm:h-[40vh] ${
-							colSpan > 1 ? `${spanClass}` : ""
-						}`}>
-						<ImageWithSkeleton
-							src={faker.image.url()}
-							alt={`Photo ${idx + 1}`}
-						/>
-					</div>
-				);
-			})}
-		</div>
+		<>
+			<div className={`grid grid-cols-2 md:${grid} gap-2 sm:gap-4`}>
+				{images.map((image, idx) => {
+					const colSpan = items[idx]?.colSpan || 1;
+					let spanClass = "";
+					if (colSpan === 2) spanClass = "col-span-2";
+					if (colSpan === 3) spanClass = "lg:col-span-3";
+					return (
+						<div
+							onClick={() => clickImage(image.imageUrl)}
+							key={idx}
+							className={`rounded-2xl w-full overflow-hidden h-[30vh] sm:h-[40vh] ${
+								colSpan > 1 ? `${spanClass}` : ""
+							}`}>
+							<ImageWithSkeleton
+								src={image.imageUrl}
+								alt={`Photo ${idx + 1}`}
+							/>
+						</div>
+					);
+				})}
+			</div>
+
+			{isDialogPhotoOpen && (
+				<PhotoDialog
+					open={isDialogPhotoOpen}
+					onOpenChange={setIsDialogPhotoOpen}
+					src={selectedImage as string}
+					// Close action
+				/>
+			)}
+		</>
 	);
 };
 
