@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { NotionService } from './notion.service';
 import {
+  CreateStoryBookDto,
   NotionDataSourcePageDto,
   NotionUserDto,
+  StoryBookResponseDto,
   UpdateTotallikeDto,
 } from './notion.dto';
 
@@ -29,8 +31,13 @@ export class NotionController {
   }
 
   @Patch('storybook/like')
-  async updateTotallike(@Body() dto: UpdateTotallikeDto) {
-    return this.notionService.updateTotallike(dto.pageId);
+  async updateTotalLike(@Body() dto: UpdateTotallikeDto) {
+    return this.notionService.updateTotalLike(dto.pageId);
+  }
+
+  @Patch('storybook/view')
+  async updateTotalView(@Body() dto: UpdateTotallikeDto) {
+    return this.notionService.updateTotalView(dto.pageId);
   }
 
   @Get('storybook/:id')
@@ -38,5 +45,12 @@ export class NotionController {
     @Param('id') id: string,
   ): Promise<NotionDataSourcePageDto> {
     return this.notionService.getStoryBookBasedOnId(id);
+  }
+
+  @Post('storybook')
+  async createStoryBook(
+    @Body() createDto: CreateStoryBookDto,
+  ): Promise<StoryBookResponseDto> {
+    return this.notionService.createStoryBook(createDto);
   }
 }

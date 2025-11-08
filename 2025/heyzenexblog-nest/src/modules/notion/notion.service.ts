@@ -1,7 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client } from '@notionhq/client';
-import { NotionDataSourcePageDto, NotionUserDto } from './notion.dto';
+import {
+  CreateStoryBookDto,
+  NotionDataSourcePageDto,
+  NotionUserDto,
+  StoryBookResponseDto,
+} from './notion.dto';
 import { NotionUserListResponse } from './notion.response.type';
 import axios from 'axios';
 
@@ -68,7 +73,7 @@ export class NotionService {
     return new NotionDataSourcePageDto(page);
   }
 
-  async updateTotallike(pageId: string): Promise<any> {
+  async updateTotalLike(pageId: string): Promise<any> {
     try {
       // 1️⃣ Fetch current page
       const page = await this.getStoryBookBasedOnId(pageId);
@@ -90,6 +95,153 @@ export class NotionService {
         `Failed to update totallike for page ${pageId}`,
         error.message,
       );
+      throw new Error(`Notion API error: ${error.message}`);
+    }
+  }
+
+  async updateTotalView(pageId: string): Promise<any> {
+    try {
+      const page = await this.getStoryBookBasedOnId(pageId);
+      const newTotalView = (page.totalview ?? 0) + 1;
+
+      const response = await this.notion.pages.update({
+        page_id: pageId,
+        properties: {
+          totalview: {
+            number: newTotalView,
+          },
+        },
+      });
+
+      return response;
+    } catch (error: any) {
+      this.logger.error(
+        `Failed to update totallike for page ${pageId}`,
+        error.message,
+      );
+      throw new Error(`Notion API error: ${error.message}`);
+    }
+  }
+
+  async createStoryBook(
+    dto: CreateStoryBookDto,
+  ): Promise<StoryBookResponseDto> {
+    try {
+      const data_source_id = this.storybookDataSourceID;
+
+      const response = await this.notion.pages.create({
+        parent: { data_source_id: data_source_id as string },
+        properties: {
+          Name: {
+            title: [
+              {
+                text: { content: dto.name },
+              },
+            ],
+          },
+          story: {
+            rich_text: [
+              {
+                text: { content: dto.story || '' },
+              },
+            ],
+          },
+          photoUrls: {
+            multi_select: (dto.photoUrls || []).map((url) => ({ name: url })),
+          },
+          headerPhoto: {
+            rich_text: [
+              {
+                text: { content: dto.headerPhoto || '' },
+              },
+            ],
+          },
+          lat: {
+            rich_text: [
+              {
+                text: { content: dto.lat || '' },
+              },
+            ],
+          },
+          long: {
+            rich_text: [
+              {
+                text: { content: dto.long || '' },
+              },
+            ],
+          },
+          location: {
+            rich_text: [
+              {
+                text: { content: dto.location || '' },
+              },
+            ],
+          },
+          totallike: {
+            number: dto.totallike ?? 0,
+          },
+          totalview: {
+            number: dto.totalview ?? 0,
+          },
+          youtube: {
+            rich_text: [
+              {
+                text: { content: dto.youtube || '' },
+              },
+            ],
+          },
+          instagram: {
+            rich_text: [
+              {
+                text: { content: dto.instagram || '' },
+              },
+            ],
+          },
+          strava: {
+            rich_text: [
+              {
+                text: { content: dto.strava || '' },
+              },
+            ],
+          },
+          komoot: {
+            rich_text: [
+              {
+                text: { content: dto.komoot || '' },
+              },
+            ],
+          },
+          otherURL: {
+            rich_text: [
+              {
+                text: { content: dto.otherURL || '' },
+              },
+            ],
+          },
+        },
+      });
+
+      // 🧠 Map response to your DTO for clean output
+      const result: StoryBookResponseDto = {
+        name: dto.name,
+        story: dto.story,
+        photoUrls: dto.photoUrls,
+        headerPhoto: dto.headerPhoto,
+        lat: dto.lat,
+        long: dto.long,
+        location: dto.location,
+        totallike: dto.totallike,
+        totalview: dto.totalview,
+        youtube: dto.youtube,
+        instagram: dto.instagram,
+        strava: dto.strava,
+        komoot: dto.komoot,
+        otherURL: dto.otherURL,
+      };
+
+      return result;
+    } catch (error: any) {
+      this.logger.error('Failed to create storybook', error.message);
       throw new Error(`Notion API error: ${error.message}`);
     }
   }

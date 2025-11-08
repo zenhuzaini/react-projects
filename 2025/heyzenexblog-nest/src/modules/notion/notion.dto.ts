@@ -40,23 +40,41 @@ export class NotionUserDto {
   }
 }
 export class NotionDataSourcePageDto {
+  @ApiProperty()
   id: string;
+  @ApiProperty()
   name: string;
+  @ApiProperty()
   story: string;
+  @ApiProperty()
   photoUrls: string[];
+  @ApiProperty()
   headerPhoto: string;
+  @ApiProperty()
   lat: string;
+  @ApiProperty()
   long: string;
+  @ApiProperty()
   location: string;
+  @ApiProperty()
   totallike: number | null;
+  @ApiProperty()
   totalview: number | null;
+  @ApiProperty()
   youtube: string;
+  @ApiProperty()
   instagram: string;
+  @ApiProperty()
   strava: string;
+  @ApiProperty()
   komoot: string;
+  @ApiProperty()
   otherURL: string;
+  @ApiProperty()
   url: string;
+  @ApiProperty()
   createdAt: string;
+  @ApiProperty()
   modifiedAt: string;
 
   constructor(page: any) {
@@ -91,4 +109,139 @@ export class NotionDataSourcePageDto {
 export class UpdateTotallikeDto {
   @ApiProperty()
   pageId: string;
+}
+
+export class CreateStoryBookDto {
+  @ApiProperty({
+    example: 'Me & My Bike(s)',
+    description: 'Title of the storybook',
+  })
+  name: string;
+
+  @ApiProperty({
+    example: 'A journey through the city with my new bike',
+    description: 'Story description or content',
+  })
+  story: string;
+
+  @ApiProperty({
+    example: [
+      'https://example.com/photo1.jpg',
+      'https://example.com/photo2.jpg',
+    ],
+    description: 'Array of photo URLs',
+    type: [String],
+  })
+  photoUrls: string[];
+
+  @ApiProperty({
+    example: 'https://example.com/header.jpg',
+    description: 'Main header photo URL',
+  })
+  headerPhoto: string;
+
+  @ApiProperty({
+    example: '3.1390',
+    description: 'Latitude (optional)',
+    required: false,
+  })
+  lat: string;
+
+  @ApiProperty({
+    example: '101.6869',
+    description: 'Longitude (optional)',
+    required: false,
+  })
+  long: string;
+
+  @ApiProperty({
+    example: 'Kuala Lumpur, Malaysia',
+    description: 'Location name or address',
+  })
+  location: string;
+
+  @ApiProperty({ example: 6, description: 'Total number of likes' })
+  totallike: number;
+
+  @ApiProperty({ example: 1, description: 'Total number of views' })
+  totalview: number;
+
+  @ApiProperty({
+    example: 'https://youtube.com/watch?v=abcd1234',
+    description: 'YouTube video URL',
+    required: false,
+  })
+  youtube: string;
+
+  @ApiProperty({
+    example: 'https://instagram.com/p/xyz567',
+    description: 'Instagram post URL',
+    required: false,
+  })
+  instagram: string;
+
+  @ApiProperty({
+    example: 'https://www.strava.com/activities/123456789',
+    description: 'Strava activity URL',
+    required: false,
+  })
+  strava: string;
+
+  @ApiProperty({
+    example: 'https://www.komoot.com/tour/12345678',
+    description: 'Komoot route URL',
+    required: false,
+  })
+  komoot: string;
+
+  @ApiProperty({
+    example: 'https://zenhuzaini.com/blog/my-ride',
+    description: 'Other external link',
+    required: false,
+  })
+  otherURL: string;
+}
+
+export class StoryBookResponseDto {
+  @ApiProperty({ example: 'Me & My Bike(s)' })
+  name: string;
+
+  @ApiProperty({ example: '', description: 'Story content' })
+  story: string;
+
+  @ApiProperty({ type: [String], example: [] })
+  photoUrls: string[];
+
+  @ApiProperty({ example: '' })
+  headerPhoto: string;
+
+  @ApiProperty({ example: '' })
+  lat: string;
+
+  @ApiProperty({ example: '' })
+  long: string;
+
+  @ApiProperty({ example: '' })
+  location: string;
+
+  @ApiProperty({ example: 6 })
+  totallike: number;
+
+  @ApiProperty({ example: 1 })
+  totalview: number;
+
+  @ApiProperty({ example: '' })
+  youtube: string;
+
+  @ApiProperty({ example: '' })
+  instagram: string;
+
+  @ApiProperty({ example: '' })
+  strava: string;
+
+  @ApiProperty({ example: '' })
+  komoot: string;
+
+  @ApiProperty({ example: '' })
+  otherURL: string;
 }
