@@ -60,4 +60,37 @@ export class NotionService {
       throw error;
     }
   }
+
+  async getStoryBookBasedOnId(
+    pageId: string,
+  ): Promise<NotionDataSourcePageDto> {
+    const page = await this.notion.pages.retrieve({ page_id: pageId });
+    return new NotionDataSourcePageDto(page);
+  }
+
+  async updateTotallike(pageId: string): Promise<any> {
+    try {
+      // 1️⃣ Fetch current page
+      const page = await this.getStoryBookBasedOnId(pageId);
+
+      // 3️⃣ Increment by 1
+      const newTotallike = (page.totallike ?? 0) + 1;
+      const response = await this.notion.pages.update({
+        page_id: pageId,
+        properties: {
+          totallike: {
+            number: newTotallike,
+          },
+        },
+      });
+
+      return response;
+    } catch (error: any) {
+      this.logger.error(
+        `Failed to update totallike for page ${pageId}`,
+        error.message,
+      );
+      throw new Error(`Notion API error: ${error.message}`);
+    }
+  }
 }

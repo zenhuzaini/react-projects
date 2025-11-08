@@ -1,6 +1,10 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { NotionService } from './notion.service';
-import { NotionDataSourcePageDto, NotionUserDto } from './notion.dto';
+import {
+  NotionDataSourcePageDto,
+  NotionUserDto,
+  UpdateTotallikeDto,
+} from './notion.dto';
 
 @Controller('notion')
 export class NotionController {
@@ -22,5 +26,17 @@ export class NotionController {
     @Param('id') id: string,
   ): Promise<NotionDataSourcePageDto[]> {
     return this.notionService.getDatabaseByID(id);
+  }
+
+  @Patch('storybook/like')
+  async updateTotallike(@Body() dto: UpdateTotallikeDto) {
+    return this.notionService.updateTotallike(dto.pageId);
+  }
+
+  @Get('storybook/:id')
+  async getStoryBookBasedOnId(
+    @Param('id') id: string,
+  ): Promise<NotionDataSourcePageDto> {
+    return this.notionService.getStoryBookBasedOnId(id);
   }
 }

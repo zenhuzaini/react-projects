@@ -1,3 +1,6 @@
+// ----------------------------
+// Notion User List Response
+// ----------------------------
 export interface NotionUserListResponse {
   object: 'list';
   results: NotionUser[];
@@ -40,7 +43,9 @@ export interface NotionBotOwner {
   };
 }
 
-// Data source
+// ----------------------------
+// Notion Data Source / Pages
+// ----------------------------
 export interface NotionDataSourceResponse {
   object: 'list';
   results: NotionDataSourcePage[];
@@ -80,15 +85,32 @@ export interface NotionParent {
   database_id: string;
 }
 
+// ----------------------------
+// Notion Page Properties
+// ----------------------------
 export interface NotionPageProperties {
-  id: NotionRichTextProperty;
-  'modified at': NotionLastEditedTimeProperty;
+  Name: NotionTitleProperty;
   story: NotionRichTextProperty;
   photoUrls: NotionMultiSelectProperty;
+  headerPhoto: NotionRichTextProperty;
+  lat: NotionRichTextProperty;
+  long: NotionRichTextProperty;
+  location: NotionRichTextProperty;
+  totallike: NotionNumberProperty;
+  totalview: NotionNumberProperty;
+  youtube: NotionRichTextProperty;
+  instagram: NotionRichTextProperty;
+  strava: NotionRichTextProperty;
+  komoot: NotionRichTextProperty;
+  otherURL: NotionRichTextProperty;
+  id: NotionRichTextProperty;
   'created at': NotionCreatedTimeProperty;
-  Name: NotionTitleProperty;
+  'modified at': NotionLastEditedTimeProperty;
 }
 
+// ----------------------------
+// Property Types
+// ----------------------------
 export interface NotionRichTextProperty {
   id: string;
   type: 'rich_text';
@@ -111,24 +133,6 @@ export interface NotionRichTextProperty {
   }>;
 }
 
-export interface NotionLastEditedTimeProperty {
-  id: string;
-  type: 'last_edited_time';
-  last_edited_time: string;
-}
-
-export interface NotionCreatedTimeProperty {
-  id: string;
-  type: 'created_time';
-  created_time: string;
-}
-
-export interface NotionMultiSelectProperty {
-  id: string;
-  type: 'multi_select';
-  multi_select: Array<any>;
-}
-
 export interface NotionTitleProperty {
   id: string;
   type: 'title';
@@ -149,4 +153,28 @@ export interface NotionTitleProperty {
     plain_text: string;
     href: string | null;
   }>;
+}
+
+export interface NotionNumberProperty {
+  id: string;
+  type: 'number';
+  number: number | null;
+}
+
+export interface NotionCreatedTimeProperty {
+  id: string;
+  type: 'created_time';
+  created_time: string;
+}
+
+export interface NotionLastEditedTimeProperty {
+  id: string;
+  type: 'last_edited_time';
+  last_edited_time: string;
+}
+
+export interface NotionMultiSelectProperty {
+  id: string;
+  type: 'multi_select';
+  multi_select: Array<{ name: string }>;
 }
