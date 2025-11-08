@@ -8,27 +8,30 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 2025/heyzenexblog-next
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Git
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'actions@github.com'
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
 
-      - name: Mirror folder to heyzenex-blog
+      - name: Copy Next.js blog folder to temp directory
+        run: |
+          mkdir -p /tmp/heyzenexblog
+          rsync -av --delete 2025/heyzenexblog-next/ /tmp/heyzenexblog/
+
+      - name: Push to heyzenex-blog repository
         env:
           MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
         run: |
-          git remote add mirror https://zenhuzaini:${MIRROR_TOKEN}@github.com/zenhuzaini/heyzenex-blog.git
-          git fetch mirror
-          git checkout mirror/main || git checkout --orphan main
-          rsync -av --delete . ../mirror-blog
-          cd ../mirror-blog
+          cd /tmp/heyzenexblog
+          git init
+          git remote add origin https://zenhuzaini:${MIRROR_TOKEN}@github.com/zenhuzaini/heyzenex-blog.git
           git add .
-          git commit -m "Sync from react-projects"
-          git push mirror HEAD:main --force
+          git commit -m "Sync from react-projects on $(date)" || echo "No changes to commit"
+          git branch -M main
+          git push origin main --force
