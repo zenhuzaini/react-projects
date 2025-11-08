@@ -16,12 +16,15 @@ const Hero = () => {
 				</div>
 			</div>
 			<div className="col-span-1 row-span-2 relative rounded-2xl overflow-hidden">
-				<ImageWithSkeleton src={faker.image.url()}></ImageWithSkeleton>
+				<ImageWithSkeleton
+					src={
+						"https://res.cloudinary.com/djufavji1/image/upload/v1762553881/f62c1875ade6210d7f9ab448ac3dd54c_Original_vg1o31.jpg"
+					}></ImageWithSkeleton>
 			</div>
 			<div className="col-span-10 sm:col-span-20 row-span-4 relative rounded-2xl overflow-hidden">
 				<ImageWithSkeleton
 					src={
-						"https://res.cloudinary.com/djufavji1/image/upload/v1762550965/pexels-dariuskrs-2228178_hmawff.jpg"
+						"https://res.cloudinary.com/djufavji1/image/upload/v1762553897/IMG_5881_Original_jloeub.jpg"
 					}></ImageWithSkeleton>
 			</div>
 		</div>
