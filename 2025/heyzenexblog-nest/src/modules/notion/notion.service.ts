@@ -41,6 +41,12 @@ export class NotionService {
 
     const response = await this.notion.dataSources.query({
       data_source_id: dataSourceId,
+      sorts: [
+        {
+          property: 'created at',
+          direction: 'descending',
+        },
+      ],
     });
 
     return response.results.map((page) => new NotionDataSourcePageDto(page));
