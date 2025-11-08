@@ -36,7 +36,14 @@ export class NotionService {
     }
   }
 
-  async getStoryBookDataSource(): Promise<NotionDataSourcePageDto[]> {
+  async getStoryBookDataSource(
+    pageSize = 10,
+    startCursor?: string,
+  ): Promise<{
+    data: NotionDataSourcePageDto[];
+    next_cursor: string | null;
+    has_more: boolean;
+  }> {
     const dataSourceId = this.storybookDataSourceID as string;
 
     const response = await this.notion.dataSources.query({
@@ -47,9 +54,18 @@ export class NotionService {
           direction: 'descending',
         },
       ],
+      page_size: Number(pageSize), // number of items per page
+      start_cursor: startCursor, // for next page
     });
 
-    return response.results.map((page) => new NotionDataSourcePageDto(page));
+    const constructedData = response.results.map(
+      (page) => new NotionDataSourcePageDto(page),
+    );
+    return {
+      data: constructedData,
+      next_cursor: response.next_cursor,
+      has_more: response.has_more,
+    };
   }
 
   async getDatabaseByID(id: string): Promise<any> {

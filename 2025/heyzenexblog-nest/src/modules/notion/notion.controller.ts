@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { NotionService } from './notion.service';
 import {
   CreateStoryBookDto,
@@ -19,8 +27,15 @@ export class NotionController {
   }
 
   @Get('storybook')
-  async getStoryBookDataSource() {
-    return this.notionService.getStoryBookDataSource();
+  async getStoryBookDataSource(
+    @Query('pageSize') pageSize?: number,
+    @Query('startCursor') startCursor?: string,
+  ): Promise<{
+    data: NotionDataSourcePageDto[];
+    next_cursor: string | null;
+    has_more: boolean;
+  }> {
+    return this.notionService.getStoryBookDataSource(pageSize, startCursor);
   }
 
   // this api only to check the datasource id
