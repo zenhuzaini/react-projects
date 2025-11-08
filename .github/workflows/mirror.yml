@@ -10,6 +10,9 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 2025/heyzenexblog-next
 
     steps:
       - name: Checkout source repository
@@ -22,19 +25,20 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
 
-      - name: Copy Next.js blog folder to temp directory
-        run: |
-          mkdir -p /tmp/heyzenexblog
-          rsync -av --delete 2025/heyzenexblog-next/ /tmp/heyzenexblog/
-
-      - name: Push to heyzenex-blog repository
+      - name: Initialize and push to heyzenex-blog
         env:
           MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
         run: |
-          cd /tmp/heyzenexblog
+          # Create new git repo inside this folder
           git init
           git remote add origin https://zenhuzaini:${MIRROR_TOKEN}@github.com/zenhuzaini/heyzenex-blog.git
+
+          # Stage everything in this folder
           git add .
-          git commit -m "Sync from react-projects on $(date)" || echo "No changes to commit"
+
+          # Commit changes if there are any
+          git commit -m "Sync from react-projects (2025/heyzenexblog-next) on $(date)" || echo "No changes to commit"
+
+          # Force push to mirror
           git branch -M main
           git push origin main --force
