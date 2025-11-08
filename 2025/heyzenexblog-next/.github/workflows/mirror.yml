@@ -32,5 +32,3 @@ jobs:
           git add .
           git commit -m "Sync from react-projects"
           git push mirror HEAD:main --force
-
-# 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
