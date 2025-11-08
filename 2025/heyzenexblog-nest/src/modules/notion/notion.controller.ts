@@ -5,6 +5,7 @@ import {
   NotionDataSourcePageDto,
   NotionUserDto,
   StoryBookResponseDto,
+  UpdateStoryBookDto,
   UpdateTotallikeDto,
 } from './notion.dto';
 
@@ -52,5 +53,12 @@ export class NotionController {
     @Body() createDto: CreateStoryBookDto,
   ): Promise<StoryBookResponseDto> {
     return this.notionService.createStoryBook(createDto);
+  }
+
+  @Patch('storybook')
+  async updateStoryBook(
+    @Body() dto: UpdateStoryBookDto,
+  ): Promise<StoryBookResponseDto> {
+    return this.notionService.updateStoryBook(dto);
   }
 }

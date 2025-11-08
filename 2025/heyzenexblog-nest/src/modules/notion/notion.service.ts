@@ -6,6 +6,7 @@ import {
   NotionDataSourcePageDto,
   NotionUserDto,
   StoryBookResponseDto,
+  UpdateStoryBookDto,
 } from './notion.dto';
 import { NotionUserListResponse } from './notion.response.type';
 import axios from 'axios';
@@ -242,6 +243,106 @@ export class NotionService {
       return result;
     } catch (error: any) {
       this.logger.error('Failed to create storybook', error.message);
+      throw new Error(`Notion API error: ${error.message}`);
+    }
+  }
+
+  async updateStoryBook(
+    dto: UpdateStoryBookDto,
+  ): Promise<StoryBookResponseDto> {
+    try {
+      const { pageId, ...data } = dto;
+
+      await this.notion.pages.update({
+        page_id: pageId,
+        properties: {
+          ...(data.name && {
+            Name: {
+              title: [{ text: { content: data.name } }],
+            },
+          }),
+          ...(data.story && {
+            story: {
+              rich_text: [{ text: { content: data.story } }],
+            },
+          }),
+          ...(data.photoUrls && {
+            photoUrls: {
+              multi_select: data.photoUrls.map((url) => ({ name: url })),
+            },
+          }),
+          ...(data.headerPhoto && {
+            headerPhoto: {
+              rich_text: [{ text: { content: data.headerPhoto } }],
+            },
+          }),
+          ...(data.lat && {
+            lat: {
+              rich_text: [{ text: { content: data.lat } }],
+            },
+          }),
+          ...(data.long && {
+            long: {
+              rich_text: [{ text: { content: data.long } }],
+            },
+          }),
+          ...(data.location && {
+            location: {
+              rich_text: [{ text: { content: data.location } }],
+            },
+          }),
+          ...(data.totallike !== undefined && {
+            totallike: { number: data.totallike },
+          }),
+          ...(data.totalview !== undefined && {
+            totalview: { number: data.totalview },
+          }),
+          ...(data.youtube && {
+            youtube: {
+              rich_text: [{ text: { content: data.youtube } }],
+            },
+          }),
+          ...(data.instagram && {
+            instagram: {
+              rich_text: [{ text: { content: data.instagram } }],
+            },
+          }),
+          ...(data.strava && {
+            strava: {
+              rich_text: [{ text: { content: data.strava } }],
+            },
+          }),
+          ...(data.komoot && {
+            komoot: {
+              rich_text: [{ text: { content: data.komoot } }],
+            },
+          }),
+          ...(data.otherURL && {
+            otherURL: {
+              rich_text: [{ text: { content: data.otherURL } }],
+            },
+          }),
+        },
+      });
+
+      return {
+        name: data.name || '',
+        story: data.story || '',
+        photoUrls: data.photoUrls || [],
+        headerPhoto: data.headerPhoto || '',
+        lat: data.lat || '',
+        long: data.long || '',
+        location: data.location || '',
+        totallike: data.totallike || 0,
+        totalview: data.totalview || 0,
+        youtube: data.youtube || '',
+        instagram: data.instagram || '',
+        strava: data.strava || '',
+        komoot: data.komoot || '',
+        otherURL: data.otherURL || '',
+      };
+    } catch (error: any) {
+      this.logger.error('Failed to update storybook', error.message);
       throw new Error(`Notion API error: ${error.message}`);
     }
   }

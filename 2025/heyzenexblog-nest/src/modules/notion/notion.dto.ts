@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { NotionUser } from './notion.response.type';
 
 export class NotionUserDto {
@@ -244,4 +244,13 @@ export class StoryBookResponseDto {
 
   @ApiProperty({ example: '' })
   otherURL: string;
+}
+
+// Update
+export class UpdateStoryBookDto extends PartialType(CreateStoryBookDto) {
+  @ApiProperty({
+    description: 'The Notion page ID to update',
+    example: '2a3a9449-e267-806e-aeca-d0f498b456de',
+  })
+  pageId: string;
 }
