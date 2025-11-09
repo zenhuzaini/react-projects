@@ -3,13 +3,12 @@ import PhotoCollectionGrid from "@/components/layout/StoryBookBlockLayouts/6_Pho
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import ChevronLeft from "@/icons/ChevronLeft";
 import ChevronRight from "@/icons/ChevronRight";
+import { photoMock } from "@/mock/photo";
 import { faker } from "@faker-js/faker";
 import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
 
 const PhotoBook = () => {
-	const photoUrls = Array.from({ length: 8 }, () => faker.image.url());
-
 	return (
 		<div>
 			<div>
@@ -56,7 +55,8 @@ const PhotoBook = () => {
 					{/* content */}
 					<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-4 mt-[3%] ">
 						{/* <PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid> */}
-						<PhotoCollectionGrid photoUrls={photoUrls}></PhotoCollectionGrid>
+						<PhotoCollectionGrid
+							photo={photoMock({ length: 8 })}></PhotoCollectionGrid>
 
 						<div className="flex justify-between mt-10">
 							<Link href={`/`}>

@@ -241,6 +241,15 @@ export class NotionService {
               },
             ],
           },
+          shortDescription: {
+            rich_text: [{ text: { content: dto.shortDescription || '' } }],
+          },
+          eventDateFrom: {
+            rich_text: [{ text: { content: dto.eventDateFrom || '' } }],
+          },
+          eventDateTo: {
+            rich_text: [{ text: { content: dto.eventDateTo || '' } }],
+          },
         },
       });
 
@@ -260,6 +269,9 @@ export class NotionService {
         strava: dto.strava,
         komoot: dto.komoot,
         otherURL: dto.otherURL,
+        shortDescription: dto.shortDescription,
+        eventDateFrom: dto.eventDateFrom,
+        eventDateTo: dto.eventDateTo,
       };
 
       return result;
@@ -362,6 +374,9 @@ export class NotionService {
         strava: data.strava || '',
         komoot: data.komoot || '',
         otherURL: data.otherURL || '',
+        shortDescription: data.shortDescription || '',
+        eventDateFrom: data.eventDateFrom || '',
+        eventDateTo: data.eventDateTo || '',
       };
     } catch (error: any) {
       this.logger.error('Failed to update storybook', error.message);

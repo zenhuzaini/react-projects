@@ -1,11 +1,12 @@
 import React from "react";
 
-const SectioonTitle = () => {
+const SectionTitle = ({ text }: { text: string }) => {
 	return (
 		<div className="grid grid-cols-8">
 			<h2 className="flex col-span-2 gap-2 sm:items-center">
 				<div className=" text-primaryText text-2xl sm:text-2xl font-light  ">
-					The Begininng Begininng aef<span className="text-dot">.</span>
+					{text}
+					<span className="text-dot">.</span>
 				</div>
 			</h2>
 
@@ -16,4 +17,4 @@ const SectioonTitle = () => {
 	);
 };
 
-export default SectioonTitle;
+export default SectionTitle;

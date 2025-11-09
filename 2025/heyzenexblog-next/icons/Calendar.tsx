@@ -1,6 +1,13 @@
+import { animationForArrow } from "@/animation/animation";
 import React from "react";
 
-const Calendar = ({ size = 6 }: { size?: number }) => {
+const Calendar = ({
+	size = 6,
+	className = "text-primarytextInvert",
+}: {
+	size?: number;
+	className?: string;
+}) => {
 	const px = size * 4;
 	return (
 		<svg
@@ -9,7 +16,7 @@ const Calendar = ({ size = 6 }: { size?: number }) => {
 			viewBox="0 0 24 24"
 			strokeWidth="1.5"
 			stroke="currentColor"
-			className="text-primarytextInvert"
+			className={className}
 			width={px}
 			height={px}>
 			<path

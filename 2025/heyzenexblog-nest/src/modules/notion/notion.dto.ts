@@ -42,40 +42,66 @@ export class NotionUserDto {
 export class NotionDataSourcePageDto {
   @ApiProperty()
   id: string;
+
   @ApiProperty()
   name: string;
+
   @ApiProperty()
   story: string;
+
   @ApiProperty()
   photoUrls: string[];
+
   @ApiProperty()
   headerPhoto: string;
+
   @ApiProperty()
   lat: string;
+
   @ApiProperty()
   long: string;
+
   @ApiProperty()
   location: string;
+
   @ApiProperty()
   totallike: number | null;
+
   @ApiProperty()
   totalview: number | null;
+
   @ApiProperty()
   youtube: string;
+
   @ApiProperty()
   instagram: string;
+
   @ApiProperty()
   strava: string;
+
   @ApiProperty()
   komoot: string;
+
   @ApiProperty()
   otherURL: string;
+
   @ApiProperty()
   url: string;
+
   @ApiProperty()
   createdAt: string;
+
   @ApiProperty()
   modifiedAt: string;
+
+  @ApiProperty()
+  shortDescription: string;
+
+  @ApiProperty()
+  eventDateFrom: string;
+
+  @ApiProperty()
+  eventDateTo: string;
 
   constructor(page: any) {
     const props = page.properties || {};
@@ -102,6 +128,9 @@ export class NotionDataSourcePageDto {
     this.url = page.url;
     this.createdAt = props?.['created at']?.created_time || '';
     this.modifiedAt = props?.['modified at']?.last_edited_time || '';
+    this.shortDescription = richTextToString(props?.shortDescription);
+    this.eventDateFrom = props?.eventDateFrom?.date?.start || '';
+    this.eventDateTo = props?.eventDateTo?.date?.end || '';
   }
 }
 
@@ -200,6 +229,24 @@ export class CreateStoryBookDto {
     required: false,
   })
   otherURL: string;
+
+  @ApiProperty({
+    example: 'A short summary of my cycling adventure',
+    description: 'Brief description of the storybook',
+  })
+  shortDescription: string;
+
+  @ApiProperty({
+    example: '2025-10-01',
+    description: 'Start date of the event',
+  })
+  eventDateFrom: string;
+
+  @ApiProperty({
+    example: '2025-10-03',
+    description: 'End date of the event',
+  })
+  eventDateTo: string;
 }
 
 export class StoryBookResponseDto {
@@ -244,6 +291,15 @@ export class StoryBookResponseDto {
 
   @ApiProperty({ example: '' })
   otherURL: string;
+
+  @ApiProperty({ example: 'A short summary of my cycling adventure' })
+  shortDescription: string;
+
+  @ApiProperty({ example: '2025-10-01' })
+  eventDateFrom: string;
+
+  @ApiProperty({ example: '2025-10-03' })
+  eventDateTo: string;
 }
 
 // Update

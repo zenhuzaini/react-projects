@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 import React from "react";
 
-const Paragraph = () => {
+const Paragraph = ({ text }: { text: string }) => {
 	return (
 		<div className="text-primaryText font-light leading-normal text-sm md:text-lg text-justify justify-center">
-			<p>{faker.lorem.sentences(8)}</p>
+			<p>{text}</p>
 		</div>
 	);
 };

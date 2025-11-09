@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import ThreeBars from "@/icons/ThreeBars";
 import XMark from "@/icons/XMark";
 import Link from "next/link";
+import TerminalIcon from "@/icons/TerminalIcon";
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
@@ -157,6 +158,17 @@ const Header = () => {
 			</div>
 
 			{/* Desktop switch */}
+			<div className="hidden lg:flex col-start-7">
+				<Link href="/playground/content" className="flex items-center gap-1 ">
+					<div>
+						<TerminalIcon size={5}></TerminalIcon>
+					</div>
+					<span>
+						playground
+						<span className="text-dot font-extrabold">.</span>
+					</span>
+				</Link>
+			</div>
 			<div className="hidden lg:flex col-start-8 col-end-8 justify-center items-center bg-primaryaccent rounded-b-2xl">
 				<div className="flex gap-3 items-center">
 					<Sun />
