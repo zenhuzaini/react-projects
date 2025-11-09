@@ -25,9 +25,9 @@ export type MyJSONEditorProps = {
 };
 
 export type StoryContentType = {
-	sectionID?: string;
-	textContent?: string;
-	photoUrls?: PhotoCardDetailType[];
+	sectionID: string;
+	textContent: string;
+	photoUrls: PhotoCardDetailType[];
 };
 
 export type MainStoryBookPageProps = {

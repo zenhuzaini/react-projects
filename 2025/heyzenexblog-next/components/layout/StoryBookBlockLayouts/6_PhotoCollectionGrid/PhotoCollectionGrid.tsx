@@ -78,12 +78,8 @@ const getLayout = (n: number) => {
 	}
 };
 
-const PhotoCollectionGrid = ({
-	photoUrls,
-}: {
-	photoUrls: PhotoCardDetailType[];
-}) => {
-	const { grid, items } = getLayout(photoUrls.length);
+const PhotoCollectionGrid = ({ photo }: { photo: PhotoCardDetailType[] }) => {
+	const { grid, items } = getLayout(photo.length);
 	// State to track modal open and src of clicked image
 	const [selectedImage, setSelectedImage] = useState<string>();
 	const [isDialogPhotoOpen, setIsDialogPhotoOpen] = useState<boolean>(false);
@@ -95,7 +91,7 @@ const PhotoCollectionGrid = ({
 	return (
 		<>
 			<div className={`grid grid-cols-2 sm:${grid} gap-2 sm:gap-4`}>
-				{photoUrls.map((image, idx) => {
+				{photo.map((image, idx) => {
 					const colSpan = items[idx]?.colSpan || 1;
 					let spanClass = "";
 					if (colSpan === 2) spanClass = "col-span-2";

@@ -10,9 +10,11 @@ import PhotoPharagraph from "./3_PhotoParagraph/PhotoPharagraph";
 import PharagraphPhoto from "./4_PharagraphPhoto/PharagraphPhoto";
 import FullPhoto from "./5_FullPhoto/FullPhoto";
 import PhotoCollectionGrid from "./6_PhotoCollectionGrid/PhotoCollectionGrid";
-import SectioonTitle from "./9_SectionTitle/SectioonTitle";
 import Link from "next/link";
-import { MainStoryBookPageProps } from "@/types/components";
+import { MainStoryBookPageProps, StoryContentType } from "@/types/components";
+import { EMPTY_STRING } from "@/const/vars";
+import { photoMockStatic } from "@/mock/photo";
+import SectionTitle from "./9_SectionTitle/SectionTitle";
 
 const MainStoryBookPage = ({
 	createdAt,
@@ -23,6 +25,81 @@ const MainStoryBookPage = ({
 	storyPhotoUrls,
 	storyContent,
 }: MainStoryBookPageProps) => {
+	const sectionMapping = (storyContent: StoryContentType, idx: number) => {
+		switch (storyContent?.sectionID) {
+			case "layout1":
+				return (
+					<ShortDescription
+						key={idx}
+						text={storyContent?.textContent}></ShortDescription>
+				);
+
+			case "layout2":
+				return (
+					<Paragraph key={idx} text={storyContent?.textContent}></Paragraph>
+				);
+				break;
+
+			case "layout3":
+				return (
+					<PhotoPharagraph
+						key={idx}
+						photo={storyContent?.photoUrls[0]}
+						text={storyContent?.textContent}></PhotoPharagraph>
+				);
+				break;
+
+			case "layout4":
+				return (
+					<PharagraphPhoto
+						key={idx}
+						photo={storyContent?.photoUrls[0]}
+						text={storyContent?.textContent}></PharagraphPhoto>
+				);
+				break;
+
+			case "layout5":
+				return (
+					<FullPhoto key={idx} photo={storyContent?.photoUrls[0]}></FullPhoto>
+				);
+				break;
+
+			case "layout6":
+				return (
+					<PhotoCollectionGrid
+						key={idx}
+						photo={storyContent?.photoUrls}></PhotoCollectionGrid>
+				);
+				break;
+
+			case "layout7":
+				break;
+
+			case "layout8":
+				break;
+
+			case "layout9":
+				return (
+					<SectionTitle
+						key={idx}
+						text={storyContent.textContent}></SectionTitle>
+				);
+				break;
+
+			default:
+				return (
+					<PhotoCollectionGrid
+						key={idx}
+						photo={photoMockStatic}></PhotoCollectionGrid>
+				);
+				break;
+		}
+	};
+
+	const constructContent = storyContent.map((content, idx) => {
+		return sectionMapping(content, idx);
+	});
+
 	return (
 		<div className="flex flex-col gap-2">
 			{/* info top */}
@@ -64,14 +141,8 @@ const MainStoryBookPage = ({
 			{/* content */}
 			<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-5 sm:gap-10 mt-[3%] ">
 				<ShortDescription text={storyDescription}></ShortDescription>
-				{/* <PhotoPharagraph></PhotoPharagraph>
-				<SectioonTitle></SectioonTitle>
 
-				<PharagraphPhoto></PharagraphPhoto>
-				<FullPhoto></FullPhoto>
-				<Paragraph></Paragraph> */}
-
-				<PhotoCollectionGrid photoUrls={storyPhotoUrls}></PhotoCollectionGrid>
+				{constructContent}
 
 				<div className="flex justify-between">
 					<Link href={`/`}>

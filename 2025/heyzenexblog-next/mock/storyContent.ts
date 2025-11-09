@@ -2,7 +2,7 @@ import { StoryContentType } from "@/types/components";
 
 export const storyContentsMock: StoryContentType[] = [
 	{
-		sectionID: "sec1",
+		sectionID: "layout1",
 		textContent:
 			"This first section captures the essence of Paris with its majestic landmarks and vibrant street life. The city offers a perfect mix of history and modern culture, drawing visitors from all over the world to admire its art, cuisine, and architecture.",
 		photoUrls: [
@@ -49,7 +49,7 @@ export const storyContentsMock: StoryContentType[] = [
 		],
 	},
 	{
-		sectionID: "sec2",
+		sectionID: "layout2",
 		textContent:
 			"In this section, the dynamic energy of American cities unfolds through bright lights and iconic landmarks. From the heart of New York's Times Square to Chicago’s Cloud Gate, each location tells a unique story of cultural vibrancy and urban life.",
 		photoUrls: [
@@ -96,7 +96,7 @@ export const storyContentsMock: StoryContentType[] = [
 		],
 	},
 	{
-		sectionID: "sec3",
+		sectionID: "layout3",
 		textContent:
 			"Nature’s serene landscapes are showcased here with crystal-clear lakes and majestic mountains. This section invites one to explore the tranquil beauty and breathtaking vistas that define the great outdoors.",
 		photoUrls: [
@@ -143,7 +143,7 @@ export const storyContentsMock: StoryContentType[] = [
 		],
 	},
 	{
-		sectionID: "sec4",
+		sectionID: "layout4",
 		textContent:
 			"Dive into the rich history and architecture of ancient cities. This section highlights historic sites and marvels that hold centuries of stories and cultural heritage.",
 		photoUrls: [
@@ -190,7 +190,7 @@ export const storyContentsMock: StoryContentType[] = [
 		],
 	},
 	{
-		sectionID: "sec5",
+		sectionID: "layout5",
 		textContent:
 			"Experience the captivating charm of coastal towns and seaside landscapes. This section offers a glimpse into the relaxed atmosphere and stunning vistas unique to waterfront locales.",
 		photoUrls: [
@@ -237,7 +237,7 @@ export const storyContentsMock: StoryContentType[] = [
 		],
 	},
 	{
-		sectionID: "sec6",
+		sectionID: "layout6",
 		textContent:
 			"Wild adventures await in breathtaking landscapes full of excitement. This section showcases thrilling experiences and stunning views that invigorate the spirit.",
 		photoUrls: [
@@ -284,7 +284,7 @@ export const storyContentsMock: StoryContentType[] = [
 		],
 	},
 	{
-		sectionID: "sec7",
+		sectionID: "layout7",
 		textContent:
 			"The vibrant nightlife and neon-lit streets of Asia’s megacities come alive here. This section captures the energy and cultural fusion that define urban nights.",
 		photoUrls: [
@@ -327,6 +327,147 @@ export const storyContentsMock: StoryContentType[] = [
 				photoUrl: "https://picsum.photos/id/1038/800/600",
 				title: "Victoria Harbour",
 				description: "Harbor skyline illuminated at night.",
+			},
+		],
+	},
+	{
+		sectionID: "layout8",
+		textContent:
+			"Exploring the rich landscapes and traditions of South America, this section highlights vibrant cultures, delicious cuisine, and breathtaking natural wonders that inspire and captivate.",
+		photoUrls: [
+			{
+				id: "26",
+				city: "Rio de Janeiro",
+				year: 2023,
+				month: "Feb",
+				country: "Brazil",
+				photoUrl: "https://picsum.photos/id/1039/800/600",
+				title: "Christ the Redeemer",
+				description: "Famous statue overlooking Rio de Janeiro.",
+			},
+			{
+				id: "27",
+				city: "Buenos Aires",
+				year: 2022,
+				month: "Nov",
+				country: "Argentina",
+				photoUrl: "https://picsum.photos/id/1040/800/600",
+				title: "La Boca",
+				description: "Colorful houses in the La Boca neighborhood.",
+			},
+			{
+				id: "28",
+				city: "Cusco",
+				year: 2021,
+				month: "May",
+				country: "Peru",
+				photoUrl: "https://picsum.photos/id/1041/800/600",
+				title: "Machu Picchu",
+				description: "Ancient Inca city nestled in the Andes Mountains.",
+			},
+			{
+				id: "29",
+				city: "Santiago",
+				year: 2023,
+				month: "Aug",
+				country: "Chile",
+				photoUrl: "https://picsum.photos/id/1042/800/600",
+				title: "Andes Mountains",
+				description: "Snow-capped peaks visible from Santiago.",
+			},
+		],
+	},
+	{
+		sectionID: "layout9",
+		textContent:
+			"Diving into the tropical biodiversity and pristine beaches of Southeast Asia, this section explores exotic wildlife, lush jungles, and serene coastal escapes with rich cultural heritage.",
+		photoUrls: [
+			{
+				id: "30",
+				city: "Bali",
+				year: 2022,
+				month: "Mar",
+				country: "Indonesia",
+				photoUrl: "https://picsum.photos/id/1043/800/600",
+				title: "Uluwatu Temple",
+				description: "Temple perched on cliffs overlooking the sea.",
+			},
+			{
+				id: "31",
+				city: "Phuket",
+				year: 2021,
+				month: "Jan",
+				country: "Thailand",
+				photoUrl: "https://picsum.photos/id/1044/800/600",
+				title: "Patong Beach",
+				description: "Lively beach town with vibrant nightlife.",
+			},
+			{
+				id: "32",
+				city: "Siem Reap",
+				year: 2020,
+				month: "Dec",
+				country: "Cambodia",
+				photoUrl: "https://picsum.photos/id/1045/800/600",
+				title: "Angkor Wat",
+				description: "Majestic temple complex and UNESCO site.",
+			},
+			{
+				id: "33",
+				city: "Hanoi",
+				year: 2022,
+				month: "Nov",
+				country: "Vietnam",
+				photoUrl: "https://picsum.photos/id/1046/800/600",
+				title: "Old Quarter",
+				description: "Historic streets with vibrant markets and culture.",
+			},
+		],
+	},
+	{
+		sectionID: "layout10",
+		textContent:
+			"From the icy fjords of Scandinavia to the Northern Lights in Lapland, this section captures breathtaking winter landscapes, charming towns, and unique Arctic experiences.",
+		photoUrls: [
+			{
+				id: "34",
+				city: "Reykjavik",
+				year: 2023,
+				month: "Jan",
+				country: "Iceland",
+				photoUrl: "https://picsum.photos/id/1047/800/600",
+				title: "Hallgrímskirkja",
+				description: "Iconic church dominating Reykjavik’s skyline.",
+			},
+			{
+				id: "35",
+				city: "Tromsø",
+				year: 2022,
+				month: "Feb",
+				country: "Norway",
+				photoUrl: "https://picsum.photos/id/1048/800/600",
+				title: "Northern Lights",
+				description: "Aurora borealis dancing over snowy landscapes.",
+			},
+			{
+				id: "36",
+				city: "Stockholm",
+				year: 2021,
+				month: "Dec",
+				country: "Sweden",
+				photoUrl: "https://picsum.photos/id/1049/800/600",
+				title: "Gamla Stan",
+				description: "Historic old town with cobbled streets and canals.",
+			},
+			{
+				id: "37",
+				city: "Lapland",
+				year: 2023,
+				month: "Mar",
+				country: "Finland",
+				photoUrl: "https://picsum.photos/id/1050/800/600",
+				title: "Reindeer Safari",
+				description: "Traditional Sami lifestyle and reindeer herding.",
 			},
 		],
 	},

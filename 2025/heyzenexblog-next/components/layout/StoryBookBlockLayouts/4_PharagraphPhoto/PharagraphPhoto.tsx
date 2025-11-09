@@ -1,14 +1,14 @@
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
-import { photoMock } from "@/mock/photo";
+import { EMPTY_STRING } from "@/const/vars";
+import { photoMockStatic } from "@/mock/photo";
 import { PhotoCardDetailType } from "@/types/components";
-import { faker } from "@faker-js/faker";
 
 const PharagraphPhoto = ({
-	photoUrl = photoMock({ length: 1 })[0],
-	text = "test test test",
+	photo = photoMockStatic[0],
+	text = EMPTY_STRING,
 }: {
 	text: string;
-	photoUrl: PhotoCardDetailType;
+	photo: PhotoCardDetailType;
 }) => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-7 h-full lg:gap-4 w-full md:items-center">
@@ -21,8 +21,8 @@ const PharagraphPhoto = ({
 			{/* Right text */}
 			<div className="rounded-2xl w-full h-[40vh]">
 				<ImageWithSkeleton
-					alt={photoUrl?.description || photoUrl?.title}
-					src={photoUrl?.photoUrl}
+					alt={photo?.description || photo?.title}
+					src={photo?.photoUrl}
 				/>
 			</div>
 		</div>

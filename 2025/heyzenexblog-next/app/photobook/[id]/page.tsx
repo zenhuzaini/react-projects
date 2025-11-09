@@ -56,7 +56,7 @@ const PhotoBook = () => {
 					<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-4 mt-[3%] ">
 						{/* <PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid> */}
 						<PhotoCollectionGrid
-							photoUrls={photoMock({ length: 8 })}></PhotoCollectionGrid>
+							photo={photoMock({ length: 8 })}></PhotoCollectionGrid>
 
 						<div className="flex justify-between mt-10">
 							<Link href={`/`}>
