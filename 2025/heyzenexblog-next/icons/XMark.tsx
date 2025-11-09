@@ -1,6 +1,6 @@
 const XMark = ({
 	size = 6,
-	className = "text-primarytextInvert",
+	className = "text-primarytextInvert ",
 }: {
 	size?: number;
 	className?: string;

@@ -18,10 +18,12 @@ import React from "react";
 import Map from "@/icons/Map";
 import AtSymbol from "@/icons/AtSymbol";
 
-import { JsonEditor } from "json-edit-react";
-
 import { storyContentExample } from "@/mock/storyContent";
 import { DataContentType } from "@/types/data";
+import MyJsonEditor from "@/components/ui/jsonEditor";
+import { PhotoCardDetailType } from "@/types/components";
+import { photoMock } from "@/mock/photo";
+import CheckSymbol from "@/icons/CheckSymbol";
 
 const ContentPlayground = () => {
 	const [openStartDate, setOpenStartDate] = React.useState(false);
@@ -31,19 +33,27 @@ const ContentPlayground = () => {
 	const [endDate, setEndDate] = React.useState<Date | undefined>(undefined);
 
 	const [title, setTitle] = React.useState<string>();
-	const [description, setDescription] = React.useState<string>();
-	const [location, setLocation] = React.useState<string>();
-	const [lat, setLat] = React.useState<string>();
-	const [long, setLong] = React.useState<string>();
-	const [photoCover, setPhotoCover] = React.useState<string>();
-	const [ig, setIg] = React.useState<string>();
-	const [yt, setYt] = React.useState<string>();
-	const [strava, setStrava] = React.useState<string>();
-	const [komoot, setKomoot] = React.useState<string>();
+	const [description, setDescription] = React.useState<string>("");
+	const [location, setLocation] = React.useState<string>(
+		"London, United Kingdom"
+	);
+	const [lat, setLat] = React.useState<string>("-555555");
+	const [long, setLong] = React.useState<string>("111111");
+	const [photoCover, setPhotoCover] = React.useState<string>(
+		"https://d2exd72xrrp1s7.cloudfront.net/www/1u/1uqh5llwgt6mg19rb2yzuxgo1050bzuy4k-c2824503-full/19040aaca35?width=3360&crop=false&q=70"
+	);
+	const [ig, setIg] = React.useState<string>("link to ig");
+	const [yt, setYt] = React.useState<string>("link to yt");
+	const [strava, setStrava] = React.useState<string>("link to strava");
+	const [komoot, setKomoot] = React.useState<string>("link to komoot");
 	const [otherUrl, setOtherUrl] = React.useState<string>();
-	const [photoCollections, setPhotoCollections] = React.useState<string[]>();
+	const [photoCollections, setPhotoCollections] = React.useState<
+		PhotoCardDetailType[]
+	>(photoMock({ length: 1 }));
 	const [content, setContent] =
 		React.useState<DataContentType[]>(storyContentExample);
+
+	const characterCounter = 160 - description.length;
 
 	return (
 		<div className="flex flex-col gap-5 lg:gap-10">
@@ -57,15 +67,11 @@ const ContentPlayground = () => {
 						</>
 					}
 					right={<>Story!</>}></SectionTitle>
-				<div className="grid lg:grid-cols-3 gap-4 h-full">
+				<div className="grid lg:grid-cols-3 h-full">
 					<div className="lg:col-span-2 w-full h-full overflow-hidden ">
-						<JsonEditor
-							data={content}
-							setData={(data) => {
-								console.log("in ", data);
-								setContent(data as DataContentType[]);
-							}} // optional
-						/>
+						<MyJsonEditor
+							content={content}
+							setContent={(x) => setContent(x)}></MyJsonEditor>
 					</div>
 					<div className="w-full h-full rounded-2xl">
 						<div className="grid w-full max-w-sm gap-6">
@@ -81,19 +87,41 @@ const ContentPlayground = () => {
 									<Chat size={4}></Chat>
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
-									<XMark size={4}></XMark>
+									{!title ? (
+										<XMark
+											size={4}
+											className="stroke-4 text-primaryred"></XMark>
+									) : (
+										<CheckSymbol
+											className="stroke-4 text-primaryfreshgreen"
+											size={4}></CheckSymbol>
+									)}
+
 									<InfoIcon />
 								</InputGroupAddon>
 							</InputGroup>
 
 							<InputGroup>
-								<InputGroupTextarea placeholder="Ask, Search or Chat..." />
+								<InputGroupTextarea
+									value={description}
+									onChange={(data) => setDescription(data.target.value)}
+									placeholder="description for this content"
+								/>
 								<InputGroupAddon align="block-end">
 									<InputGroupText className="ml-auto">
-										52 char left
+										{characterCounter} char left
 									</InputGroupText>
 									<Separator orientation="vertical" className="h-4!" />
-									<CheckIcon />
+									{!description ? (
+										<XMark
+											size={4}
+											className="stroke-4 text-primaryred"></XMark>
+									) : (
+										<CheckSymbol
+											className="stroke-4 text-primaryfreshgreen"
+											size={4}></CheckSymbol>
+									)}
+
 									<InfoIcon />
 								</InputGroupAddon>
 							</InputGroup>
@@ -119,44 +147,92 @@ const ContentPlayground = () => {
 							</div>
 
 							<InputGroup>
-								<InputGroupInput placeholder="photo cover Url" />
+								<InputGroupInput
+									value={photoCover}
+									onChange={(data) => setPhotoCover(data.target.value)}
+									placeholder="photo cover Url"
+								/>
 								<InputGroupAddon>
 									<PhotoImageIcon size={4}></PhotoImageIcon>
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
-									<CheckIcon />
+									{!photoCover ? (
+										<XMark
+											size={4}
+											className="stroke-4 text-primaryred"></XMark>
+									) : (
+										<CheckSymbol
+											className="stroke-4 text-primaryfreshgreen"
+											size={4}></CheckSymbol>
+									)}
 									<InfoIcon />
 								</InputGroupAddon>
 							</InputGroup>
 							<InputGroup>
-								<InputGroupInput placeholder="Location" />
+								<InputGroupInput
+									value={location}
+									onChange={(data) => setLocation(data.target.value)}
+									placeholder="Location"
+								/>
 								<InputGroupAddon>
 									<Globe size={4} />
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
-									<CheckIcon />
+									{!location ? (
+										<XMark
+											size={4}
+											className="stroke-4 text-primaryred"></XMark>
+									) : (
+										<CheckSymbol
+											className="stroke-4 text-primaryfreshgreen"
+											size={4}></CheckSymbol>
+									)}
 									<InfoIcon />
 								</InputGroupAddon>
 							</InputGroup>
 							<div className="grid grid-cols-2 gap-3">
 								<InputGroup>
-									<InputGroupInput placeholder="Latitude" />
+									<InputGroupInput
+										value={lat}
+										onChange={(data) => setLat(data.target.value)}
+										placeholder="Latitude"
+									/>
 									<InputGroupAddon>
 										<Map size={4} />
 									</InputGroupAddon>
 									<InputGroupAddon align="inline-end">
-										<CheckIcon />
+										{!lat ? (
+											<XMark
+												size={4}
+												className="stroke-4 text-primaryred"></XMark>
+										) : (
+											<CheckSymbol
+												className="stroke-4 text-primaryfreshgreen"
+												size={4}></CheckSymbol>
+										)}
 										<InfoIcon />
 									</InputGroupAddon>
 								</InputGroup>
 
 								<InputGroup>
-									<InputGroupInput placeholder="Longitude" />
+									<InputGroupInput
+										value={long}
+										onChange={(data) => setLong(data.target.value)}
+										placeholder="Longitude"
+									/>
 									<InputGroupAddon>
 										<Map size={4} />
 									</InputGroupAddon>
 									<InputGroupAddon align="inline-end">
-										<CheckIcon />
+										{!lat ? (
+											<XMark
+												size={4}
+												className="stroke-4 text-primaryred"></XMark>
+										) : (
+											<CheckSymbol
+												className="stroke-4 text-primaryfreshgreen"
+												size={4}></CheckSymbol>
+										)}
 										<InfoIcon />
 									</InputGroupAddon>
 								</InputGroup>
@@ -164,67 +240,133 @@ const ContentPlayground = () => {
 
 							<div className="grid grid-cols-2 gap-4">
 								<InputGroup>
-									<InputGroupInput placeholder="Instagram" />
+									<InputGroupInput
+										value={ig}
+										onChange={(data) => setIg(data.target.value)}
+										placeholder="Instagram"
+									/>
 									<InputGroupAddon>
 										<AtSymbol size={4}></AtSymbol>
 									</InputGroupAddon>
 									<InputGroupAddon align="inline-end">
-										<CheckIcon />
+										{!ig ? (
+											<XMark
+												size={4}
+												className="stroke-4 text-primaryred"></XMark>
+										) : (
+											<CheckSymbol
+												className="stroke-4 text-primaryfreshgreen"
+												size={4}></CheckSymbol>
+										)}
 										<InfoIcon />
 									</InputGroupAddon>
 								</InputGroup>
 
 								<InputGroup>
-									<InputGroupInput placeholder="Komoot" />
+									<InputGroupInput
+										value={komoot}
+										onChange={(data) => setKomoot(data.target.value)}
+										placeholder="Komoot"
+									/>
 									<InputGroupAddon>
 										<AtSymbol size={4}></AtSymbol>
 									</InputGroupAddon>
 									<InputGroupAddon align="inline-end">
-										<CheckIcon />
+										{!komoot ? (
+											<XMark
+												size={4}
+												className="stroke-4 text-primaryred"></XMark>
+										) : (
+											<CheckSymbol
+												className="stroke-4 text-primaryfreshgreen"
+												size={4}></CheckSymbol>
+										)}
 										<InfoIcon />
 									</InputGroupAddon>
 								</InputGroup>
 
 								<InputGroup>
-									<InputGroupInput placeholder="Strava" />
+									<InputGroupInput
+										value={strava}
+										onChange={(data) => setStrava(data.target.value)}
+										placeholder="Strava"
+									/>
 									<InputGroupAddon>
 										<AtSymbol size={4}></AtSymbol>
 									</InputGroupAddon>
 									<InputGroupAddon align="inline-end">
-										<CheckIcon />
+										{!strava ? (
+											<XMark
+												size={4}
+												className="stroke-4 text-primaryred"></XMark>
+										) : (
+											<CheckSymbol
+												className="stroke-4 text-primaryfreshgreen"
+												size={4}></CheckSymbol>
+										)}
 										<InfoIcon />
 									</InputGroupAddon>
 								</InputGroup>
 
 								<InputGroup>
-									<InputGroupInput placeholder="Youtube" />
+									<InputGroupInput
+										value={yt}
+										onChange={(data) => setYt(data.target.value)}
+										placeholder="Youtube"
+									/>
 									<InputGroupAddon>
 										<AtSymbol size={4}></AtSymbol>
 									</InputGroupAddon>
 									<InputGroupAddon align="inline-end">
-										<CheckIcon />
+										{!yt ? (
+											<XMark
+												size={4}
+												className="stroke-4 text-primaryred"></XMark>
+										) : (
+											<CheckSymbol
+												className="stroke-4 text-primaryfreshgreen"
+												size={4}></CheckSymbol>
+										)}
 										<InfoIcon />
 									</InputGroupAddon>
 								</InputGroup>
 
 								<InputGroup>
-									<InputGroupInput placeholder="Other URL" />
+									<InputGroupInput
+										value={otherUrl}
+										onChange={(data) => setOtherUrl(data.target.value)}
+										placeholder="Other URL"
+									/>
 									<InputGroupAddon>
 										<AtSymbol size={4}></AtSymbol>
 									</InputGroupAddon>
 									<InputGroupAddon align="inline-end">
-										<CheckIcon />
+										{!otherUrl ? (
+											<XMark
+												size={4}
+												className="stroke-4 text-primaryred"></XMark>
+										) : (
+											<CheckSymbol
+												className="stroke-4 text-primaryfreshgreen"
+												size={4}></CheckSymbol>
+										)}
 										<InfoIcon />
 									</InputGroupAddon>
 								</InputGroup>
 							</div>
 
-							<div></div>
+							<div className="flex flex-col gap-1">
+								<div className="text-primaryText">Photos</div>
+								<MyJsonEditor
+									content={photoCollections}
+									setContent={(x) => setPhotoCollections(x)}></MyJsonEditor>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
+			{/* Preview */}
 			<div>
 				<SectionTitle left={<></>} right={<>Preview</>}></SectionTitle>
 			</div>

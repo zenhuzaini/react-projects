@@ -22,3 +22,24 @@ export const photoMock = ({
 		};
 	});
 };
+
+export const basicPhotoContent = [
+	{
+		url: "",
+		title: faker.book.series(),
+		description: faker.lorem
+			.sentence({ min: 8, max: 20 })
+			.split(" ")
+			.slice(0, 10)
+			.join(" "),
+	},
+	{
+		url: "",
+		title: faker.book.series(),
+		description: faker.lorem
+			.sentence({ min: 8, max: 20 })
+			.split(" ")
+			.slice(0, 10)
+			.join(" "),
+	},
+];

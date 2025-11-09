@@ -1,12 +1,12 @@
 export type PhotoCardDetailType = {
-	id: string;
-	city: string;
-	year: number;
-	month: string;
-	country: string;
+	id?: string;
+	city?: string;
+	year?: number;
+	month?: string;
+	country?: string;
 	photoUrl: string;
 	title?: string;
-	description?: string;
+	description: string;
 };
 
 export type DatePickerProps = {
@@ -15,4 +15,11 @@ export type DatePickerProps = {
 	label?: string;
 	open: boolean;
 	setOpen: () => void;
+};
+
+export type MyJSONEditorProps = {
+	content: any;
+	setContent: (data: any) => void;
+	searchInput?: string;
+	title?: string;
 };
