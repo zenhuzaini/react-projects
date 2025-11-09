@@ -17,11 +17,8 @@ import { CheckIcon, InfoIcon } from "lucide-react";
 import React from "react";
 import Map from "@/icons/Map";
 import AtSymbol from "@/icons/AtSymbol";
-import dynamic from "next/dynamic";
 
-const ReactJsonView = dynamic(() => import("@microlink/react-json-view"), {
-	ssr: false, // disables SSR for this component!
-});
+import { JsonEditor } from "json-edit-react";
 
 import { storyContentExample } from "@/mock/storyContent";
 import { DataContentType } from "@/types/data";
@@ -62,25 +59,24 @@ const ContentPlayground = () => {
 					right={<>Story!</>}></SectionTitle>
 				<div className="grid lg:grid-cols-3 gap-4 h-full">
 					<div className="lg:col-span-2 w-full h-full overflow-hidden ">
-						<ReactJsonView
-							src={content}
-							onAdd={(data) => {
-								setContent(data.updated_src as DataContentType[]);
-							}}
-							onDelete={(data) => {
-								setContent(data.updated_src as DataContentType[]);
-							}}
-							onEdit={(data) => {
-								setContent(data.updated_src as DataContentType[]);
-							}}
-							collapsed={true}
-							iconStyle="circle"
+						<JsonEditor
+							data={content}
+							setData={(data) => {
+								console.log("in ", data);
+								setContent(data as DataContentType[]);
+							}} // optional
 						/>
 					</div>
 					<div className="w-full h-full rounded-2xl">
 						<div className="grid w-full max-w-sm gap-6">
 							<InputGroup>
-								<InputGroupInput placeholder="Title" />
+								<InputGroupInput
+									value={title}
+									onChange={(data) => {
+										setTitle(data.target.value);
+									}}
+									placeholder="Title"
+								/>
 								<InputGroupAddon>
 									<Chat size={4}></Chat>
 								</InputGroupAddon>
