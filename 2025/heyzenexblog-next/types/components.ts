@@ -8,3 +8,11 @@ export type PhotoCardDetailType = {
 	title?: string;
 	description?: string;
 };
+
+export type DatePickerProps = {
+	date: Date | undefined;
+	setDate: (date: Date | undefined) => void;
+	label?: string;
+	open: boolean;
+	setOpen: () => void;
+};

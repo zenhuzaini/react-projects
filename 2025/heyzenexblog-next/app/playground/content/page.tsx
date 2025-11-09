@@ -1,5 +1,6 @@
 "use client";
 import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
+import { DatePicker } from "@/components/molecule/DatePicker";
 import {
 	InputGroup,
 	InputGroupInput,
@@ -8,18 +9,22 @@ import {
 	InputGroupText,
 } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
+import Chat from "@/icons/Chat";
+import Globe from "@/icons/Globe";
+import PhotoImageIcon from "@/icons/PhotoImageIcon";
 import XMark from "@/icons/XMark";
-import {
-	SearchIcon,
-	MailIcon,
-	CreditCardIcon,
-	CheckIcon,
-	StarIcon,
-	InfoIcon,
-} from "lucide-react";
+import { CheckIcon, InfoIcon } from "lucide-react";
 import React from "react";
+import Map from "@/icons/Map";
+import AtSymbol from "@/icons/AtSymbol";
 
 const ContentPlayground = () => {
+	const [openStartDate, setOpenStartDate] = React.useState(false);
+	const [startDate, setStartDate] = React.useState<Date | undefined>(undefined);
+
+	const [openEndDate, setOpenEndDate] = React.useState(false);
+	const [endDate, setEndDate] = React.useState<Date | undefined>(undefined);
+
 	return (
 		<div className="flex flex-col gap-5 lg:gap-9">
 			<SectionTitle
@@ -40,10 +45,10 @@ const ContentPlayground = () => {
 						<InputGroup>
 							<InputGroupInput placeholder="Title" />
 							<InputGroupAddon>
-								<SearchIcon />
+								<Chat size={4}></Chat>
 							</InputGroupAddon>
 							<InputGroupAddon align="inline-end">
-								<XMark></XMark>
+								<XMark size={4}></XMark>
 								<InfoIcon />
 							</InputGroupAddon>
 						</InputGroup>
@@ -62,32 +67,28 @@ const ContentPlayground = () => {
 
 						<div className="grid grid-cols-2 gap-3">
 							<InputGroup>
-								<InputGroupInput placeholder="Date Start" />
-								<InputGroupAddon>
-									<MailIcon />
-								</InputGroupAddon>
-								<InputGroupAddon align="inline-end">
-									<CheckIcon />
-									<InfoIcon />
-								</InputGroupAddon>
+								<DatePicker
+									date={startDate}
+									setDate={(date) => setStartDate(date)}
+									open={openStartDate}
+									setOpen={() => setOpenStartDate((prev) => !prev)}
+									label="Date Start"></DatePicker>
 							</InputGroup>
 
 							<InputGroup>
-								<InputGroupInput placeholder="Date End" />
-								<InputGroupAddon>
-									<MailIcon />
-								</InputGroupAddon>
-								<InputGroupAddon align="inline-end">
-									<CheckIcon />
-									<InfoIcon />
-								</InputGroupAddon>
+								<DatePicker
+									date={endDate}
+									setDate={(date) => setEndDate(date)}
+									open={openEndDate}
+									setOpen={() => setOpenEndDate((prev) => !prev)}
+									label="Date End"></DatePicker>
 							</InputGroup>
 						</div>
 
 						<InputGroup>
 							<InputGroupInput placeholder="photo cover Url" />
 							<InputGroupAddon>
-								<MailIcon />
+								<PhotoImageIcon size={4}></PhotoImageIcon>
 							</InputGroupAddon>
 							<InputGroupAddon align="inline-end">
 								<CheckIcon />
@@ -97,7 +98,7 @@ const ContentPlayground = () => {
 						<InputGroup>
 							<InputGroupInput placeholder="Location" />
 							<InputGroupAddon>
-								<MailIcon />
+								<Globe size={4} />
 							</InputGroupAddon>
 							<InputGroupAddon align="inline-end">
 								<CheckIcon />
@@ -108,7 +109,7 @@ const ContentPlayground = () => {
 							<InputGroup>
 								<InputGroupInput placeholder="Latitude" />
 								<InputGroupAddon>
-									<MailIcon />
+									<Map size={4} />
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
 									<CheckIcon />
@@ -119,7 +120,7 @@ const ContentPlayground = () => {
 							<InputGroup>
 								<InputGroupInput placeholder="Longitude" />
 								<InputGroupAddon>
-									<MailIcon />
+									<Map size={4} />
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
 									<CheckIcon />
@@ -132,7 +133,7 @@ const ContentPlayground = () => {
 							<InputGroup>
 								<InputGroupInput placeholder="Instagram" />
 								<InputGroupAddon>
-									<MailIcon />
+									<AtSymbol size={4}></AtSymbol>
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
 									<CheckIcon />
@@ -143,7 +144,7 @@ const ContentPlayground = () => {
 							<InputGroup>
 								<InputGroupInput placeholder="Komoot" />
 								<InputGroupAddon>
-									<MailIcon />
+									<AtSymbol size={4}></AtSymbol>
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
 									<CheckIcon />
@@ -154,7 +155,7 @@ const ContentPlayground = () => {
 							<InputGroup>
 								<InputGroupInput placeholder="Strava" />
 								<InputGroupAddon>
-									<MailIcon />
+									<AtSymbol size={4}></AtSymbol>
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
 									<CheckIcon />
@@ -165,7 +166,7 @@ const ContentPlayground = () => {
 							<InputGroup>
 								<InputGroupInput placeholder="Youtube" />
 								<InputGroupAddon>
-									<MailIcon />
+									<AtSymbol size={4}></AtSymbol>
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
 									<CheckIcon />
@@ -176,7 +177,7 @@ const ContentPlayground = () => {
 							<InputGroup>
 								<InputGroupInput placeholder="Other URL" />
 								<InputGroupAddon>
-									<MailIcon />
+									<AtSymbol size={4}></AtSymbol>
 								</InputGroupAddon>
 								<InputGroupAddon align="inline-end">
 									<CheckIcon />
