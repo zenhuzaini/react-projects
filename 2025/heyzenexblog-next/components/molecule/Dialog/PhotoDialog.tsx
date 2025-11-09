@@ -34,7 +34,7 @@ export default function PhotoDialog({
 						size="icon"
 						className="absolute bg-mybackground  top-4 right-0 z-30 text-primarytextInvert hover:bg-primaryaccent"
 						aria-label="Close">
-						<XMark color="stroke-primaryText "></XMark>
+						<XMark className="stroke-primaryText "></XMark>
 					</Button>
 					<div className="h-[50vh] w-full">
 						<ImageWithSkeleton
