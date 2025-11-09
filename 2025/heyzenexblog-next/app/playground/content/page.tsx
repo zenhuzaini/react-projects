@@ -60,6 +60,30 @@ const ContentPlayground = () => {
 							</InputGroupAddon>
 						</InputGroup>
 
+						<div className="grid grid-cols-2 gap-3">
+							<InputGroup>
+								<InputGroupInput placeholder="Date Start" />
+								<InputGroupAddon>
+									<MailIcon />
+								</InputGroupAddon>
+								<InputGroupAddon align="inline-end">
+									<CheckIcon />
+									<InfoIcon />
+								</InputGroupAddon>
+							</InputGroup>
+
+							<InputGroup>
+								<InputGroupInput placeholder="Date End" />
+								<InputGroupAddon>
+									<MailIcon />
+								</InputGroupAddon>
+								<InputGroupAddon align="inline-end">
+									<CheckIcon />
+									<InfoIcon />
+								</InputGroupAddon>
+							</InputGroup>
+						</div>
+
 						<InputGroup>
 							<InputGroupInput placeholder="photo cover Url" />
 							<InputGroupAddon>
