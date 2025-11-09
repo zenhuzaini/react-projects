@@ -379,8 +379,7 @@ export const storyContentsMock: StoryContentType[] = [
 	},
 	{
 		sectionID: "layout9",
-		textContent:
-			"Diving into the tropical biodiversity and pristine beaches of Southeast Asia, this section explores exotic wildlife, lush jungles, and serene coastal escapes with rich cultural heritage.",
+		textContent: "Diving into the tropical",
 		photoUrls: [
 			{
 				id: "30",
