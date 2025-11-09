@@ -20,7 +20,7 @@ const PhotoBook = () => {
 								<p className="text-primarytextInvert font-extralight">
 									PhotoBook
 								</p>
-								<p className="text-[8px] text-primarytextInvert md:text-sm tracking-tight">
+								<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
 									<span className="font-extralight">Written on</span> 22 Jan
 									2025
 								</p>

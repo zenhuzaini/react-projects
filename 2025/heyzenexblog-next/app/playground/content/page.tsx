@@ -240,6 +240,8 @@ const ContentPlayground = () => {
 					storyDescription={description}
 					storyPhotoUrls={photoCollections}
 					storyContent={content}
+					totalView={100}
+					totalLike={10}
 				/>
 			</div>
 		</div>

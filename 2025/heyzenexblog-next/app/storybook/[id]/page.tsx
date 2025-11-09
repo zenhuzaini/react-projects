@@ -18,9 +18,13 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const storyDescription = faker.lorem.paragraphs(1);
 	const storyPhotoUrls = photoMock({ length: 8 });
 	const storyContent = storyContentsMock;
+	const totalLike = 17;
+	const totalView = 200;
 
 	return (
 		<MainStoryBookPage
+			totalLike={totalLike}
+			totalView={totalView}
 			createdAt={createdAt}
 			storyCover={storyCover}
 			storyId={id}

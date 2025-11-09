@@ -24,6 +24,8 @@ const MainStoryBookPage = ({
 	storyDescription,
 	storyPhotoUrls,
 	storyContent,
+	totalView,
+	totalLike,
 }: MainStoryBookPageProps) => {
 	const sectionMapping = (storyContent: StoryContentType, idx: number) => {
 		switch (storyContent?.sectionID) {
@@ -107,7 +109,7 @@ const MainStoryBookPage = ({
 				<div className="flex justify-between items-center">
 					<div className="flex flex-col text-xs md:text-lg">
 						<p className="text-primarytextInvert font-extralight">StoryBook</p>
-						<p className="text-[8px] text-primarytextInvert md:text-sm tracking-tight">
+						<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
 							<span className="font-extralight">Written on</span> {createdAt}
 						</p>
 					</div>
@@ -139,7 +141,7 @@ const MainStoryBookPage = ({
 			</div>
 
 			{/* content */}
-			<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-5 sm:gap-10 mt-[3%] ">
+			<div className="md:ml-[20%] md:mr-[20%] md:p-10  flex flex-col gap-5 sm:gap-10 mt-[3%] rounded-3xl dark:bg-transparent ">
 				<ShortDescription text={storyDescription}></ShortDescription>
 
 				{constructContent}

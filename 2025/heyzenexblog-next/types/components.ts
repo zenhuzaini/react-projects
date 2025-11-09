@@ -38,4 +38,6 @@ export type MainStoryBookPageProps = {
 	storyDescription: string;
 	storyPhotoUrls: PhotoCardDetailType[];
 	storyContent: StoryContentType[];
+	totalView: number;
+	totalLike: number;
 };

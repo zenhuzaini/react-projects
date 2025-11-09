@@ -3,7 +3,7 @@ import React from "react";
 const SectionTitle = ({ text }: { text: string }) => {
 	return (
 		<div className="grid grid-cols-8">
-			<h2 className="flex col-span-2 gap-2 sm:items-center">
+			<h2 className="flex col-span-4 lg:col-span-2 gap-2 sm:items-center">
 				<div className=" text-primaryText text-2xl sm:text-2xl font-light  ">
 					{text}
 					<span className="text-dot">.</span>
