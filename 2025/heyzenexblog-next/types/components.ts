@@ -24,12 +24,18 @@ export type MyJSONEditorProps = {
 	title?: string;
 };
 
+export type StoryContentType = {
+	sectionID?: string;
+	textContent?: string;
+	photoUrls?: PhotoCardDetailType[];
+};
+
 export type MainStoryBookPageProps = {
 	storyCover: string;
 	createdAt: string;
 	storyId: string;
 	storyTitle: string;
 	storyDescription: string;
-	storyPhotoUrls: string[];
-	storyContent: any[];
+	storyPhotoUrls: PhotoCardDetailType[];
+	storyContent: StoryContentType[];
 };

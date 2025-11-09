@@ -2,6 +2,7 @@
 
 import PhotoDialog from "@/components/molecule/Dialog/PhotoDialog";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
+import { PhotoCardDetailType } from "@/types/components";
 import { faker, ur } from "@faker-js/faker";
 import React, { useState } from "react";
 
@@ -77,7 +78,11 @@ const getLayout = (n: number) => {
 	}
 };
 
-const PhotoCollectionGrid = ({ photoUrls }: { photoUrls: string[] }) => {
+const PhotoCollectionGrid = ({
+	photoUrls,
+}: {
+	photoUrls: PhotoCardDetailType[];
+}) => {
 	const { grid, items } = getLayout(photoUrls.length);
 	// State to track modal open and src of clicked image
 	const [selectedImage, setSelectedImage] = useState<string>();
@@ -97,12 +102,15 @@ const PhotoCollectionGrid = ({ photoUrls }: { photoUrls: string[] }) => {
 					if (colSpan === 3) spanClass = "lg:col-span-3";
 					return (
 						<div
-							onClick={() => clickImage(image)}
+							onClick={() => clickImage(image?.photoUrl)}
 							key={idx}
 							className={`rounded-2xl w-full overflow-hidden h-[30vh] sm:h-[40vh] ${
 								colSpan > 1 ? `${spanClass}` : ""
 							}`}>
-							<ImageWithSkeleton src={image} alt={`Photo ${idx + 1}`} />
+							<ImageWithSkeleton
+								src={image?.photoUrl}
+								alt={image?.description}
+							/>
 						</div>
 					);
 				})}

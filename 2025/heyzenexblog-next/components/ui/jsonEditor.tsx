@@ -18,6 +18,7 @@ const MyJsonEditor = ({
 			searchFilter={"all"}
 			searchDebounceTime={10}
 			searchText={searchInput}
+			collapse={true}
 		/>
 	);
 };

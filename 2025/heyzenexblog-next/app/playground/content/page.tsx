@@ -17,15 +17,14 @@ import XMark from "@/icons/XMark";
 import { InfoIcon } from "lucide-react";
 import Map from "@/icons/Map";
 import AtSymbol from "@/icons/AtSymbol";
-
-import { storyContentExample } from "@/mock/storyContent";
-import { DataContentType } from "@/types/data";
+import { storyContentsMock } from "@/mock/storyContent";
 import MyJsonEditor from "@/components/ui/jsonEditor";
-import { PhotoCardDetailType } from "@/types/components";
-import { photoMock } from "@/mock/photo";
+import { PhotoCardDetailType, StoryContentType } from "@/types/components";
+import { photoMockStatic } from "@/mock/photo";
 import CheckSymbol from "@/icons/CheckSymbol";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputWithIconAndValidation from "@/components/molecule/inputs/InputWithIconAndValidation";
+import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
 
 const ContentPlayground = () => {
 	// Dates
@@ -48,15 +47,25 @@ const ContentPlayground = () => {
 	const [strava, setStrava] = useState<string>("link to strava");
 	const [komoot, setKomoot] = useState<string>("link to komoot");
 	const [otherUrl, setOtherUrl] = useState<string>("");
+	const [createdAt, setCreatedAt] = useState<string>("");
 
 	// Photo collections and content (JSON editor)
-	const [photoCollections, setPhotoCollections] = useState<
-		PhotoCardDetailType[]
-	>(photoMock({ length: 1 }));
-	const [content, setContent] =
-		useState<DataContentType[]>(storyContentExample);
+	const [photoCollections, setPhotoCollections] =
+		useState<PhotoCardDetailType[]>(photoMockStatic);
+	const [content, setContent] = useState<StoryContentType[]>(storyContentsMock);
 
 	const characterCounter = 160 - description.length;
+
+	useEffect(() => {
+		const date = new Date();
+		const formatted = date.toLocaleDateString("en-GB", {
+			weekday: "short",
+			day: "2-digit",
+			month: "short",
+			year: "numeric",
+		});
+		setCreatedAt(formatted);
+	}, []);
 
 	return (
 		<div className="flex flex-col gap-5 lg:gap-10">
@@ -220,8 +229,18 @@ const ContentPlayground = () => {
 				<Separator className="border-t-2 bg-transparent border-primaryaccent border-dashed"></Separator>
 			</div>
 			{/* Preview */}
-			<div>
+			<div className="flex flex-col gap-5">
 				<SectionTitle left={null} right="Preview" />
+
+				<MainStoryBookPage
+					createdAt={createdAt}
+					storyCover={photoCover}
+					storyId={"2"}
+					storyTitle={title}
+					storyDescription={description}
+					storyPhotoUrls={photoCollections}
+					storyContent={content}
+				/>
 			</div>
 		</div>
 	);

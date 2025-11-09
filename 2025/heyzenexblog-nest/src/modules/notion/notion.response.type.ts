@@ -106,6 +106,9 @@ export interface NotionPageProperties {
   id: NotionRichTextProperty;
   'created at': NotionCreatedTimeProperty;
   'modified at': NotionLastEditedTimeProperty;
+  shortDescription: NotionRichTextProperty;
+  eventDateFrom: NotionRichTextProperty;
+  eventDateTo: NotionRichTextProperty;
 }
 
 // ----------------------------

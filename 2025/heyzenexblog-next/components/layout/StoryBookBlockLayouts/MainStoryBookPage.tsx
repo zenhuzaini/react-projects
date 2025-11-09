@@ -48,7 +48,7 @@ const MainStoryBookPage = ({
 
 			{/* hero title */}
 			<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
-				<ImageWithSkeleton src={storyCover} />
+				<ImageWithSkeleton alt={storyDescription} src={storyCover} />
 				<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
 
 				<div className="absolute bottom-0 m-5 w-[20%]">
@@ -64,13 +64,14 @@ const MainStoryBookPage = ({
 			{/* content */}
 			<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-5 sm:gap-10 mt-[3%] ">
 				<ShortDescription text={storyDescription}></ShortDescription>
-				<PhotoPharagraph></PhotoPharagraph>
+				{/* <PhotoPharagraph></PhotoPharagraph>
 				<SectioonTitle></SectioonTitle>
-				<PhotoCollectionGrid photoUrls={storyPhotoUrls}></PhotoCollectionGrid>
 
 				<PharagraphPhoto></PharagraphPhoto>
 				<FullPhoto></FullPhoto>
-				<Paragraph></Paragraph>
+				<Paragraph></Paragraph> */}
+
+				<PhotoCollectionGrid photoUrls={storyPhotoUrls}></PhotoCollectionGrid>
 
 				<div className="flex justify-between">
 					<Link href={`/`}>
@@ -80,7 +81,7 @@ const MainStoryBookPage = ({
 						</div>
 					</Link>
 
-					<Link href={`/storybook/${faker.string.uuid()}`}>
+					<Link href={`/storybook/1`}>
 						<div className="text-primaryText flex gap-1">
 							Next Story<ChevronRight></ChevronRight>
 						</div>
