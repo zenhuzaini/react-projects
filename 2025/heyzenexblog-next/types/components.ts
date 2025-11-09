@@ -23,3 +23,13 @@ export type MyJSONEditorProps = {
 	searchInput?: string;
 	title?: string;
 };
+
+export type MainStoryBookPageProps = {
+	storyCover: string;
+	createdAt: string;
+	storyId: string;
+	storyTitle: string;
+	storyDescription: string;
+	storyPhotoUrls: string[];
+	storyContent: any[];
+};
