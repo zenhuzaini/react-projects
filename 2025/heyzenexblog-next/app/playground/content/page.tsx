@@ -25,6 +25,20 @@ const ContentPlayground = () => {
 	const [openEndDate, setOpenEndDate] = React.useState(false);
 	const [endDate, setEndDate] = React.useState<Date | undefined>(undefined);
 
+	const [title, setTitle] = React.useState<string>();
+	const [description, setDescription] = React.useState<string>();
+	const [location, setLocation] = React.useState<string>();
+	const [lat, setLat] = React.useState<string>();
+	const [long, setLong] = React.useState<string>();
+	const [photoCover, setPhotoCover] = React.useState<string>();
+	const [ig, setIg] = React.useState<string>();
+	const [yt, setYt] = React.useState<string>();
+	const [strava, setStrava] = React.useState<string>();
+	const [komoot, setKomoot] = React.useState<string>();
+	const [otherUrl, setOtherUrl] = React.useState<string>();
+	const [photoCollections, setPhotoCollections] = React.useState<string[]>();
+	const [content, setContent] = React.useState<string[]>();
+
 	return (
 		<div className="flex flex-col gap-5 lg:gap-9">
 			<SectionTitle
