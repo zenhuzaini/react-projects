@@ -8,13 +8,18 @@ export const ImageWithSkeleton = ({
 	alt = "Just an image",
 	rounded = "rounded-2xl",
 	fadeSpeed,
+	isForDialog = false,
 }: {
 	src: string;
 	alt?: string;
 	rounded?: string;
 	fadeSpeed?: "slow" | "medium" | "fast";
+	isForDialog?: boolean;
 }) => {
 	const [loading, setLoading] = useState(true);
+	const [size, setSize] = useState<{ width: number; height: number } | null>(
+		null
+	);
 
 	let easeDuration = "";
 
@@ -33,19 +38,36 @@ export const ImageWithSkeleton = ({
 			break;
 	}
 
+	const imageProps = isForDialog
+		? {
+				width: size?.width ?? 800, // fallback size
+				height: size?.height ?? 600,
+				onLoadingComplete: (img: any) => {
+					const aspectRatio = img.naturalWidth / img.naturalHeight;
+					let displayWidth = Math.min(img.naturalWidth, 800);
+					let displayHeight = displayWidth / aspectRatio;
+
+					setSize({ width: displayWidth, height: displayHeight });
+					setLoading(false);
+				},
+		  }
+		: {
+				fill: true,
+				sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+		  };
+
 	return (
 		<div className={`relative h-full w-full overflow-hidden ${rounded}`}>
 			{loading && <Skeleton className="absolute inset-0 h-full w-full" />}
 			<Image
 				src={src}
 				alt={alt}
-				fill
+				loading="lazy"
 				className={`object-cover transition-opacity ${easeDuration} ease-in ${
 					loading ? "opacity-0" : "opacity-100"
-				}`}
-				sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+				} ${rounded}`}
 				onLoad={() => setLoading(false)}
-				loading="lazy"
+				{...imageProps}
 			/>
 		</div>
 	);

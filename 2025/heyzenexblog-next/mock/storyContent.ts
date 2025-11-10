@@ -277,7 +277,8 @@ export const storyContentsMock: StoryContentType[] = [
 				year: 2021,
 				month: "Feb",
 				country: "South Africa",
-				photoUrl: "https://picsum.photos/id/1034/800/600",
+				photoUrl:
+					"https://d2exd72xrrp1s7.cloudfront.net/www/mz/mz230g017aad1p87aav1il9v450bvhw2p-p466200603-full/18ffbb458c0?width=3360&crop=false&q=70",
 				title: "Mountain Hiking",
 				description: "Challenging trails in the Drakensberg mountains.",
 			},

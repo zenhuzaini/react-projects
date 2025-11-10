@@ -11,9 +11,9 @@ const PhotoPharagraph = ({
 	photo: PhotoCardDetailType;
 }) => {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 gap-7 h-full lg:gap-4 w-full md:items-center">
+		<div className="grid grid-cols-1 md:grid-cols-3 gap-7 h-full lg:gap-4 w-full md:items-center">
 			{/* Left image */}
-			<div className="rounded-2xl w-full h-[40vh]">
+			<div className="rounded-2xl w-full h-[40vh] md:col-span-2">
 				<ImageWithSkeleton
 					alt={photo?.description || photo?.title}
 					src={photo.photoUrl}
