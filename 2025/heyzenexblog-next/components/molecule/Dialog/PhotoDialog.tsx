@@ -2,6 +2,7 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog"; // adjust import path
@@ -24,7 +25,7 @@ export default function PhotoDialog({
 }) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className=" bg-transparent border-0 [&>button]:text-primarytextInvert p-0 [&>button]:hidden">
+			<DialogContent className="bg-transparent border-0 [&>button]:text-primarytextInvert p-0 [&>button]:hidden h-fit w-fit">
 				<DialogHeader className="">
 					<DialogTitle className="text-primarytextInvert"></DialogTitle>
 					<DialogDescription></DialogDescription>
@@ -36,8 +37,15 @@ export default function PhotoDialog({
 						aria-label="Close">
 						<XMark className="stroke-primaryText "></XMark>
 					</Button>
-					<div className="h-[50vh] w-full">
+					<div className="absolute bottom-1 right-5 z-30 ">
+						<h2 className=" text-accenttext">
+							photo by heyzenex
+							<span className="text-dot">.</span>
+						</h2>
+					</div>
+					<div className="h-fit w-fit">
 						<ImageWithSkeleton
+							isForDialog
 							fadeSpeed={fadeSpeed}
 							src={src}></ImageWithSkeleton>
 					</div>

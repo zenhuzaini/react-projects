@@ -18,7 +18,7 @@ const Hero = () => {
 			<div className="col-span-1 row-span-2 relative rounded-2xl overflow-hidden">
 				<ImageWithSkeleton
 					src={
-						"https://res.cloudinary.com/djufavji1/image/upload/v1762553881/f62c1875ade6210d7f9ab448ac3dd54c_Original_vg1o31.jpg"
+						"https://d2exd72xrrp1s7.cloudfront.net/www/bl/bl7nf04qu2jc1kjnqblizutxk50b7tgrf-p466137801-full/18ff9557e5a?width=3360&crop=false&q=70"
 					}></ImageWithSkeleton>
 			</div>
 			<div className="col-span-10 sm:col-span-20 row-span-4 relative rounded-2xl overflow-hidden">
