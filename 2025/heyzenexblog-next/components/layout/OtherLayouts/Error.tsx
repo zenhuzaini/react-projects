@@ -1,0 +1,44 @@
+import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
+import ArrowRight from "@/icons/ArrowRight";
+import Link from "next/link";
+import React from "react";
+
+const ErrorPage = () => {
+	return (
+		<div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-7 lg:gap-4 w-full  md:items-center">
+				{/* Left image */}
+				<div className="rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
+					<ImageWithSkeleton src="/sad-cat.png" alt="Sad cat - error" />
+				</div>
+
+				{/* Right text */}
+				<div className="rounded-2xl flex flex-col justify-center">
+					<div className="text-primaryText font-bold tracking-tighter leading-[0.8] flex flex-col gap-6 lg:gap-1">
+						<h2 className="text-primaryaccent font-extrabold text-5xl lg:text-9xl">
+							Ouch..
+						</h2>
+						<h2 className="text-3xl lg:text-4xl font-light">
+							Something went{" "}
+							<span className="text-primaryaccent font-style-heading">
+								WRONG!
+							</span>
+							<span className="text-dot">.</span>
+						</h2>
+						<Link href="/" className="flex gap-2 items-center">
+							<h2 className="text-2xl font-extralight  lg:text-4xl">
+								lesshhgo
+								<span className="text-primaryaccent font-style-heading">
+									home
+								</span>
+							</h2>
+							<ArrowRight />
+						</Link>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export default ErrorPage;

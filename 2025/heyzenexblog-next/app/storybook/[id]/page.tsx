@@ -1,3 +1,4 @@
+"use cache";
 import { faker } from "@faker-js/faker";
 import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
 import { photoMock } from "@/mock/photo";
