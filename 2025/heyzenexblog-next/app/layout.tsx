@@ -5,11 +5,14 @@ import {
 	Geist_Mono,
 	Inter,
 	Playfair_Display,
+	Schibsted_Grotesk,
+	Martian_Mono,
 } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/MainSections/Footer";
 import Header from "@/components/layout/MainSections/Header";
 import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
+import { Suspense } from "react";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -46,6 +49,16 @@ export const metadata: Metadata = {
 		"Heyzenex is a captivating blog dedicated to photography and travel stories. Explore breathtaking adventures, vibrant cultures, and inspiring journeys through the lens of a passionate explorer.",
 };
 
+const schibstedGrotesk = Schibsted_Grotesk({
+	variable: "--font-schibsted-grotesk",
+	subsets: ["latin"],
+});
+
+const martianMono = Martian_Mono({
+	variable: "--font-martian-mono",
+	subsets: ["latin"],
+});
+
 // this acts as a parent for all of the other pages
 export default function RootLayout({
 	children,
@@ -55,8 +68,10 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} ${fleurDeLeah.variable} ${playfair.variable} ${inter.variable}  antialiased`}>
-				<ScrollToTop></ScrollToTop>
+				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				<Suspense fallback={null}>
+					<ScrollToTop />
+				</Suspense>
 				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
 					<Header></Header>
 					{/* this is to wrap not full frame */}
