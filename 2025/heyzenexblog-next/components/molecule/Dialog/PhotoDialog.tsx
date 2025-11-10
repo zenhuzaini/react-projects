@@ -36,6 +36,12 @@ export default function PhotoDialog({
 						aria-label="Close">
 						<XMark className="stroke-primaryText "></XMark>
 					</Button>
+					<div className="absolute bottom-1 right-5 z-30 ">
+						<h2 className=" text-accenttext">
+							photo by heyzenex
+							<span className="text-dot">.</span>
+						</h2>
+					</div>
 					<div className="h-[50vh] w-full">
 						<ImageWithSkeleton
 							fadeSpeed={fadeSpeed}
