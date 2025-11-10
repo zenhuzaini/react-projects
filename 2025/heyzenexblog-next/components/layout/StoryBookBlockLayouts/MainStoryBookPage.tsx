@@ -15,6 +15,8 @@ import { MainStoryBookPageProps, StoryContentType } from "@/types/components";
 import { EMPTY_STRING } from "@/const/vars";
 import { photoMockStatic } from "@/mock/photo";
 import SectionTitle from "./9_SectionTitle/SectionTitle";
+import EyeSymbol from "@/icons/EyeSymbol";
+import HeartOutlined from "@/icons/HeartOutlined";
 
 const MainStoryBookPage = ({
 	createdAt,
@@ -82,9 +84,11 @@ const MainStoryBookPage = ({
 
 			case "layout9":
 				return (
-					<SectionTitle
-						key={idx}
-						text={storyContent.textContent}></SectionTitle>
+					<div className="mt-[5%] sm:mt-[3%]" key={idx}>
+						<SectionTitle
+							key={idx}
+							text={storyContent.textContent}></SectionTitle>
+					</div>
 				);
 				break;
 
@@ -103,7 +107,7 @@ const MainStoryBookPage = ({
 	});
 
 	return (
-		<div className="flex flex-col gap-2">
+		<main className="flex flex-col gap-2 ">
 			{/* info top */}
 			<div className="flex flex-col gap-2">
 				<div className="flex justify-between items-center">
@@ -125,28 +129,46 @@ const MainStoryBookPage = ({
 				</div>
 			</div>
 
-			{/* hero title */}
-			<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
-				<ImageWithSkeleton alt={storyDescription} src={storyCover} />
-				<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
+			{/* hero title & sats */}
+			<div className="flex flex-col gap-2 sm:gap-4">
+				<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
+					<ImageWithSkeleton alt={storyDescription} src={storyCover} />
+					<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
 
-				<div className="absolute bottom-0 m-5 w-[20%]">
-					<div className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
-						<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.8]">
-							{storyTitle}
-							<span className="text-dot">.</span>
-						</h1>
+					<div className="absolute bottom-0 m-5 w-[20%]">
+						<div
+							className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
+							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.8]">
+								{storyTitle}
+								<span className="text-dot">.</span>
+							</h1>
+						</div>
+					</div>
+				</div>
+				{/* Stats */}
+				<div className="flex gap-0 sm:gap-2">
+					<div className="flex text-sm gap-1 sm:gap-2  pl-2 pr-2 rounded-lg items-center">
+						<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
+						<span className="text-primarytextInvert">12.k</span>
+					</div>
+					<div className="flex text-sm gap-1 sm:gap-2 pl-2 pr-2 rounded-lg items-center ">
+						<HeartOutlined
+							className="stroke-primaryaccent"
+							size={4}></HeartOutlined>
+						<span className="text-primarytextInvert">100</span>
 					</div>
 				</div>
 			</div>
 
 			{/* content */}
-			<div className="md:ml-[20%] md:mr-[20%] md:p-10  flex flex-col gap-5 sm:gap-10 mt-[3%] rounded-3xl dark:bg-transparent ">
-				<ShortDescription text={storyDescription}></ShortDescription>
+			<div className="md:ml-[20%] md:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
+				<div className="text-center">
+					<ShortDescription text={storyDescription}></ShortDescription>
+				</div>
 
 				{constructContent}
 
-				<div className="flex justify-between">
+				<div className="flex justify-between mt-[5%]">
 					<Link href={`/`}>
 						<div className="text-primaryText flex gap-1">
 							<ChevronLeft />
@@ -156,12 +178,13 @@ const MainStoryBookPage = ({
 
 					<Link href={`/storybook/1`}>
 						<div className="text-primaryText flex gap-1">
-							Next Story<ChevronRight></ChevronRight>
+							<span>Next StoryBook</span>
+							<ChevronRight></ChevronRight>
 						</div>
 					</Link>
 				</div>
 			</div>
-		</div>
+		</main>
 	);
 };
 
