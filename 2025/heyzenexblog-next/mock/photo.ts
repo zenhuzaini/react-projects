@@ -11,7 +11,7 @@ export const photoMock = ({
 		const descriptionWords = fullDescription.split(" ").slice(0, 10).join(" ");
 
 		return {
-			id: faker.number.int({ min: 10, max: 200 }).toString(),
+			id: "2a7a9449-e267-80a7-ba5f-f3190c62022c",
 			city: faker.location.city(),
 			year: faker.number.int({ min: 2000, max: 2030 }),
 			month: faker.date.month({ abbreviated: true }),
