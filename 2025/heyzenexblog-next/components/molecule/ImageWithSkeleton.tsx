@@ -34,7 +34,7 @@ export const ImageWithSkeleton = ({
 	}
 
 	return (
-		<div className={`relative h-full w-full overflow-hidden ${rounded}`}>
+		<figure className={`relative h-full w-full overflow-hidden ${rounded}`}>
 			{loading && <Skeleton className="absolute inset-0 h-full w-full" />}
 			<Image
 				src={src}
@@ -47,6 +47,6 @@ export const ImageWithSkeleton = ({
 				onLoad={() => setLoading(false)}
 				loading="lazy"
 			/>
-		</div>
+		</figure>
 	);
 };

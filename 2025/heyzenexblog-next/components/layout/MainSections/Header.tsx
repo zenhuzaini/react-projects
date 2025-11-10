@@ -73,7 +73,7 @@ const Header = () => {
 	}, [lastScrollY]);
 
 	return (
-		<div
+		<header
 			className={`	
 				grid grid-cols-8 h-15 sm:h-20
 				transition-all
@@ -176,7 +176,7 @@ const Header = () => {
 					<Moon />
 				</div>
 			</div>
-		</div>
+		</header>
 	);
 };
 
