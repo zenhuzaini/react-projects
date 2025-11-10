@@ -146,22 +146,41 @@ const MainStoryBookPage = ({
 					</div>
 				</div>
 				{/* Stats */}
-				<div className="flex gap-0 sm:gap-2">
-					<div className="flex text-sm gap-1 sm:gap-2  pl-2 pr-2 rounded-lg items-center">
-						<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
-						<span className="text-primarytextInvert">12.k</span>
+				<div className="flex justify-between">
+					<div className="flex gap-0 sm:gap-2">
+						<div className="flex text-sm md:text-lg sm:gap-2  pl-2 pr-2 rounded-lg items-center">
+							<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
+							<span className="text-primarytextInvert">12.k</span>
+						</div>
+						<div className="flex text-sm md:text-lg gap-1 sm:gap-2 pl-2 pr-2 rounded-lg items-center ">
+							<HeartOutlined
+								className="stroke-primaryaccent"
+								size={4}></HeartOutlined>
+							<span className="text-primarytextInvert">100</span>
+						</div>
 					</div>
-					<div className="flex text-sm gap-1 sm:gap-2 pl-2 pr-2 rounded-lg items-center ">
-						<HeartOutlined
-							className="stroke-primaryaccent"
-							size={4}></HeartOutlined>
-						<span className="text-primarytextInvert">100</span>
+					<div className="hidden md:flex gap-2">
+						<div className="flex items-center justify-center">
+							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
+								<span className="text-dot">#</span>adventure
+							</h6>
+						</div>
+						<div className="flex items-center justify-center">
+							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
+								<span className="text-dot">#</span>travel
+							</h6>
+						</div>
+						<div className="flex items-center justify-center">
+							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
+								<span className="text-dot">#</span>brazil
+							</h6>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			{/* content */}
-			<div className="md:ml-[20%] md:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
+			<div className="lg:ml-[20%] lg:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
 				<div className="text-center">
 					<ShortDescription text={storyDescription}></ShortDescription>
 				</div>

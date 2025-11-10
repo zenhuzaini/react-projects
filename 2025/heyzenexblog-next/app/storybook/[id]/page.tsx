@@ -5,7 +5,6 @@ import { photoMock } from "@/mock/photo";
 import { storyContentsMock } from "@/mock/storyContent";
 
 const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
-	const photoUrls = Array.from({ length: 8 }, () => faker.image.url());
 	const { id } = await params;
 
 	const createdAt = faker.date.anytime().toLocaleDateString("en-GB", {
