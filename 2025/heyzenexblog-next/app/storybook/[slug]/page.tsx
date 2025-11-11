@@ -12,6 +12,7 @@ import { getAllSlugs, getStoryBySlug } from "@/lib/storybook";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
+import Chip from "@/components/ui/chip";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
@@ -76,12 +77,15 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 	const { Content, metadata } = story;
 
-	const createdAt = faker.date.anytime().toLocaleDateString("en-GB", {
-		weekday: "short",
-		day: "2-digit",
-		month: "short",
-		year: "numeric",
-	});
+	const date = new Date(metadata.datePublished);
+	const parts = {
+		weekday: date.toLocaleDateString("en-US", { weekday: "short" }),
+		month: date.toLocaleDateString("en-US", { month: "short" }),
+		day: date.toLocaleDateString("en-US", { day: "2-digit" }),
+		year: date.getFullYear(),
+	};
+
+	const formattedDate = `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year}`;
 
 	return (
 		<article className="flex flex-col gap-2 ">
@@ -91,8 +95,8 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					<div className="flex flex-col text-xs md:text-lg">
 						<p className="text-primarytextInvert font-extralight">StoryBook</p>
 						<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
-							<span className="font-extralight">Written on</span>{" "}
-							{metadata.datePublished}
+							<span className="font-extralight">Published on</span>{" "}
+							{formattedDate}
 						</p>
 					</div>
 					<div className="bg-primaryaccent w-fit sm:text-base text-[10px] p-2 flex justify-center items-center rounded">
@@ -138,21 +142,9 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 						</div>
 					</div>
 					<div className="hidden md:flex gap-2">
-						<div className="flex items-center justify-center">
-							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
-								<span className="text-dot">#</span>adventure
-							</h6>
-						</div>
-						<div className="flex items-center justify-center">
-							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
-								<span className="text-dot">#</span>travel
-							</h6>
-						</div>
-						<div className="flex items-center justify-center">
-							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
-								<span className="text-dot">#</span>brazil
-							</h6>
-						</div>
+						{metadata.tags.map((tag, _) => {
+							return <Chip key={_} text={tag}></Chip>;
+						})}
 					</div>
 				</div>
 			</section>

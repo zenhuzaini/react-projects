@@ -1,48 +1,23 @@
-import { faker } from "@faker-js/faker";
-
-import fs from "fs";
-import path from "path";
-
-const baseContent = (index: number, slug: string) => {
-	const bookName = faker.book.title();
-	const cover = faker.image.url();
-	const fullDescription = faker.lorem.sentence({ min: 8, max: 20 });
-	const description = fullDescription.split(" ").slice(0, 10).join(" ");
-	const photoExample = faker.image.url();
-	const date = faker.date.anytime();
-	const modifiedDate = faker.date.anytime();
-	const eventDateTo = faker.date.anytime();
-	const eventDateFrom = faker.date.anytime();
-	const tags = `["${faker.word.words({ count: 1 })}","${faker.word.words({
-		count: 1,
-	})}", "${faker.word.words({
-		count: 1,
-	})}","${faker.word.words({ count: 1 })}"]`;
-	const city = faker.location.city();
-	const country = faker.location.country();
-	const like = faker.number.int({ min: 50, max: 100 });
-	const view = faker.number.int({ min: 100, max: 400 });
-
-	return `export const metadata = {
-	slug: "${slug}",
-	title: "${bookName}",
-	id: ${index},
-	views: ${view},
-	likes: ${like},
+export const metadata = {
+	slug: "aqua-charisma-absum-adduco-cohors",
+	title: "Lord Jim",
+	id: 1,
+	views: 243,
+	likes: 77,
 	cover:
-		"${cover}",
-	description: "${description}",
-	datePublished: "${date}",
-	dateModified: "${modifiedDate}",
-	eventDateTo: "${eventDateTo}",
-	eventDateFrom: "${eventDateFrom}",
-	tags: ${tags},
-	city: "${city}",
-	country: "${country}"
+		"https://picsum.photos/seed/W9GOY/8/294",
+	description: "Inflammatio contigo amicitia abutor tertius virtus cogito rem dolor collum",
+	datePublished: "Sat Aug 29 2026 18:21:26 GMT+0200 (Central European Summer Time)",
+	dateModified: "Sun Jun 28 2026 06:41:26 GMT+0200 (Central European Summer Time)",
+	eventDateTo: "Mon Sep 28 2026 06:40:26 GMT+0200 (Central European Summer Time)",
+	eventDateFrom: "Sun May 25 2025 09:07:47 GMT+0200 (Central European Summer Time)",
+	tags: ["yuck","ha", "spork","switchboard"],
+	city: "Aprilport",
+	country: "United States Minor Outlying Islands"
 };
 
 export const photoexample = {
-	photoUrl: "${photoExample}",
+	photoUrl: "https://picsum.photos/seed/Mbdi58N/1283/3397",
 	description:
 		"Tergiversatio alioqui optio contego carcer repellendus itaque copiose celebrer id",
 };
@@ -122,18 +97,3 @@ Checkout my React component:
 <Phapho text={"whatever it is it has to like work!"} photo={photoexample} />
 
 <PhoCol photo={photoExamples} />
-`;
-};
-
-const outputDir = path.join(process.cwd(), "contents", "mystorybook");
-if (!fs.existsSync(outputDir)) {
-	fs.mkdirSync(outputDir, { recursive: true });
-}
-
-for (let i = 1; i <= 25; i++) {
-	const slug = faker.lorem.slug(5);
-	const content = baseContent(i, slug);
-	const filename = `${slug}.mdx`;
-	fs.writeFileSync(path.join(outputDir, filename), content, "utf8");
-	console.log(`Generated ${filename}`);
-}
