@@ -7,29 +7,47 @@ import { photoMock } from "@/mock/photo";
 import PostCardsLong from "../../molecule/Cards/PostCardsLong";
 import PostCard from "../../molecule/Cards/PostCard";
 import Link from "next/link";
+import { StoryBookMeta } from "@/types/data";
+import { PhotoCardDetailType } from "@/types/components";
 
-const StoryPost = () => {
-	const postContentLong = photoMock({ length: 1 }).map((photoDetail, idx) => (
-		<Link key={idx} href={`/storybook/${photoDetail.id}`}>
-			<PostCardsLong key={idx} photoDetail={photoDetail} />
+const StoryPost = ({ stories }: { stories: StoryBookMeta[] }) => {
+	const getPhotoDetail = (story: StoryBookMeta): PhotoCardDetailType => ({
+		title: story.title,
+		photoUrl: story.cover,
+		description: story.description,
+		city: story.city,
+		country: story.country,
+		year: Number(story.eventDateFrom.split(" ")[3]),
+		month: story.eventDateFrom.split(" ")[1],
+	});
+
+	// Only the first story for long card
+	const postContentLong =
+		stories.length > 0 ? (
+			<Link href={`/storybook/${stories[0].slug}`} key={stories[0].slug}>
+				<PostCardsLong photoDetail={getPhotoDetail(stories[0])} />
+			</Link>
+		) : null;
+
+	// All but the first story for regular cards
+	const postContent = stories.slice(1).map((story) => (
+		<Link href={`/storybook/${story.slug}`} key={story.slug}>
+			<PostCard photoDetail={getPhotoDetail(story)} />
 		</Link>
 	));
-	const postContent = photoMock({ length: 4 }).map((photoDetail, idx) => (
-		<Link key={idx} href={`/storybook/${photoDetail.id}`}>
-			<PostCard key={idx} photoDetail={photoDetail} />
-		</Link>
-	));
+
 	return (
 		<div className="flex flex-col gap-5 sm:gap-10">
 			<SectionTitle
 				left={
 					<>
-						I WIll
+						I Will
 						<br />
 						TELL YOU
 					</>
 				}
-				right={<>STORIES</>}></SectionTitle>
+				right={<>STORIES</>}
+			/>
 
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col">{postContentLong}</div>

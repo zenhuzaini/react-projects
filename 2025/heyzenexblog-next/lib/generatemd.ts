@@ -3,28 +3,42 @@ import { faker } from "@faker-js/faker";
 import fs from "fs";
 import path from "path";
 
-const baseContent = (index: number) => {
-	const slug = faker.lorem.slug(5);
+const baseContent = (index: number, slug: string) => {
 	const bookName = faker.book.title();
 	const cover = faker.image.url();
 	const fullDescription = faker.lorem.sentence({ min: 8, max: 20 });
 	const description = fullDescription.split(" ").slice(0, 10).join(" ");
 	const photoExample = faker.image.url();
+	const date = faker.date.anytime();
+	const modifiedDate = faker.date.anytime();
+	const eventDateTo = faker.date.anytime();
+	const eventDateFrom = faker.date.anytime();
+	const tags = `["${faker.word.words({ count: 1 })}","${faker.word.words({
+		count: 1,
+	})}", "${faker.word.words({
+		count: 1,
+	})}","${faker.word.words({ count: 1 })}"]`;
+	const city = faker.location.city();
+	const country = faker.location.country();
+	const like = faker.number.int({ min: 50, max: 100 });
+	const view = faker.number.int({ min: 100, max: 400 });
 
 	return `export const metadata = {
 	slug: "${index}-${slug}",
 	title: "${bookName}",
 	id: ${index},
-	views: 100,
-	likes: 90,
+	views: ${view},
+	likes: ${like},
 	cover:
 		"${cover}",
 	description: "${description}",
-	datePublished: "2025-02-12",
-	dateModified: "string",
-	eventDateTo: "string",
-	eventDateFrom: "string",
-	tags: ["adventure", "travel", "forest"],
+	datePublished: "${date}",
+	dateModified: "${modifiedDate}",
+	eventDateTo: "${eventDateTo}",
+	eventDateFrom: "${eventDateFrom}",
+	tags: ${tags},
+	city: "${city}",
+	country: "${country}"
 };
 
 export const photoexample = {
@@ -116,9 +130,10 @@ if (!fs.existsSync(outputDir)) {
 	fs.mkdirSync(outputDir, { recursive: true });
 }
 
-for (let i = 2; i <= 25; i++) {
-	const content = baseContent(i);
-	const filename = `0${i}-heyzenex-blog.mdx`;
+for (let i = 1; i <= 25; i++) {
+	const slug = faker.lorem.slug(5);
+	const content = baseContent(i, slug);
+	const filename = `${slug}.mdx`;
 	fs.writeFileSync(path.join(outputDir, filename), content, "utf8");
 	console.log(`Generated ${filename}`);
 }

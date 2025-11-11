@@ -20,4 +20,6 @@ export type StoryBookMeta = {
 	eventDateTo: string;
 	eventDateFrom: string;
 	tags: string[];
+	city: string;
+	country: string;
 };
