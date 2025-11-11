@@ -65,7 +65,6 @@ export async function generateMetadata(props: {
 		metadataBase: new URL("https://heyzenex.pl"), // replace with your domain
 	};
 
-	console.log("Generated metadata:", fullMetadata);
 	return fullMetadata;
 }
 
