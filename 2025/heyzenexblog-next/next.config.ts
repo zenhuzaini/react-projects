@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
-	cacheComponents: true,
+	// cacheComponents: true,
 	images: {
 		remotePatterns: [
 			{
@@ -25,4 +26,9 @@ const nextConfig: NextConfig = {
 	reactCompiler: true,
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+	extension: /\.(md|mdx)$/,
+});
+
+// Merge MDX config with Next.js config
+export default withMDX(nextConfig);

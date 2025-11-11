@@ -102,7 +102,7 @@ const Header = () => {
 					<Link href="/error/construction" className="block py-2 ">
 						PhotoBook
 					</Link>
-					<Link href="/error/construction" className="block py-2">
+					<Link href="/storybook" className="block py-2">
 						StoryBook
 					</Link>
 					<Link href="/error/construction" className="block py-2">
