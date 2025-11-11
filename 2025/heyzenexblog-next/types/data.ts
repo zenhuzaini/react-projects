@@ -6,3 +6,18 @@ export type DataContentType = {
 		description: string;
 	}[];
 };
+
+export type StoryBookMeta = {
+	slug: string;
+	title: string;
+	id: number;
+	views: number;
+	likes: number;
+	cover: string;
+	description: string;
+	datePublished: string;
+	dateModified: string;
+	eventDateTo: string;
+	eventDateFrom: string;
+	tags: string[];
+};

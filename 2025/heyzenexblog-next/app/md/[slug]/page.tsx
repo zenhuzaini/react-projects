@@ -2,20 +2,80 @@ import { animationForArrow } from "@/animation/animation";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import ChevronLeft from "@/icons/ChevronLeft";
 import ChevronRight from "@/icons/ChevronRight";
-import { photoMock, photoMockStatic } from "@/mock/photo";
 import { faker } from "@faker-js/faker";
 import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
-import MyContent, {
-	metadata,
-} from "@/contents/mystorybook/001-welcome-heyzenex.mdx";
-import { storyContentsMock } from "@/mock/storyContent";
 import ShortDescription from "@/components/layout/StoryBookBlockLayouts/1_ShortDescription/ShortDescription";
 import EyeSymbol from "@/icons/EyeSymbol";
 import HeartOutlined from "@/icons/HeartOutlined";
+import { getAllSlugs, getStoryBySlug } from "@/lib/storybook";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import { NOT_FOUND_METADATA } from "@/const/metadata";
 
-const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
-	const { id } = await params;
+export async function generateMetadata(props: {
+	params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+	// Unwrap the promise
+	const { slug } = await props.params;
+
+	// Fetch the story by slug
+	const story = await getStoryBySlug(slug);
+
+	if (!story?.metadata) {
+		return NOT_FOUND_METADATA;
+	}
+
+	const { metadata } = story;
+
+	// Build the full metadata object
+	const fullMetadata: Metadata = {
+		title: metadata.title,
+		description: metadata.description,
+		keywords: metadata.tags,
+		authors: [
+			{
+				name: "Zen Huzaini",
+			},
+			{
+				name: "heyzenex",
+			},
+		],
+		openGraph: {
+			title: metadata.title,
+			description: metadata.description,
+			type: "article",
+			publishedTime: metadata.datePublished,
+			modifiedTime: metadata.dateModified,
+			url: `/md/${metadata.slug}`,
+			images: [
+				{
+					url: metadata.cover,
+					alt: metadata.title,
+				},
+			],
+			tags: metadata.tags,
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: metadata.title,
+			description: metadata.description,
+			images: [metadata.cover],
+		},
+		metadataBase: new URL("https://heyzenex.pl"), // replace with your domain
+	};
+
+	console.log("Generated metadata:", fullMetadata);
+	return fullMetadata;
+}
+
+const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
+	const { slug } = await params;
+	const story = await getStoryBySlug(slug);
+
+	if (!story) return notFound();
+
+	const { Content, metadata } = story;
 
 	const createdAt = faker.date.anytime().toLocaleDateString("en-GB", {
 		weekday: "short",
@@ -23,13 +83,6 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 		month: "short",
 		year: "numeric",
 	});
-	const storyCover = faker.image.url();
-	const storyTitle = faker.lorem.sentence(4);
-	const storyDescription = faker.lorem.paragraphs(1);
-	const storyPhotoUrls = photoMockStatic;
-	const storyContent = storyContentsMock;
-	const totalLike = 17;
-	const totalView = 200;
 
 	return (
 		<article className="flex flex-col gap-2 ">
@@ -108,10 +161,10 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 			{/* content */}
 			<section className="lg:ml-[20%] lg:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
 				<div className="text-center">
-					<ShortDescription text={storyDescription}></ShortDescription>
+					<ShortDescription text={metadata.description}></ShortDescription>
 				</div>
 
-				<MyContent></MyContent>
+				<Content></Content>
 
 				<div className="flex justify-between mt-[5%]">
 					<Link href={`/`}>
@@ -135,9 +188,10 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 
 export default Story;
 
+// used for mdx
 export function generateStaticParams() {
-	// TODO, this needs to be updated to automatically load all of the slugs
-	return [{ slug: "001-welcome-heyzenex" }];
+	const slug = getAllSlugs();
+	return slug;
 }
 
 export const dynamicParams = false;
