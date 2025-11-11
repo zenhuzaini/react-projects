@@ -107,9 +107,9 @@ const MainStoryBookPage = ({
 	});
 
 	return (
-		<main className="flex flex-col gap-2 ">
+		<article className="flex flex-col gap-2 ">
 			{/* info top */}
-			<div className="flex flex-col gap-2">
+			<section className="flex flex-col gap-2">
 				<div className="flex justify-between items-center">
 					<div className="flex flex-col text-xs md:text-lg">
 						<p className="text-primarytextInvert font-extralight">StoryBook</p>
@@ -127,10 +127,10 @@ const MainStoryBookPage = ({
 				<div className="hidden md:flex">
 					<Separator className="bg-primaryaccent"></Separator>
 				</div>
-			</div>
+			</section>
 
 			{/* hero title & sats */}
-			<div className="flex flex-col gap-2 sm:gap-4">
+			<section className="flex flex-col gap-2 sm:gap-4">
 				<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
 					<ImageWithSkeleton alt={storyDescription} src={storyCover} />
 					<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
@@ -146,22 +146,41 @@ const MainStoryBookPage = ({
 					</div>
 				</div>
 				{/* Stats */}
-				<div className="flex gap-0 sm:gap-2">
-					<div className="flex text-sm gap-1 sm:gap-2  pl-2 pr-2 rounded-lg items-center">
-						<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
-						<span className="text-primarytextInvert">12.k</span>
+				<div className="flex justify-between">
+					<div className="flex gap-0 sm:gap-2">
+						<div className="flex text-sm md:text-lg sm:gap-2  pl-2 pr-2 rounded-lg items-center">
+							<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
+							<span className="text-primarytextInvert">12.k</span>
+						</div>
+						<div className="flex text-sm md:text-lg gap-1 sm:gap-2 pl-2 pr-2 rounded-lg items-center ">
+							<HeartOutlined
+								className="stroke-primaryaccent"
+								size={4}></HeartOutlined>
+							<span className="text-primarytextInvert">100</span>
+						</div>
 					</div>
-					<div className="flex text-sm gap-1 sm:gap-2 pl-2 pr-2 rounded-lg items-center ">
-						<HeartOutlined
-							className="stroke-primaryaccent"
-							size={4}></HeartOutlined>
-						<span className="text-primarytextInvert">100</span>
+					<div className="hidden md:flex gap-2">
+						<div className="flex items-center justify-center">
+							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
+								<span className="text-dot">#</span>adventure
+							</h6>
+						</div>
+						<div className="flex items-center justify-center">
+							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
+								<span className="text-dot">#</span>travel
+							</h6>
+						</div>
+						<div className="flex items-center justify-center">
+							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
+								<span className="text-dot">#</span>brazil
+							</h6>
+						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 
 			{/* content */}
-			<div className="md:ml-[20%] md:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
+			<section className="lg:ml-[20%] lg:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
 				<div className="text-center">
 					<ShortDescription text={storyDescription}></ShortDescription>
 				</div>
@@ -183,8 +202,8 @@ const MainStoryBookPage = ({
 						</div>
 					</Link>
 				</div>
-			</div>
-		</main>
+			</section>
+		</article>
 	);
 };
 

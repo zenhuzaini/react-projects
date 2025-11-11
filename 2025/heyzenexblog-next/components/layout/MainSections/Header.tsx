@@ -73,7 +73,7 @@ const Header = () => {
 	}, [lastScrollY]);
 
 	return (
-		<div
+		<header
 			className={`	
 				grid grid-cols-8 h-15 sm:h-20
 				transition-all
@@ -82,9 +82,9 @@ const Header = () => {
 				ml-4 mr-4 sm:ml-20 sm:mr-20 sticky top-0 z-50
 				${showHeader ? "translate-y-0 " + bg : "-translate-y-full"}
   			`}>
-			<div className="flex items-center">
+			<div className="flex items-center ">
 				<Link href={"/"}>
-					<h1 className="flex flex-col text-2xl sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
+					<h1 className="flex flex-col text-lg sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
 						<span>HEY</span>
 						<span>
 							<span className="text-primaryaccent">ZENEX</span>
@@ -176,7 +176,7 @@ const Header = () => {
 					<Moon />
 				</div>
 			</div>
-		</div>
+		</header>
 	);
 };
 

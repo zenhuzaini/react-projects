@@ -1,10 +1,10 @@
+"use cache";
 import { faker } from "@faker-js/faker";
 import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
-import { photoMock } from "@/mock/photo";
+import { photoMock, photoMockStatic } from "@/mock/photo";
 import { storyContentsMock } from "@/mock/storyContent";
 
 const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
-	const photoUrls = Array.from({ length: 8 }, () => faker.image.url());
 	const { id } = await params;
 
 	const createdAt = faker.date.anytime().toLocaleDateString("en-GB", {
@@ -16,7 +16,7 @@ const Story = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const storyCover = faker.image.url();
 	const storyTitle = faker.lorem.sentence(4);
 	const storyDescription = faker.lorem.paragraphs(1);
-	const storyPhotoUrls = photoMock({ length: 8 });
+	const storyPhotoUrls = photoMockStatic;
 	const storyContent = storyContentsMock;
 	const totalLike = 17;
 	const totalView = 200;
