@@ -130,15 +130,15 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 				{/* Stats */}
 				<div className="flex justify-between">
 					<div className="flex gap-0 sm:gap-2">
-						<div className="flex text-sm md:text-lg sm:gap-2  pl-2 pr-2 rounded-lg items-center">
+						<div className="flex text-sm md:text-lg gap-1 sm:gap-2  pl-2 pr-2 rounded-lg items-center">
 							<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
-							<span className="text-primarytextInvert">12.k</span>
+							<span className="text-primarytextInvert">{metadata.views}</span>
 						</div>
 						<div className="flex text-sm md:text-lg gap-1 sm:gap-2 pl-2 pr-2 rounded-lg items-center ">
 							<HeartOutlined
 								className="stroke-primaryaccent"
 								size={4}></HeartOutlined>
-							<span className="text-primarytextInvert">100</span>
+							<span className="text-primarytextInvert">{metadata.likes}</span>
 						</div>
 					</div>
 					<div className="hidden md:flex gap-2">
