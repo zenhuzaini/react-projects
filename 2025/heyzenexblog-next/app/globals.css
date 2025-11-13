@@ -49,8 +49,8 @@
 	--color-primaryyellow: #fad02c;
 	--color-secondaryyellow: #ebaf30;
 
-	--color-background: var(--color-primarycream);
-	--color-mybackground: var(--color-primarycream);
+	--color-background: var(--color-secondarywhite);
+	--color-mybackground: var(--color-secondarywhite);
 	--color-mybackgroundinvert: var(--color-primarymidnight);
 
 	/* this is for accent */

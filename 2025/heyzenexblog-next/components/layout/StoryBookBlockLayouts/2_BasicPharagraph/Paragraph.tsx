@@ -3,7 +3,7 @@ import React from "react";
 
 const Paragraph = ({ text }: { text: string }) => {
 	return (
-		<p className="text-primaryText font-light leading-normal text-sm md:text-lg text-justify justify-center">
+		<p className="text-primaryText font-light leading-normal text-[16px] md:text-lg text-justify justify-center">
 			{text}
 		</p>
 	);

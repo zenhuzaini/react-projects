@@ -8,6 +8,7 @@ import ThreeBars from "@/icons/ThreeBars";
 import XMark from "@/icons/XMark";
 import Link from "next/link";
 import TerminalIcon from "@/icons/TerminalIcon";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
@@ -15,6 +16,7 @@ const Header = () => {
 	const [showHeader, setShowHeader] = useState(true);
 	const [lastScrollY, setLastScrollY] = useState(0);
 	const [bg, setBG] = useState("");
+	const [hovered, setHovered] = useState(false);
 
 	const toggleDarkMode = () => {
 		const html = document.documentElement;
@@ -84,13 +86,44 @@ const Header = () => {
   			`}>
 			<div className="flex items-center ">
 				<Link href={"/"}>
-					<h1 className="flex flex-col text-lg sm:text-3xl font-extrabold tracking-tighter leading-[0.8]">
-						<span>HEY</span>
-						<span>
-							<span className="text-primaryaccent">ZENEX</span>
-							<span className="text-dot">.</span>
-						</span>
-					</h1>
+					<div
+						onMouseEnter={() => setHovered(true)}
+						onMouseLeave={() => setHovered(false)}
+						className="relative h-8 sm:h-14 overflow-hidden cursor-pointer select-none"
+						style={{ width: "fit-content" }}>
+						<motion.div
+							animate={{
+								y: hovered ? "-55%" : "0%",
+								opacity: hovered ? 0.95 : 1,
+							}}
+							transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
+							className="flex flex-col">
+							{/* Default logo */}
+							<h1 className="text-lg sm:text-3xl flex flex-col font-extrabold tracking-tighter leading-[0.9]">
+								<span>HEY</span>
+								<span className="text-primaryaccent">
+									ZENEX<span className="text-dot">.</span>
+								</span>
+							</h1>
+
+							{/* Hover logo */}
+							<h1 className="text-lg sm:text-3xl flex flex-col  font-extrabold tracking-tighter leading-[0.9] mt-2">
+								<span className="">ZEN</span>{" "}
+								<span className="text-primaryaccent">
+									HUZAINI
+									<motion.span
+										className="text-dot inline-block"
+										animate={{ y: hovered ? [-2, 0, -2] : 0 }}
+										transition={{
+											repeat: hovered ? Infinity : 0,
+											duration: 0.8,
+										}}>
+										.
+									</motion.span>
+								</span>
+							</h1>
+						</motion.div>
+					</div>
 				</Link>
 			</div>
 
