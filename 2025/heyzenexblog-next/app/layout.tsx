@@ -27,19 +27,19 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${schibstedGrotesk.className}  antialiased`}>
-				<PageTransition>
-					<Suspense fallback={null}>
-						<ScrollToTop />
-					</Suspense>
-					<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
-						<Header></Header>
+				<Suspense fallback={null}>
+					<ScrollToTop />
+				</Suspense>
+				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
+					<Header></Header>
+					<PageTransition>
 						{/* this is to wrap not full frame */}
 						<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
 							{children}
 						</div>
-						<Footer></Footer>
-					</div>
-				</PageTransition>
+					</PageTransition>
+					<Footer></Footer>
+				</div>
 			</body>
 		</html>
 	);
