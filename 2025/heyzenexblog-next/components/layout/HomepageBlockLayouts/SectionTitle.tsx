@@ -16,11 +16,11 @@ const SectionTitle = ({
 	return (
 		<div className="grid grid-cols-8">
 			<h2 className="col-span-6 flex gap-2 sm:gap-2 sm:items-center">
-				<div className=" text-primaryText text-2xl sm:text-2xl font-light  leading-[0.8]">
+				<div className=" text-primaryText text-2xl sm:text-2xl font-light  leading-[0.9]">
 					{left}
 				</div>
 
-				<div className="text-primaryaccent flex justify-center items-end  text-2xl sm:text-5xl font-extrabold tracking-tighter  leading-[0.8]">
+				<div className="text-primaryaccent flex justify-center items-end  text-2xl sm:text-5xl font-extrabold tracking-tighter leading-[0.9]">
 					{right}
 					<span className="text-dot">.</span>
 				</div>

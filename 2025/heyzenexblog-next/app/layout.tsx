@@ -10,6 +10,7 @@ import {
 	martianMono,
 	schibstedGrotesk,
 } from "@/components/ui/fonts";
+import PageTransition from "@/animation/PageTransition";
 
 export const metadata: Metadata = {
 	title: "heyzenex",
@@ -31,10 +32,12 @@ export default function RootLayout({
 				</Suspense>
 				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
 					<Header></Header>
-					{/* this is to wrap not full frame */}
-					<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
-						{children}
-					</div>
+					<PageTransition>
+						{/* this is to wrap not full frame */}
+						<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
+							{children}
+						</div>
+					</PageTransition>
 					<Footer></Footer>
 				</div>
 			</body>
