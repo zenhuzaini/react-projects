@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
 			new URL("https://picsum.photos/seed/**"),
 			new URL("https://res.cloudinary.com/djufavji1/image/upload/**/**"),
 		],
+		unoptimized: true,
 	},
 	experimental: {
 		turbopackFileSystemCacheForDev: true,
