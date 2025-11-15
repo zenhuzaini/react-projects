@@ -1,0 +1,87 @@
+export const metadata = {
+	slug: "first-solo-bikepacking-overnighter-virgin-lake-jezioro-dziewicze-wroclaw-poland",
+	title: "My First Solo Bikepacking Adventure - Jezioro Dziewicze",
+	id: 16,
+	views: 211,
+	likes: 51,
+	cover:
+		"https://d2exd72xrrp1s7.cloudfront.net/www/15/1539gm6oohhqm158y5fje4f82g52syvve0-p493302165-full/1913cce336a?width=3360&crop=false&q=70",
+	description:
+		"My first solo bikepacking overnighter at Jezioro Dziewicze (Virgin Lake), Wroclaw Poland",
+	datePublished:
+		"Sun Mar 09 2025 10:31:36 GMT+0100 (Central European Standard Time)",
+	dateModified:
+		"Thu Oct 01 2026 05:27:49 GMT+0200 (Central European Summer Time)",
+	eventDateTo:
+		"Wed Nov 05 2025 15:05:37 GMT+0100 (Central European Standard Time)",
+	eventDateFrom:
+		"Sun Nov 30 2025 16:24:54 GMT+0100 (Central European Standard Time)",
+	tags: ["bikepacking", "solo", "adventure", "nature", "alone"],
+	city: "Wroclaw",
+	country: "Poland",
+};
+
+export const mainPhoto = {
+	photoUrl:
+		"https://d2exd72xrrp1s7.cloudfront.net/www/s4/s4b023qtnhmy7ppsav6w7ntt52sywbsu-p493302665-full/1913cce8713?width=3360&crop=false&q=70",
+	description:
+		"My bike against the tree and my tent. This is my small setup for bikepacking solo.",
+};
+
+export const photoexample = {
+	photoUrl:
+		"https://d2exd72xrrp1s7.cloudfront.net/www/s4/s4b023qtnhmy7ppsav6w7ntt52sywbsu-p493302665-full/1913cce8713?width=3360&crop=false&q=70",
+	description:
+		"My bike against the tree and my tent. This is my small setup for bikepacking solo.",
+};
+
+export const photoExamples = [
+	{
+		photoUrl: "https://picsum.photos/seed/A1B2C3D4/1907/1577",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+	},
+	{
+		photoUrl: "https://picsum.photos/seed/E5F6G7H8/1907/1577",
+		description:
+			"Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia.",
+	},
+];
+
+<Par text="This is the story of my first time going bikepacking alone." />
+
+<Par
+	text="Ever since I got my Brompton, I’ve always wanted to go out and explore more. 
+After doing a group overnighter two weeks ago, I realized .. "
+/>
+
+<Quo
+	text={`Hey, maybe I can actually do this by myself.`}
+	shouldCenter={true}
+/>
+
+<Pho photo={mainPhoto} />
+
+<Par text={"So… I decided to try.."} />
+
+<Phopha
+	text={
+		" I’m preparing for a bigger solo trip on the Velo Dunajec, so I wanted to do a small test run. Virgin Lake is only around 15 km from my place. Some people camp there sometimes, but it’s usually pretty quiet. Perfect for what I needed."
+	}
+	photo={{
+		photoUrl:
+			"https://d2exd72xrrp1s7.cloudfront.net/www/ot/otd6zeipcnguzszxghm81nu952syw8h2-p493302540-full/1913cce76ad?width=3360&crop=false&q=70",
+		description: "Virgin Lake in Wroclaw",
+	}}
+/>
+
+<Phapho
+	text={
+		"this is the photo of thaddeus . the betrayer. He is also known as the long lover"
+	}
+	photo={photoexample}
+/>
+
+<Phapho text={"whatever it is it has to like work!"} photo={photoexample} />
+
+<PhoCol photo={photoExamples} />

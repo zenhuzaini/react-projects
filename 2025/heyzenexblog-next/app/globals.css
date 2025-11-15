@@ -50,7 +50,7 @@
 	--color-secondaryyellow: #ebaf30;
 
 	--color-background: var(--color-secondarywhite);
-	--color-mybackground: var(--color-secondarywhite);
+	--color-mybackground: var(--color-primarycream);
 	--color-mybackgroundinvert: var(--color-primarymidnight);
 
 	/* this is for accent */
@@ -245,9 +245,7 @@ html.theme-transition * {
 	}
 } */
 
-/* to avoid scroll in the bottom */
-/*  */
-/* html,
-body {
-	overflow-x: hidden !important;
+/* to avoid horizontal scroll in the bottom */
+/* body {
+	overflow-x: hidden;
 } */

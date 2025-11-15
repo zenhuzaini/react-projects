@@ -46,6 +46,7 @@ const components: MDXComponents = {
 			<ShortDescription
 				{...(props as {
 					text: string;
+					shouldCenter: boolean;
 				})}
 			/>
 		);

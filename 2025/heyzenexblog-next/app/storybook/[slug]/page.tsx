@@ -184,5 +184,3 @@ export function generateStaticParams() {
 	const slug = getAllSlugs();
 	return slug;
 }
-
-export const dynamicParams = false;
