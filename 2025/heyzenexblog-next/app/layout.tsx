@@ -4,12 +4,7 @@ import Footer from "@/components/layout/MainSections/Footer";
 import Header from "@/components/layout/MainSections/Header";
 import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
 import { Suspense } from "react";
-import {
-	geistMono,
-	geistSans,
-	martianMono,
-	schibstedGrotesk,
-} from "@/components/ui/fonts";
+import { schibstedGrotesk } from "@/components/ui/fonts";
 import PageTransition from "@/animation/PageTransition";
 
 export const metadata: Metadata = {
