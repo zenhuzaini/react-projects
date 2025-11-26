@@ -22,7 +22,7 @@ const PhotoPharagraph = ({
 
 			{/* Right text */}
 
-			<div className="text-primaryText font-light leading-normal text-sm md:text-lg text-justify justify-center">
+			<div className="text-primaryText font-light leading-normal text-[16px] text-justify justify-center">
 				<p>{text}</p>
 			</div>
 		</div>
