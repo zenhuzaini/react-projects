@@ -48,3 +48,12 @@ export type ChecklistItem = {
 	label: ReactNode;
 	done?: boolean;
 };
+
+export type AccordionItemProps = {
+	title: React.ReactNode;
+	content: React.ReactNode;
+};
+
+export type AccordionComponentProps = {
+	items: AccordionItemProps[];
+};

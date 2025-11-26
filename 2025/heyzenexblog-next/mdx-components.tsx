@@ -1,7 +1,11 @@
 import type { MDXComponents } from "mdx/types";
 import Paragraph from "./components/layout/StoryBookBlockLayouts/2_BasicPharagraph/Paragraph";
 import PhotoPharagraph from "./components/layout/StoryBookBlockLayouts/3_PhotoParagraph/PhotoPharagraph";
-import { PhotoCardDetailType } from "./types/components";
+import {
+	AccordionComponentProps,
+	AccordionItemProps,
+	PhotoCardDetailType,
+} from "./types/components";
 import PharagraphPhoto from "./components/layout/StoryBookBlockLayouts/4_PharagraphPhoto/PharagraphPhoto";
 import ShortDescription from "./components/layout/StoryBookBlockLayouts/1_ShortDescription/ShortDescription";
 import FullPhoto from "./components/layout/StoryBookBlockLayouts/5_FullPhoto/FullPhoto";
@@ -11,6 +15,7 @@ import SectionTitle from "./components/layout/StoryBookBlockLayouts/9_SectionTit
 import Checklist from "./components/layout/StoryBookBlockLayouts/Lists/Lists";
 import ItemList from "./components/layout/StoryBookBlockLayouts/Lists/ItemLists";
 import HastagSymbol from "./icons/Hastag";
+import { AccordionComponent } from "./components/molecule/Accordion/Accordion";
 
 const components: MDXComponents = {
 	Par: (props) => {
@@ -104,6 +109,9 @@ const components: MDXComponents = {
 	},
 	HastagIcon: () => {
 		return <HastagSymbol></HastagSymbol>;
+	},
+	Accordion: ({ items }: AccordionComponentProps) => {
+		return <AccordionComponent items={items}></AccordionComponent>;
 	},
 } satisfies MDXComponents;
 

@@ -1,7 +1,7 @@
 export const metadata = {
 	slug: "first-solo-bikepacking-overnighter-virgin-lake-jezioro-dziewicze-wroclaw-poland",
 	title: "My First Solo Bikepacking Adventure",
-	id: 16,
+	id: 1,
 	views: 211,
 	likes: 51,
 	cover:
@@ -45,6 +45,22 @@ export const photoExamples = [
 		photoUrl:
 			"https://d2exd72xrrp1s7.cloudfront.net/www/1d/1dxupgsqmmd7l1ex9ekmhn98yx50l3j7g5-p468787602-full/1901cf214d5?width=1920&crop=false&q=70",
 		description: "Beautiful view of odra river from the camping place.",
+	},
+	{
+		photoUrl:
+			"https://d2exd72xrrp1s7.cloudfront.net/www/13/13jz4407motghjeb7dpyzttvm5l6lvs0v-p664172613-full/19a8d650e2c?width=1920&crop=false&q=70",
+		description: "Flower and sunset",
+	},
+	{
+		photoUrl:
+			"https://d2exd72xrrp1s7.cloudfront.net/www/x9/x9t8dhrvfmfy1imizb0d70mvh52syvwsr-p493302181-full/1913cce3bb2?width=1920&crop=false&q=70",
+		description:
+			"my back fully loaded for overnighter bikepacking. Bike is yellow canyon and tailwind",
+	},
+	{
+		photoUrl:
+			"https://d2exd72xrrp1s7.cloudfront.net/www/zi/zijdyi95s0j5178tjpdopl97c52syw2fl-p493302382-full/1913cce577a?width=1920&crop=false&q=70",
+		description: "view from my tent",
 	},
 ];
 
@@ -169,7 +185,7 @@ forest, total peace. That moment alone made the whole trip worth it.
 <PhoCol photo={photoExamples} />
 
 Overall, it was really fun. I’m honestly proud that I survived a night alone in the forest.
-And yes — I made it back home happy.And my mind kept saying ...
+And yes — I made it back home happy. I was like ...
 
 <Quo
 	text={`Dude, you made it!`}
@@ -178,14 +194,28 @@ And yes — I made it back home happy.And my mind kept saying ...
 	fontSize="medium"
 />
 
+<Accordion
+	items={[
+		{
+			title: (
+				<div className='flex gap-1'>
+					Check the {"  "}<Highlight>map</Highlight>
+				</div>
+			),
+			content: (
+				<>
+					<iframe
+						src="https://www.komoot.com/tour/1776587165/embed?share_token=aelpzvVtQjnILFIjWUIyUbwsg5ztSJAf4WMGM61YqkNjhCALcS&profile=1"
+						width="100%"
+						height="500"
+						style={{
+							border: 1,
+							borderRadius: 10,
+							overflow: "hidden",
+						}}></iframe>
+				</>
+			),
+		},
+	]}
+/>
 </Center>
-
-<iframe
-	src="https://www.komoot.com/tour/1776587165/embed?share_token=aelpzvVtQjnILFIjWUIyUbwsg5ztSJAf4WMGM61YqkNjhCALcS&profile=1"
-	width="100%"
-	height="500"
-	style={{
-		border: 1,
-		borderRadius: 10,
-		overflow: "hidden",
-	}}></iframe>
