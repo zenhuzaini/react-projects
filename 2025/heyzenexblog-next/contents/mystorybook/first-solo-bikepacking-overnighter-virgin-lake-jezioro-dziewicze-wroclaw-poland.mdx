@@ -7,7 +7,7 @@ export const metadata = {
 	cover:
 		"https://d2exd72xrrp1s7.cloudfront.net/www/ah/ahlfc1lxgvbtjwbqtulk2n465l6lvrec-p664172611-full/19a8d650ab5?width=3072&height=2304&crop=false&q=70",
 	description:
-		"My first solo bikepacking overnighter at Jezioro Dziewicze (Virgin Lake), Wroclaw Poland",
+		"My first solo bikepacking overnighter at Jezioro Dziewicze (Virgin Lake), Wrocław, Poland",
 	datePublished:
 		"Sun Mar 09 2025 10:31:36 GMT+0100 (Central European Standard Time)",
 	dateModified:
@@ -119,6 +119,36 @@ I went straight after work and picked a spot near a little lake inside the fores
 
 Easy enough.
 
+<Section text="Things I bring" />
+<Pho
+	photo={{
+		photoUrl:
+			"https://d2exd72xrrp1s7.cloudfront.net/www/1r/1rurr9k4a8bzu17xolzmuua3hm5lks7bzw-p665646242-full/19ac07c062c?width=3072&height=2304&crop=false&q=70",
+		description: "Things I bring during bikepacking",
+	}}
+/>
+
+<Checklist
+	items={[
+		{ label: "Quilt from Cumulus", done: true },
+		{ label: "1 person cycling tent from Naturehike", done: true },
+		{ label: "Sleeping pad with 5.6 R Value from Naturehike", done: true },
+		{ label: "foldable pillow - Aeros", done: true },
+		{ label: "Spare outfits for the night", done: true },
+		{ label: "2 pack of chicken sausages", done: true },
+		{ label: "Sleeping liner", done: true },
+		{ label: "Hot water", done: true },
+		{ label: "Wind blocker Jacket", done: true },
+		{ label: "headlamp", done: true },
+		{ label: "wet tissue", done: true },
+	]}
+/>
+
+The things I brought were pretty basic but enough for an overnighter.
+
+The only thing I was afraid of was… what if I feel cold? What if I get hungry? What if my water runs out?  
+But I decided to just go for it anyway.
+
 <Section text="The Night" />
 
 <Pho
@@ -184,8 +214,18 @@ forest, total peace. That moment alone made the whole trip worth it.
 
 <PhoCol photo={photoExamples} />
 
-Overall, it was really fun. I’m honestly proud that I survived a night alone in the forest.
+Overall, it was really fun. I’m honestly proud that I survived a night alone in the forest. Any concerns or fears I had were probably just because I was overthinking.
+I didn’t feel cold, didn’t get hungry, and didn’t even run out of water, lol.
+
 And yes — I made it back home happy. I was like ...
+
+<Pho
+	photo={{
+		photoUrl:
+			"https://d2exd72xrrp1s7.cloudfront.net/www/1o/1oulrd0e4assb1f0rwl53vr0p05l6lvzxi-p664172614-full/19a8d6535fc?width=1920&crop=false&q=70",
+		description: "going home from bikepacking",
+	}}
+/>
 
 <Quo
 	text={`Dude, you made it!`}
@@ -196,6 +236,7 @@ And yes — I made it back home happy. I was like ...
 
 <Accordion
 	items={[
+		
 		{
 			title: (
 				<div className='flex gap-1'>
@@ -203,17 +244,7 @@ And yes — I made it back home happy. I was like ...
 				</div>
 			),
 			content: (
-				<>
-					<iframe
-						src="https://www.komoot.com/tour/1776587165/embed?share_token=aelpzvVtQjnILFIjWUIyUbwsg5ztSJAf4WMGM61YqkNjhCALcS&profile=1"
-						width="100%"
-						height="500"
-						style={{
-							border: 1,
-							borderRadius: 10,
-							overflow: "hidden",
-						}}></iframe>
-				</>
+				<IframeWithLoader url={"https://www.komoot.com/tour/1776587165/embed?share_token=aelpzvVtQjnILFIjWUIyUbwsg5ztSJAf4WMGM61YqkNjhCALcS&profile=1"}/>
 			),
 		},
 	]}

@@ -10,7 +10,9 @@ export function AccordionComponent({ items }: AccordionComponentProps) {
 	const accordionItem = items.map((accordionContent, index) => {
 		return (
 			<AccordionItem value={`${index}`}>
-				<AccordionTrigger>{accordionContent.title}</AccordionTrigger>
+				<AccordionTrigger className="cursor-pointer hover:no-underline transition-all">
+					{accordionContent.title}
+				</AccordionTrigger>
 				<AccordionContent className="flex flex-col gap-4 text-balance">
 					{accordionContent.content}
 				</AccordionContent>

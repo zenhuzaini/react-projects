@@ -16,6 +16,7 @@ import Checklist from "./components/layout/StoryBookBlockLayouts/Lists/Lists";
 import ItemList from "./components/layout/StoryBookBlockLayouts/Lists/ItemLists";
 import HastagSymbol from "./icons/Hastag";
 import { AccordionComponent } from "./components/molecule/Accordion/Accordion";
+import { IframeWithLoader } from "./components/molecule/Iframe/IframeWithLoader";
 
 const components: MDXComponents = {
 	Par: (props) => {
@@ -112,6 +113,9 @@ const components: MDXComponents = {
 	},
 	Accordion: ({ items }: AccordionComponentProps) => {
 		return <AccordionComponent items={items}></AccordionComponent>;
+	},
+	IframeWithLoader: ({ url }: { url: string }) => {
+		return <IframeWithLoader src={url}></IframeWithLoader>;
 	},
 } satisfies MDXComponents;
 

@@ -24,7 +24,7 @@ export default function RootLayout({
 			<body className={`${schibstedGrotesk.className}  antialiased`}>
 				<ScrollToTop />
 
-				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
+				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen">
 					<Header></Header>
 					<PageTransition>
 						{/* this is to wrap not full frame */}
