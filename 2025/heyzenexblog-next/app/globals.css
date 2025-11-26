@@ -244,8 +244,3 @@ html.theme-transition * {
 		font-family: var(--font-body), sans-serif;
 	}
 } */
-
-/* to avoid horizontal scroll in the bottom */
-/* body {
-	overflow-x: hidden;
-} */

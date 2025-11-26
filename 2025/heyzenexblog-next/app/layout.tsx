@@ -20,8 +20,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body
-				className={`${schibstedGrotesk.className} overflow-x-hidden  antialiased`}>
+			{/* add this if there will be scrollbar horizontal in the bottom overflow-x-hidden  */}
+			<body className={`${schibstedGrotesk.className}  antialiased`}>
 				<ScrollToTop />
 
 				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
