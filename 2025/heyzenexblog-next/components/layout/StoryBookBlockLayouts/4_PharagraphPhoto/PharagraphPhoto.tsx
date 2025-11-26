@@ -14,7 +14,7 @@ const PharagraphPhoto = ({
 		<div className="grid grid-cols-1 md:grid-cols-3 gap-7 h-full lg:gap-4 w-full md:items-center">
 			{/* Left image */}
 
-			<div className="text-primaryText font-light leading-normal text-sm md:text-lg text-justify justify-center">
+			<div className="text-primaryText font-light leading-normal text-[16px] text-justify justify-center">
 				<p>{text}</p>
 			</div>
 

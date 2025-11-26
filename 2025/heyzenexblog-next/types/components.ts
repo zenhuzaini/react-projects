@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type PhotoCardDetailType = {
 	id?: string;
 	city?: string;
@@ -40,4 +42,9 @@ export type MainStoryBookPageProps = {
 	storyContent: StoryContentType[];
 	totalView: number;
 	totalLike: number;
+};
+
+export type ChecklistItem = {
+	label: ReactNode;
+	done?: boolean;
 };
