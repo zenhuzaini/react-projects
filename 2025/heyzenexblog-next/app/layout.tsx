@@ -6,6 +6,7 @@ import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
 import { schibstedGrotesk } from "@/components/ui/fonts";
 import PageTransition from "@/animation/PageTransition";
 import { createBaseMetadata } from "../lib/seo";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = createBaseMetadata();
 
@@ -20,7 +21,6 @@ export default function RootLayout({
 			{/* add this if there will be scrollbar horizontal in the bottom overflow-x-hidden  */}
 			<body className={`${schibstedGrotesk.className}  antialiased`}>
 				<ScrollToTop />
-
 				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen">
 					<Header></Header>
 					<PageTransition>
@@ -31,6 +31,7 @@ export default function RootLayout({
 					</PageTransition>
 					<Footer></Footer>
 				</div>
+				<Analytics></Analytics>
 			</body>
 		</html>
 	);
