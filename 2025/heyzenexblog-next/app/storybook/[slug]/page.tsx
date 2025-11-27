@@ -13,6 +13,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
 import Chip from "@/components/ui/chip";
+import { createBaseMetadata } from "@/lib/seo";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
@@ -29,42 +30,16 @@ export async function generateMetadata(props: {
 
 	const { metadata } = story;
 
-	// Build the full metadata object
-	const fullMetadata: Metadata = {
+	const fullMetadata: Metadata = createBaseMetadata({
 		title: metadata.title,
 		description: metadata.description,
-		keywords: metadata.tags,
-		authors: [
-			{
-				name: "Zen Huzaini",
-			},
-			{
-				name: "heyzenex",
-			},
-		],
-		openGraph: {
-			title: metadata.title,
-			description: metadata.description,
-			type: "article",
-			publishedTime: metadata.datePublished,
-			modifiedTime: metadata.dateModified,
-			url: `/md/${metadata.slug}`,
-			images: [
-				{
-					url: metadata.cover,
-					alt: metadata.title,
-				},
-			],
-			tags: metadata.tags,
+		path: `/storybook/${metadata.slug}`,
+		ogImage: {
+			url: metadata.cover,
+			alt: metadata.title,
 		},
-		twitter: {
-			card: "summary_large_image",
-			title: metadata.title,
-			description: metadata.description,
-			images: [metadata.cover],
-		},
-		metadataBase: new URL("https://heyzenex.pl"), // replace with your domain
-	};
+		robotsIndex: true,
+	});
 
 	return fullMetadata;
 }

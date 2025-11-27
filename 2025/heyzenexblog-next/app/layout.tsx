@@ -5,12 +5,9 @@ import Header from "@/components/layout/MainSections/Header";
 import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
 import { schibstedGrotesk } from "@/components/ui/fonts";
 import PageTransition from "@/animation/PageTransition";
+import { createBaseMetadata } from "../lib/seo";
 
-export const metadata: Metadata = {
-	title: "heyzenex",
-	description:
-		"Heyzenex is a captivating blog dedicated to photography and travel stories. Explore breathtaking adventures, vibrant cultures, and inspiring journeys through the lens of a passionate explorer.",
-};
+export const metadata: Metadata = createBaseMetadata();
 
 // this acts as a parent for all of the other pages
 export default function RootLayout({
