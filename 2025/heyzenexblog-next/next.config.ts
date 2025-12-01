@@ -3,6 +3,7 @@ import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
 	// cacheComponents: true,
+	allowedDevOrigins: ["https://heyzenex.pl", "https://www.heyzenex.pl"],
 	images: {
 		remotePatterns: [
 			{
