@@ -1,6 +1,5 @@
 import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
 import { getPaginatedStoryMetas } from "@/lib/storybook";
-import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
 
 const page = async () => {

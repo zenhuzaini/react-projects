@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker";
 
 const UnderDevelopment = () => {
 	return (
-		<div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+		<div className="flex items-center justify-center min-h-[calc(100%-200px)]">
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-7 lg:gap-4 w-full  md:items-center">
 				{/* Left image */}
 				<div className="rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">

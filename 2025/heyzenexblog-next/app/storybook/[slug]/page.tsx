@@ -13,6 +13,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
 import Chip from "@/components/ui/chip";
+import { createBaseMetadata } from "@/lib/seo";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
@@ -29,42 +30,16 @@ export async function generateMetadata(props: {
 
 	const { metadata } = story;
 
-	// Build the full metadata object
-	const fullMetadata: Metadata = {
+	const fullMetadata: Metadata = createBaseMetadata({
 		title: metadata.title,
 		description: metadata.description,
-		keywords: metadata.tags,
-		authors: [
-			{
-				name: "Zen Huzaini",
-			},
-			{
-				name: "heyzenex",
-			},
-		],
-		openGraph: {
-			title: metadata.title,
-			description: metadata.description,
-			type: "article",
-			publishedTime: metadata.datePublished,
-			modifiedTime: metadata.dateModified,
-			url: `/md/${metadata.slug}`,
-			images: [
-				{
-					url: metadata.cover,
-					alt: metadata.title,
-				},
-			],
-			tags: metadata.tags,
+		path: `/storybook/${metadata.slug}`,
+		ogImage: {
+			url: metadata.cover,
+			alt: metadata.title,
 		},
-		twitter: {
-			card: "summary_large_image",
-			title: metadata.title,
-			description: metadata.description,
-			images: [metadata.cover],
-		},
-		metadataBase: new URL("https://heyzenex.pl"), // replace with your domain
-	};
+		robotsIndex: true,
+	});
 
 	return fullMetadata;
 }
@@ -117,7 +92,7 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					<ImageWithSkeleton alt={metadata.description} src={metadata.cover} />
 					<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
 
-					<div className="absolute bottom-0 m-5 w-[20%]">
+					<div className="absolute bottom-0 m-5 w-[40%]">
 						<div
 							className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
 							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.8]">
@@ -151,10 +126,6 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 			{/* content */}
 			<section className="lg:ml-[20%] lg:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
-				<div className="text-center">
-					<ShortDescription text={metadata.description}></ShortDescription>
-				</div>
-
 				<Content></Content>
 
 				<div className="flex justify-between mt-[5%]">
@@ -184,5 +155,3 @@ export function generateStaticParams() {
 	const slug = getAllSlugs();
 	return slug;
 }
-
-export const dynamicParams = false;

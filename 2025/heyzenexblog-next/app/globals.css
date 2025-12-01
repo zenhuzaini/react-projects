@@ -50,7 +50,7 @@
 	--color-secondaryyellow: #ebaf30;
 
 	--color-background: var(--color-secondarywhite);
-	--color-mybackground: var(--color-secondarywhite);
+	--color-mybackground: var(--color-primarycream);
 	--color-mybackgroundinvert: var(--color-primarymidnight);
 
 	/* this is for accent */
@@ -243,11 +243,4 @@ html.theme-transition * {
 	.font-style-body {
 		font-family: var(--font-body), sans-serif;
 	}
-} */
-
-/* to avoid scroll in the bottom */
-/*  */
-/* html,
-body {
-	overflow-x: hidden !important;
 } */

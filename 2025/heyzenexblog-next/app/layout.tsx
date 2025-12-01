@@ -3,15 +3,12 @@ import "./globals.css";
 import Footer from "@/components/layout/MainSections/Footer";
 import Header from "@/components/layout/MainSections/Header";
 import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
-import { Suspense } from "react";
 import { schibstedGrotesk } from "@/components/ui/fonts";
 import PageTransition from "@/animation/PageTransition";
+import { createBaseMetadata } from "../lib/seo";
+import { Analytics } from "@vercel/analytics/next";
 
-export const metadata: Metadata = {
-	title: "heyzenex",
-	description:
-		"Heyzenex is a captivating blog dedicated to photography and travel stories. Explore breathtaking adventures, vibrant cultures, and inspiring journeys through the lens of a passionate explorer.",
-};
+export const metadata: Metadata = createBaseMetadata();
 
 // this acts as a parent for all of the other pages
 export default function RootLayout({
@@ -21,11 +18,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
+			{/* add this if there will be scrollbar horizontal in the bottom overflow-x-hidden  */}
 			<body className={`${schibstedGrotesk.className}  antialiased`}>
-				<Suspense fallback={null}>
-					<ScrollToTop />
-				</Suspense>
-				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen w-screen">
+				<ScrollToTop />
+				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen">
 					<Header></Header>
 					<PageTransition>
 						{/* this is to wrap not full frame */}
@@ -35,6 +31,7 @@ export default function RootLayout({
 					</PageTransition>
 					<Footer></Footer>
 				</div>
+				<Analytics></Analytics>
 			</body>
 		</html>
 	);

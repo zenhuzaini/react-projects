@@ -17,7 +17,7 @@ const PostCardsLong = ({
 					src={photoDetail.photoUrl}></ImageWithSkeleton>
 			</div>
 			{/* but when I hover, it will open this. so the image above will have only 80%. I want this only for dekstop */}
-			<div className="p-3 col-start-4 col-end-7 sm:col-start-5  m:pl-5 flex flex-col gap-5 justify-center">
+			<div className="p-3 col-start-4 col-end-7 sm:col-start-5 flex flex-col gap-5 justify-center">
 				<h2 className="text-2xl sm:text-4xl text-primarytextInvert font-bold tracking-tight sm:tracking-tighter leading-[1.1]">
 					{photoDetail?.title}
 					<span className="text-primaryaccent">.</span>
@@ -37,12 +37,12 @@ const PostCardsLong = ({
 						</p>
 					</div>
 
-					<div className="hidden sm:flex flex-row text-xs font-extralight text-right">
+					<div className="hidden flex-row text-xs font-extralight text-right">
 						<ArrowRight />
 					</div>
 				</div>
 
-				<div className="sm:hidden flex text-xs font-extralight self-end">
+				<div className="hidden text-xs font-extralight self-end">
 					<ArrowRight />
 				</div>
 			</div>

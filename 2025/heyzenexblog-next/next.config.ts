@@ -3,6 +3,7 @@ import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
 	// cacheComponents: true,
+	allowedDevOrigins: ["https://heyzenex.pl", "https://www.heyzenex.pl"],
 	images: {
 		remotePatterns: [
 			{
@@ -20,9 +21,6 @@ const nextConfig: NextConfig = {
 			new URL("https://res.cloudinary.com/djufavji1/image/upload/**/**"),
 		],
 		unoptimized: true,
-	},
-	experimental: {
-		turbopackFileSystemCacheForDev: true,
 	},
 	reactCompiler: true,
 };
