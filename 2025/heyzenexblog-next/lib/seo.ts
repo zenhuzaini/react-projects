@@ -16,12 +16,12 @@ type BaseMetaOptions = {
 const SITE_URL = "https://heyzenex.pl"; // change to your real domain
 const DEFAULT_OG = "/zen.jpg"; // put this in /app or /public
 const DEFAULT_LOCALE = "en_US";
-const SITE_NAME = "heyzenex";
+const SITE_NAME = "Heyzenex";
 
 export function createBaseMetadata(options: BaseMetaOptions = {}): Metadata {
 	const {
-		title = SITE_NAME,
-		description = "Heyzenex is a captivating blog dedicated to photography and travel stories. Explore breathtaking adventures, vibrant cultures, and inspiring journeys through the lens of a passionate explorer.",
+		title,
+		description,
 		keywords = [
 			"heyzenex",
 			"Zen Huzaini",
@@ -41,7 +41,10 @@ export function createBaseMetadata(options: BaseMetaOptions = {}): Metadata {
 
 	return {
 		metadataBase: new URL(SITE_URL),
-		title,
+		title: {
+			default: title ? `${title} | ${SITE_NAME}` : SITE_NAME,
+			template: title ? `%s` : SITE_NAME,
+		},
 		description,
 		keywords,
 		icons: [
@@ -53,7 +56,7 @@ export function createBaseMetadata(options: BaseMetaOptions = {}): Metadata {
 			description,
 			url: absoluteUrl,
 			type: "website",
-			siteName: "heyzenex",
+			siteName: SITE_NAME,
 			locale: DEFAULT_LOCALE,
 			images: [
 				{
@@ -84,6 +87,9 @@ export function createBaseMetadata(options: BaseMetaOptions = {}): Metadata {
 			},
 			{
 				name: "heyzenex",
+			},
+			{
+				name: "Heyzenex",
 			},
 		],
 	};

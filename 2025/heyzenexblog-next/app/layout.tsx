@@ -8,7 +8,20 @@ import PageTransition from "@/animation/PageTransition";
 import { createBaseMetadata } from "../lib/seo";
 import { Analytics } from "@vercel/analytics/next";
 
-export const metadata: Metadata = createBaseMetadata();
+export const metadata: Metadata = createBaseMetadata({
+	title: "Zen Huzaini's Photography and Travel Blog",
+	description:
+		"Heyzenex is a captivating blog dedicated to photography and travel stories. Explore breathtaking adventures, vibrant cultures, and inspiring journeys through the lens of a passionate explorer.",
+	keywords: [
+		"heyzenex",
+		"Zen Huzaini",
+		"zenhuzaini",
+		"adventure",
+		"photography",
+		"bikepacking",
+		"hiking",
+	],
+});
 
 // this acts as a parent for all of the other pages
 export default function RootLayout({
