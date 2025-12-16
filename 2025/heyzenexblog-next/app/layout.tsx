@@ -38,11 +38,15 @@ export default function RootLayout({
 					<Header></Header>
 					<PageTransition>
 						{/* this is to wrap not full frame */}
-						<div className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
+						<div
+							role="main"
+							className="ml-4 mr-4 flex flex-col gap-2 sm:ml-20 sm:mr-20 lg:gap-7 grow">
 							{children}
 						</div>
 					</PageTransition>
-					<Footer></Footer>
+					<div role="contentinfo">
+						<Footer></Footer>
+					</div>
 				</div>
 				<Analytics></Analytics>
 			</body>

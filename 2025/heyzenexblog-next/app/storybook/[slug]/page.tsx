@@ -31,8 +31,10 @@ export async function generateMetadata(props: {
 
 	const fullMetadata: Metadata = createBaseMetadata({
 		title: metadata.title,
-		description: metadata.description,
+		description:
+			metadata.description ?? `${metadata.title} – a story by Zen Huzaini.`,
 		path: `/storybook/${metadata.slug}`,
+		keywords: metadata.tags,
 		ogImage: {
 			url: metadata.cover,
 			alt: metadata.title,
