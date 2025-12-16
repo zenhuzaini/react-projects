@@ -13,7 +13,7 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 			<div className="h-full w-full">
 				<ImageWithSkeleton
 					rounded="rounded-tl-2xl rounded-tr-2xl"
-					src={faker.image.url()}></ImageWithSkeleton>
+					src={photoDetail.photoUrl}></ImageWithSkeleton>
 			</div>
 			{/* title / detail section */}
 			<div className="bg-primarycardbg">

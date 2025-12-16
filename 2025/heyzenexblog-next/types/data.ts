@@ -22,4 +22,6 @@ export type StoryBookMeta = {
 	tags: string[];
 	city: string;
 	country: string;
+	nextPostSlug: string;
+	prevPostSlug: string;
 };

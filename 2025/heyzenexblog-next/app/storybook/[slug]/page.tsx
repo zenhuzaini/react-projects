@@ -136,7 +136,7 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 						</div>
 					</Link>
 
-					<Link href={`/storybook/1`}>
+					<Link href={`/storybook/${metadata.nextPostSlug}`}>
 						<div className="text-primaryText flex gap-1">
 							<span>Next StoryBook</span>
 							<ChevronRight></ChevronRight>
