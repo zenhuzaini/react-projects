@@ -11,7 +11,7 @@ import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = createBaseMetadata({
 	title: "Zen Huzaini's Photography and Travel Blog",
 	description:
-		"Heyzenex is a blog dedicated to photography and travel stories. Explore breathtaking adventures and inspiring journeys.",
+		"Personal photography and travel stories by Zen. Explore adventures, bikepacking journeys, and life outdoors.",
 	keywords: [
 		"heyzenex",
 		"Zen Huzaini",
