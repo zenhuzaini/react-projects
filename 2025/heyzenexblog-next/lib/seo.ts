@@ -14,7 +14,7 @@ type BaseMetaOptions = {
 };
 
 const SITE_URL = "https://heyzenex.pl"; // change to your real domain
-const DEFAULT_OG = "/zen.jpg"; // put this in /app or /public
+const DEFAULT_OG = "/zenog.png"; // put this in /app or /public
 const DEFAULT_LOCALE = "en_US";
 const SITE_NAME = "Heyzenex";
 
@@ -37,7 +37,9 @@ export function createBaseMetadata(options: BaseMetaOptions = {}): Metadata {
 	} = options;
 
 	const absoluteUrl = new URL(path, SITE_URL).toString();
-	const imageUrl = ogImage?.url ?? new URL(DEFAULT_OG, SITE_URL).toString();
+	const imageUrl = ogImage?.url
+		? new URL(ogImage.url, SITE_URL).toString()
+		: new URL(DEFAULT_OG, SITE_URL).toString();
 
 	return {
 		metadataBase: new URL(SITE_URL),

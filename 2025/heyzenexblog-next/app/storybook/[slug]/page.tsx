@@ -5,7 +5,6 @@ import ChevronRight from "@/icons/ChevronRight";
 import { faker } from "@faker-js/faker";
 import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
-import ShortDescription from "@/components/layout/StoryBookBlockLayouts/1_ShortDescription/ShortDescription";
 import EyeSymbol from "@/icons/EyeSymbol";
 import HeartOutlined from "@/icons/HeartOutlined";
 import { getAllSlugs, getStoryBySlug } from "@/lib/storybook";
