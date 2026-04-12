@@ -1,0 +1,67 @@
+import {
+	Avatar,
+	AvatarBadge,
+	AvatarFallback,
+	AvatarImage,
+} from "@/components/ui/avatar";
+import CheckSymbol from "@/icons/CheckSymbol";
+import ChevronRight from "@/icons/ChevronRight";
+import DotFilled from "@/icons/DotFilled";
+import React from "react";
+
+const ActivityAvatar = ({
+	url = "https://yt3.googleusercontent.com/4tN6FVc3O1GU8KNdNswDqHdvNYaunyHjrdvjd_RMLqLfZl_8RikDsLOEg6fok_z_ur5tQR5N=s900-c-k-c0x00ffffff-no-rj",
+	alt,
+	avatarName,
+	publishedDate,
+	activityType,
+}: {
+	url?: string;
+	alt: string;
+	avatarName: string;
+	publishedDate: string;
+	activityType: string;
+}) => {
+	const date = new Date(publishedDate);
+	const parts = {
+		weekday: date.toLocaleDateString("en-US", { weekday: "short" }),
+		month: date.toLocaleDateString("en-US", { month: "short" }),
+		day: date.toLocaleDateString("en-US", { day: "2-digit" }),
+		year: date.getFullYear(),
+	};
+
+	const formattedDate = `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year}`;
+
+	return (
+		<div className="flex flex-row items-center gap-1 md:gap-2">
+			<Avatar className="size-7 md:size-10">
+				<AvatarImage src={url} alt={alt} />
+				<AvatarFallback>{avatarName}</AvatarFallback>
+				<AvatarBadge className="bg-green-600 dark:bg-green-800">
+					<CheckSymbol />
+				</AvatarBadge>
+			</Avatar>
+
+			<div>
+				<div className="flex flex-col text-xs md:text-lg">
+					<p className=" text-primarytextInvert font-extralight">
+						{avatarName}
+					</p>
+					<p className="flex gap-2 text-[10px] text-primarytextInvert md:text-sm tracking-tight">
+						went
+						<div className="flex gap-0.5 items-center">
+							<h6 className="text-primaryaccent font-extrabold flex">
+								<span className="text-dot">#</span>
+								{activityType}
+							</h6>
+							<DotFilled size={4} className="text-primarytextInvert" />
+							{formattedDate}
+						</div>
+					</p>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export default ActivityAvatar;
