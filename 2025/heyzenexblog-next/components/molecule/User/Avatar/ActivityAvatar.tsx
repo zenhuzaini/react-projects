@@ -47,7 +47,7 @@ const ActivityAvatar = ({
 					<p className=" text-primarytextInvert font-extralight">
 						{avatarName}
 					</p>
-					<p className="flex gap-2 text-[10px] text-primarytextInvert md:text-sm tracking-tight">
+					<p className="flex gap-2 text-[10px] items-center text-primarytextInvert md:text-sm tracking-tight">
 						went
 						<div className="flex gap-0.5 items-center">
 							<h6 className="text-primaryaccent font-extrabold flex">
