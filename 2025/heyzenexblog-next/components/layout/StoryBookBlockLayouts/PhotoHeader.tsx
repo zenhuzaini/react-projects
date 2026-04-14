@@ -1,94 +1,74 @@
-import PhotoCards from "@/components/molecule/Cards/PhotoCards";
+import { animationForArrow } from "@/animation/animation";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { photoMock } from "@/mock/photo";
+import { faker } from "@faker-js/faker";
 
-// This can be used in the StoryBook header section, and also in the adventure view header (with some adjustments to height and gap)
-//and photo collection section in the content page (with adjustments to layout and gap)
 export const PhotoHeaderSection = ({
 	photoLength = 5,
+	articleTitle = "My Adventure in the Mountains",
 }: {
 	photoLength?: number;
+	articleTitle?: string;
 }) => {
 	const photos = photoMock({ length: Math.min(photoLength, 5) });
 
 	return (
-		<div className="flex flex-col gap-5 sm:gap-10">
+		<div className="flex flex-col gap-4 sm:gap-6">
 			{/* 1 PHOTO */}
 			{photos.length === 1 && (
-				<div className="grid grid-cols-1">
-					<div className="h-[50vh] sm:h-[60vh]">
-						<ImageWithSkeleton src={photos[0].photoUrl} />
-					</div>
+				<div className="relative grid grid-cols-1 h-[45vh] sm:h-[60vh]">
+					<ImageWithSkeleton src={photos[0].photoUrl} />
 				</div>
 			)}
 
 			{/* 2 PHOTOS */}
 			{photos.length === 2 && (
-				<div className="grid grid-cols-2 gap-3 sm:gap-4">
+				<div className="grid grid-cols-2 gap-3 sm:gap-4 h-[40vh] sm:h-[50vh]">
 					{photos.map((p, i) => (
-						<div key={i} className="h-[40vh] sm:h-[50vh]">
-							<ImageWithSkeleton src={p.photoUrl} />
-						</div>
+						<ImageWithSkeleton key={i} src={p.photoUrl} />
 					))}
 				</div>
 			)}
 
 			{/* 3 PHOTOS */}
 			{photos.length === 3 && (
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-					<div className="sm:col-span-2 h-[50vh] sm:h-[60vh]">
+				<div className="grid grid-cols-2 sm:grid-cols-3 grid-rows-2 gap-3 sm:gap-4 h-[50vh] sm:h-[60vh]">
+					{/* big image */}
+					<div className="col-span-2 sm:col-span-2 row-span-2">
 						<ImageWithSkeleton src={photos[0].photoUrl} />
 					</div>
 
-					<div className="grid grid-rows-2 gap-3 sm:gap-4 h-[50vh] sm:h-[60vh]">
-						<ImageWithSkeleton src={photos[1].photoUrl} />
-						<ImageWithSkeleton src={photos[2].photoUrl} />
-					</div>
+					<ImageWithSkeleton src={photos[1].photoUrl} />
+					<ImageWithSkeleton src={photos[2].photoUrl} />
 				</div>
 			)}
 
 			{/* 4 PHOTOS */}
 			{photos.length === 4 && (
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-					<div className="sm:col-span-2 h-[50vh] sm:h-[60vh]">
+				<div className="grid grid-cols-2 sm:grid-cols-3 grid-rows-2 gap-3 sm:gap-4 h-[50vh] sm:h-[60vh]">
+					{/* big */}
+					<div className="col-span-2 sm:col-span-2 row-span-2">
 						<ImageWithSkeleton src={photos[0].photoUrl} />
 					</div>
 
-					<div className="grid grid-rows-3 gap-3 sm:gap-4 h-[50vh] sm:h-[60vh]">
-						{photos.slice(1).map((p, i) => (
-							<ImageWithSkeleton key={i} src={p.photoUrl} />
-						))}
-					</div>
+					{photos.slice(1).map((p, i) => (
+						<ImageWithSkeleton key={i} src={p.photoUrl} />
+					))}
 				</div>
 			)}
 
-			{/* 5 PHOTOS (FINAL PERFECT LAYOUT) */}
+			{/* 5 PHOTOS */}
 			{photos.length >= 5 && (
-				<div className="grid grid-cols-1 sm:grid-cols-4 sm:grid-rows-2 gap-3 sm:gap-4 h-auto sm:h-[60vh]">
-					{/* LEFT BIG */}
-					<div className="sm:col-span-2 sm:row-span-2">
+				<div className="grid grid-cols-2 sm:grid-cols-4 grid-rows-3 sm:grid-rows-2 gap-3 sm:gap-4 h-[55vh] sm:h-[60vh]">
+					{/* big hero */}
+					<div className="col-span-2 row-span-2 sm:col-span-2 sm:row-span-2">
 						<ImageWithSkeleton src={photos[0].photoUrl} />
 					</div>
 
-					{/* RIGHT TOP LEFT */}
-					<div>
-						<ImageWithSkeleton src={photos[1].photoUrl} />
-					</div>
-
-					{/* RIGHT TOP RIGHT */}
-					<div>
-						<ImageWithSkeleton src={photos[2].photoUrl} />
-					</div>
-
-					{/* RIGHT BOTTOM LEFT */}
-					<div>
-						<ImageWithSkeleton src={photos[3].photoUrl} />
-					</div>
-
-					{/* RIGHT BOTTOM RIGHT */}
-					<div>
-						<ImageWithSkeleton src={photos[4].photoUrl} />
-					</div>
+					<ImageWithSkeleton src={photos[1].photoUrl} />
+					<ImageWithSkeleton src={photos[2].photoUrl} />
+					<ImageWithSkeleton src={photos[3].photoUrl} />
+					<ImageWithSkeleton src={photos[4].photoUrl} />
 				</div>
 			)}
 		</div>

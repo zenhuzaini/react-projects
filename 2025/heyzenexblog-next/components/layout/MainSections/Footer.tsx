@@ -12,13 +12,14 @@ const Footer = () => {
 				</div>
 				<div className=" flex-row text-[9px] sm:text-sm font-extralight text-right">
 					<p>
-						copyright 2025 @heyzenex<span className="text-dot">.</span>
+						copyright {new Date().getFullYear()} @heyzenex
+						<span className="text-dot">.</span>
 					</p>
 					<div>
 						<p>
 							all design, photos & articles are property of{" "}
 							<span className="text-primaryaccent sm:font-extrabold font-bold ">
-								HEYZENEX.com
+								HEYZENEX<span className="text-dot">.</span>com
 							</span>
 						</p>
 					</div>

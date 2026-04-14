@@ -34,7 +34,7 @@ const ActivityAvatar = ({
 
 	return (
 		<div className="flex flex-row items-center gap-1 md:gap-2">
-			<Avatar className="size-7 md:size-10">
+			<Avatar className="size-7 md:size-9">
 				<AvatarImage src={url} alt={alt} />
 				<AvatarFallback>{avatarName}</AvatarFallback>
 				<AvatarBadge className="bg-green-600 dark:bg-green-800">
@@ -43,10 +43,8 @@ const ActivityAvatar = ({
 			</Avatar>
 
 			<div>
-				<div className="flex flex-col text-xs md:text-lg">
-					<p className=" text-primarytextInvert font-extralight">
-						{avatarName}
-					</p>
+				<div className="flex flex-col text-xs md:text-sm">
+					<p className="text-primarytextInvert font-extralight">{avatarName}</p>
 					<p className="flex gap-2 text-[10px] items-center text-primarytextInvert md:text-sm tracking-tight">
 						went
 						<div className="flex gap-0.5 items-center">
