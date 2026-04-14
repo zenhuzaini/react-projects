@@ -38,16 +38,17 @@ const page = () => {
 				</section>
 
 				{/* avatar section */}
-				<section className="mt-5 flex flex-col gap-2">
+				<section className="mt-1 sm:mt-5 flex flex-col gap-2">
 					<ActivityAvatar
 						activityType="bikepacking"
 						alt="User Avatar"
 						avatarName="Zen Huzaini"
 						publishedDate="2023-10-15"></ActivityAvatar>
 
-					<div className="w-[60%] ">
-						<h1 className="text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.8]">
-							The Journey Begins<span className="text-dot">.</span>
+					<div className="sm:w-[60%] ">
+						<h1 className="text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter ">
+							sgdesrg ahgjvfajeh jaesj The Journey Begins
+							<span className="text-dot">.</span>
 						</h1>
 					</div>
 				</section>
