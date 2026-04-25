@@ -1,4 +1,5 @@
 import { animationForArrow } from "@/animation/animation";
+import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import { PhotoHeaderSection } from "@/components/layout/StoryBookBlockLayouts/PhotoHeader";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 
@@ -21,24 +22,7 @@ const page = () => {
 		<div>
 			<article className="flex flex-col gap-2 ">
 				{/* info top */}
-				<section>
-					<div className="flex justify-between items-center">
-						<div className="flex flex-col text-xs md:text-lg">
-							<p className="text-primarytextInvert font-extralight">
-								StoryBook
-							</p>
-							<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
-								<span className="font-extralight">Published on</span> 2023-10-15
-							</p>
-						</div>
-						<div className="bg-primaryaccent w-fit sm:text-base text-[10px] p-2 flex justify-center items-center rounded">
-							<h3 className="text-primarycream font-extrabold">
-								<span className="text-dot">#</span>
-								{24}
-							</h3>
-						</div>
-					</div>
-				</section>
+				<HeaderInfoSection date={"2023-10-15"} id={24}></HeaderInfoSection>
 
 				{/* hero title */}
 				<section className="flex flex-col gap-2 sm:gap-4">
@@ -66,42 +50,36 @@ const page = () => {
 					{/* <Content></Content> */}
 					{/* thi is supposed to be the contetn eith two columns. content in the left and map in the right */}
 
-					<div className="grid md:grid-cols-2">
+					<div className="grid md:grid-cols-2 gap-6">
 						{/* LEFT CONTENT */}
 						<div className="flex flex-col gap-5">
 							<h2 className="text-xl font-semibold">
 								Day 1 - the adventure begins
 							</h2>
 
-							<p>
-								Today was the day. After preparing for almost half year, I can’t
-								believe it was really happening...
-							</p>
-
-							<p>
-								The feeling of being far away from home and exploring new
-								places...
-							</p>
-
-							<p>I had a train to Zakopane from Wroclaw at 8:47...</p>
-
-							<p>After that I rode through the velo dunajec...</p>
-
-							<p>
-								After riding around 50km I arrived in the Frydman campsite...
-							</p>
-
-							<p>I started pitching my tent and then took a shower...</p>
+							<p>Today was the day...</p>
+							<p>The feeling of being far away...</p>
+							<p>I had a train to Zakopane...</p>
+							<p>After that I rode...</p>
+							<p>After riding around 50km...</p>
+							<p>I started pitching my tent...</p>
 
 							{/* simulate long content */}
 							<div className="h-[120vh]" />
+
+							{/* 📱 MOBILE MAP (BOTTOM) */}
+							<div className="block md:hidden mt-6">
+								<div className="w-full h-[40vh] rounded-2xl overflow-hidden">
+									<BasicMap />
+								</div>
+							</div>
 						</div>
 
-						{/* RIGHT MAP (STICKY) */}
-						<div className="hidden lg:block">
+						{/* 💻 DESKTOP MAP (STICKY RIGHT) */}
+						<div className="hidden md:block">
 							<div className="sticky top-24">
 								<div className="w-full h-[70vh] rounded-2xl overflow-hidden">
-									<BasicMap></BasicMap>
+									<BasicMap />
 								</div>
 							</div>
 						</div>

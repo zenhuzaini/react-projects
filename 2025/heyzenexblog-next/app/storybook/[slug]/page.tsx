@@ -13,6 +13,7 @@ import { Metadata } from "next";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
 import Chip from "@/components/ui/chip";
 import { createBaseMetadata } from "@/lib/seo";
+import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
@@ -66,26 +67,9 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 	return (
 		<article className="flex flex-col gap-2 ">
 			{/* info top */}
-			<section className="flex flex-col gap-2">
-				<div className="flex justify-between items-center">
-					<div className="flex flex-col text-xs md:text-lg">
-						<p className="text-primarytextInvert font-extralight">StoryBook</p>
-						<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
-							<span className="font-extralight">Published on</span>{" "}
-							{formattedDate}
-						</p>
-					</div>
-					<div className="bg-primaryaccent w-fit sm:text-base text-[10px] p-2 flex justify-center items-center rounded">
-						<h3 className="text-primarycream font-extrabold">
-							<span className="text-dot">#</span>
-							{metadata.id}
-						</h3>
-					</div>
-				</div>
-				<div className="hidden md:flex">
-					<Separator className="bg-primaryaccent"></Separator>
-				</div>
-			</section>
+			<HeaderInfoSection
+				date={metadata.datePublished}
+				id={metadata.id}></HeaderInfoSection>
 
 			{/* hero title & sats */}
 			<section className="flex flex-col gap-2 sm:gap-4">
