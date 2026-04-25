@@ -1,3 +1,6 @@
+"use client";
+import { Switch } from "@/components/ui/switch";
+
 import React from "react";
 
 const HeaderInfoSection = ({
@@ -7,6 +10,11 @@ const HeaderInfoSection = ({
 	date: string;
 	id: number;
 }) => {
+	const [isAdventureMode, setIsAdventureMode] = React.useState(false);
+
+	const toggleAdventureMode = () => {
+		setIsAdventureMode((prev) => !prev);
+	};
 	return (
 		<section>
 			<div className="flex justify-between items-center">
@@ -17,16 +25,14 @@ const HeaderInfoSection = ({
 					</p>
 				</div>
 				<div className="flex gap-1">
-					<div className="flex">
-						<h3 className="text-primaryText font-semibold">
-							<span className="text-dot">#</span>
-							Basic view
-						</h3>
-						<h3 className="text-primary font-semibold">
-							<span className="text-dot">#</span>
-							Adventure
-						</h3>
+					<div className="flex gap-3 items-center">
+						<Switch
+							checked={isAdventureMode}
+							onCheckedChange={toggleAdventureMode}
+						/>
+						Adventure View
 					</div>
+
 					<div className="bg-primaryaccent w-fit sm:text-base text-[10px] p-2 flex justify-center items-center rounded">
 						<h3 className="text-primarycream font-extrabold">
 							<span className="text-dot">#</span>
