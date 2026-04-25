@@ -1,5 +1,7 @@
 "use client";
+import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import MountainTrail from "@/icons/MountainTrail";
 
 import React from "react";
 
@@ -24,14 +26,28 @@ const HeaderInfoSection = ({
 						<span className="font-extralight">Published on</span> {date}
 					</p>
 				</div>
-				<div className="flex gap-1">
-					<div className="flex gap-3 items-center">
-						<Switch
-							checked={isAdventureMode}
-							onCheckedChange={toggleAdventureMode}
-						/>
-						Adventure View
+				<div className="flex gap-0.5 md:gap-2 items-center">
+					<div className="flex gap-1 items-center border-primaryaccent ">
+						<div className="flex flex-col gap-1 items-start">
+							<div className="flex gap-1">
+								<span className="font-medium leading-tight">Adventure</span>
+								<Switch
+									checked={isAdventureMode}
+									onCheckedChange={toggleAdventureMode}
+									className="data-[state=checked]:bg-primaryaccent data-[state=unchecked]:bg-primaryaccent/30"
+								/>
+							</div>
+
+							<span className="text-xs text-muted-foreground leading-tight">
+								if on, will show more adventure vibes
+							</span>
+						</div>
 					</div>
+
+					<Separator
+						orientation="vertical"
+						className="h-4 w-2 bg-primarytextInvert"
+					/>
 
 					<div className="bg-primaryaccent w-fit sm:text-base text-[10px] p-2 flex justify-center items-center rounded">
 						<h3 className="text-primarycream font-extrabold">
