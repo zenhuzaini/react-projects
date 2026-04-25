@@ -10,6 +10,8 @@ import Link from "next/link";
 import TerminalIcon from "@/icons/TerminalIcon";
 import { motion } from "framer-motion";
 import LightDarkSwitcher from "@/components/molecule/Switch/LightDarkSwitcher";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "radix-ui";
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
@@ -19,6 +21,7 @@ const Header = () => {
 	const [bg, setBG] = useState("");
 	const [hovered, setHovered] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
+	const [isAdventureMode, setIsAdventureMode] = useState(false);
 
 	const toggleDarkMode = () => {
 		const html = document.documentElement;
@@ -64,6 +67,9 @@ const Header = () => {
 	}, [lastScrollY, isBurgerMenuOpen]);
 
 	useEffect(() => {
+		const pathname = window.location.pathname;
+		setIsAdventureMode(pathname.includes("/storybook"));
+
 		const handleResize = () => setIsMobile(window.innerWidth < 640);
 		handleResize();
 		window.addEventListener("resize", handleResize);
