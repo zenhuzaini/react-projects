@@ -14,6 +14,7 @@ import Chip from "@/components/ui/chip";
 import { createBaseMetadata } from "@/lib/seo";
 import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import ActivityAvatar from "@/components/molecule/User/Avatar/ActivityAvatar";
+import { formatDate } from "@/lib/utils";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
@@ -54,21 +55,25 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 	const { Content, metadata } = story;
 
-	const date = new Date(metadata.datePublished);
-	const parts = {
-		weekday: date.toLocaleDateString("en-US", { weekday: "short" }),
-		month: date.toLocaleDateString("en-US", { month: "short" }),
-		day: date.toLocaleDateString("en-US", { day: "2-digit" }),
-		year: date.getFullYear(),
-	};
+	const publishedDate = new Date(metadata.datePublished);
+	const isValidPublishedDate = !isNaN(publishedDate.getTime());
+	const formattedPublishedDate = formatDate(
+		metadata.datePublished,
+		isValidPublishedDate,
+	);
 
-	const formattedDate = `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year}`;
+	const activityDate = new Date(metadata.eventDateFrom);
+	const isValidActivityDate = !isNaN(activityDate.getTime());
+	const formattedActivityDate = formatDate(
+		metadata.eventDateFrom,
+		isValidActivityDate,
+	);
 
 	return (
 		<article className="flex flex-col gap-2 ">
 			{/* info top */}
 			<HeaderInfoSection
-				date={formattedDate}
+				date={formattedPublishedDate}
 				id={metadata.id}></HeaderInfoSection>
 
 			{/* hero title & sats */}
@@ -94,7 +99,7 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 						activityType={metadata.activityType}
 						alt="User Avatar"
 						avatarName="Zen"
-						publishedDate="2023-10-15"></ActivityAvatar>
+						publishedDate={formattedActivityDate}></ActivityAvatar>
 					{/* love stats */}
 					<div className="hidden gap-0 sm:gap-2">
 						<div className="flex text-sm md:text-lg gap-1 sm:gap-2  pl-2 pr-2 rounded-lg items-center">
