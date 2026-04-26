@@ -62,10 +62,10 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 		isValidPublishedDate,
 	);
 
-	const activityDate = new Date(metadata.eventDateFrom);
+	const activityDate = new Date(metadata.eventDateTo);
 	const isValidActivityDate = !isNaN(activityDate.getTime());
 	const formattedActivityDate = formatDate(
-		metadata.eventDateFrom,
+		metadata.eventDateTo,
 		isValidActivityDate,
 	);
 
@@ -83,10 +83,10 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					<ImageWithSkeleton alt={metadata.description} src={metadata.cover} />
 					<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
 
-					<div className="absolute bottom-0 m-5 w-[40%]">
+					<div className="absolute bottom-0 m-5 w-[30%]">
 						<div
 							className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
-							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.8]">
+							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.9]">
 								{metadata.title}
 								<span className="text-dot">.</span>
 							</h1>

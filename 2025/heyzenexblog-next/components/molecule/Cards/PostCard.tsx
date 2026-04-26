@@ -1,9 +1,4 @@
-import { faker } from "@faker-js/faker";
-
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
-import Map from "@/icons/Map";
-import Calendar from "@/icons/Calendar";
-import ArrowRight from "@/icons/ArrowRight";
 import { PhotoCardDetailType } from "@/types/components";
 import ActivityAvatar from "../User/Avatar/ActivityAvatar";
 
