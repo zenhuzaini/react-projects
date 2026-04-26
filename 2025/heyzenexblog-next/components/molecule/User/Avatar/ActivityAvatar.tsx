@@ -1,54 +1,76 @@
-import {
-	Avatar,
-	AvatarBadge,
-	AvatarFallback,
-	AvatarImage,
-} from "@/components/ui/avatar";
-import CheckSymbol from "@/icons/CheckSymbol";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+type Variant = "default" | "light" | "hover-invert";
 const ActivityAvatar = ({
 	url = "https://yt3.googleusercontent.com/4tN6FVc3O1GU8KNdNswDqHdvNYaunyHjrdvjd_RMLqLfZl_8RikDsLOEg6fok_z_ur5tQR5N=s900-c-k-c0x00ffffff-no-rj",
 	alt,
 	avatarName,
 	publishedDate,
 	activityType,
+	shouldShowAvatar = true,
+	smallAvatar = false,
+	variant = "default",
 }: {
 	url?: string;
 	alt: string;
 	avatarName: string;
 	publishedDate: string;
 	activityType: string;
+	shouldShowAvatar?: boolean;
+	smallAvatar?: boolean;
+	variant?: Variant;
 }) => {
 	const date = new Date(publishedDate);
-	const parts = {
-		weekday: date.toLocaleDateString("en-US", { weekday: "short" }),
-		month: date.toLocaleDateString("en-US", { month: "short" }),
-		day: date.toLocaleDateString("en-US", { day: "2-digit" }),
-		year: date.getFullYear(),
-	};
 
-	const formattedDate = `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year}`;
+	const formattedDate = date.toLocaleDateString("en-US", {
+		weekday: "short",
+		month: "short",
+		day: "2-digit",
+		year: "numeric",
+	});
+
+	let textVariant;
+	let textAccentVariant;
+	switch (variant) {
+		case "default":
+			textVariant = "text-primarytextInvert";
+			textAccentVariant = "text-primaryaccent";
+			break;
+		case "light":
+			textVariant = "text-white";
+			textAccentVariant = "text-white";
+			break;
+		default:
+			break;
+	}
 
 	return (
 		<div className="mt-2 flex flex-row items-center gap-1 md:gap-2">
-			<Avatar className="size-9 md:size-9">
-				<AvatarImage src={url} alt={alt} />
-				<AvatarFallback>{avatarName}</AvatarFallback>
-			</Avatar>
-
+			{shouldShowAvatar && !smallAvatar && (
+				<Avatar className={smallAvatar ? "size-6" : "size-9 md:size-9"}>
+					<AvatarImage src={url} alt={alt} />
+					<AvatarFallback>{avatarName}</AvatarFallback>
+				</Avatar>
+			)}
 			<div className="flex flex-col text-sm md:text-lg">
-				<p className="text-primarytextInvert font-extralight">{avatarName}</p>
-				<p className="flex gap-1 text-[12px] items-center text-primarytextInvert md:text-sm tracking-tight">
+				<div className="flex gap-2 items-center">
+					{smallAvatar && (
+						<Avatar className={smallAvatar ? "size-6" : "size-9 md:size-9"}>
+							<AvatarImage src={url} alt={alt} />
+							<AvatarFallback>{avatarName}</AvatarFallback>
+						</Avatar>
+					)}
+					<p className={`${textVariant} font-extralight`}>{avatarName}</p>
+				</div>
+				<p
+					className={`flex gap-1 text-[12px] items-center ${textVariant} md:text-sm tracking-tight`}>
 					went
 					<span className="flex gap-1 items-center">
-						<span className="text-primaryaccent font-extrabold flex">
-							<span className="text-dot">#</span>
-							{activityType}
+						<span className={` font-extrabold flex ${textAccentVariant}`}>
+							<span className="text-dot">#</span> {activityType}
 						</span>
-
-						<div className="rounded-3xl h-4 w-0.5 bg-dot" />
-
-						{formattedDate}
+						<div className={`rounded-3xl h-4 w-0.5 bg-dot ${textVariant}`} />
+						<p className={`${textVariant} font-extralight`}>{formattedDate}</p>
 					</span>
 				</p>
 			</div>

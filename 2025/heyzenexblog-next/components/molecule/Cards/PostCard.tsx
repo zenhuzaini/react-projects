@@ -5,49 +5,46 @@ import Map from "@/icons/Map";
 import Calendar from "@/icons/Calendar";
 import ArrowRight from "@/icons/ArrowRight";
 import { PhotoCardDetailType } from "@/types/components";
+import ActivityAvatar from "../User/Avatar/ActivityAvatar";
 
 const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 	return (
-		<div className="bg-primarycardbg flex flex-col h-[30vh] sm:h-[50vh]  w-full rounded-2xl overflow-hidden">
-			{/* photo section */}
-			<div className="h-full w-full">
-				<ImageWithSkeleton
-					rounded="rounded-tl-2xl rounded-tr-2xl"
-					src={photoDetail.photoUrl}></ImageWithSkeleton>
-			</div>
-			{/* title / detail section */}
-			<div className="bg-primarycardbg">
-				<div className="items-center p-4 sm:p-4">
-					<div className="flex flex-col gap-2">
-						<h2 className="text-primarytextInvert text-lg sm:text-1xl md:text-2xl tracking-tight font-semibold leading-[1.1]">
-							{photoDetail.title}
-							<span className="text-primaryaccent">.</span>
-						</h2>
+		<div className="relative h-[30vh] sm:h-[50vh] w-full rounded-2xl overflow-hidden group cursor-pointer">
+			{/* Background Image */}
+			<ImageWithSkeleton src={photoDetail.photoUrl} rounded="rounded-2xl" />
 
-						<div className="text-primarytextInvert text-xs sm:text-sm  font-extralight tracking-tight flex justify-between">
-							<p className="flex gap-3">
-								<span className="flex gap-1 items-center">
-									<span className="hidden lg:flex">
-										<Map size={4} />
-									</span>
-									<span>{photoDetail.country}</span>
-								</span>
+			{/* Gradient overlay */}
+			<div className="absolute inset-0 bg-linear-0  from-black/40 via-black/20 to-transparent" />
 
-								<span className="flex gap-1 items-center">
-									<span className="hidden lg:flex">
-										<Calendar size={4}></Calendar>
-									</span>
+			{/* Content */}
+			<div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 flex flex-col gap-3">
+				<h2 className="text-white text-lg sm:text-xl md:text-2xl font-semibold leading-tight">
+					{photoDetail.title}
+				</h2>
 
-									<span>
-										{photoDetail.month} {photoDetail.year}
-									</span>
-								</span>
-							</p>
+				<div className="flex justify-between items-end text-xs sm:text-sm">
+					<ActivityAvatar
+						variant="light"
+						smallAvatar={true}
+						activityType={photoDetail.activityType || "posted"}
+						alt="User Avatar"
+						avatarName="Zen"
+						publishedDate="2023-10-15"></ActivityAvatar>
 
-							<div className=" text-xs font-extralight text-right">
-								<ArrowRight />
-							</div>
-						</div>
+					{/* <div className="flex gap-1">
+						<span className="flex items-center gap-2 ">
+							{photoDetail.country}
+						</span>
+
+						<span className="flex items-center gap-2">
+							<Calendar size={4} />
+							{photoDetail.month} {photoDetail.year}
+						</span>
+					</div> */}
+
+					{/* Arrow */}
+					<div className="  p-2 rounded-full group-hover:translate-x-1 transition">
+						<ArrowRight className="text-accenttext" />
 					</div>
 				</div>
 			</div>

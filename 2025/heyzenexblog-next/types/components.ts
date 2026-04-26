@@ -9,6 +9,8 @@ export type PhotoCardDetailType = {
 	photoUrl: string;
 	title?: string;
 	description: string;
+	activityType?: string;
+	activityDate?: string;
 };
 
 export type DatePickerProps = {
