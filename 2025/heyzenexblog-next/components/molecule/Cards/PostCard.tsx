@@ -22,7 +22,7 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 					{photoDetail.title}
 				</h2>
 
-				<div className="flex justify-between items-end text-xs sm:text-sm">
+				<div className="flex text-xs sm:text-sm">
 					<ActivityAvatar
 						variant="light"
 						smallAvatar={true}
@@ -30,22 +30,6 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 						alt="User Avatar"
 						avatarName="Zen"
 						publishedDate="2023-10-15"></ActivityAvatar>
-
-					{/* <div className="flex gap-1">
-						<span className="flex items-center gap-2 ">
-							{photoDetail.country}
-						</span>
-
-						<span className="flex items-center gap-2">
-							<Calendar size={4} />
-							{photoDetail.month} {photoDetail.year}
-						</span>
-					</div> */}
-
-					{/* Arrow */}
-					<div className="  p-2 rounded-full group-hover:translate-x-1 transition">
-						<ArrowRight className="text-accenttext" />
-					</div>
 				</div>
 			</div>
 		</div>

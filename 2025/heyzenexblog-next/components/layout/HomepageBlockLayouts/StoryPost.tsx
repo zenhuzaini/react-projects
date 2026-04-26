@@ -14,6 +14,8 @@ const StoryPost = ({ stories }: { stories: StoryBookMeta[] }) => {
 		country: story.country,
 		year: Number(story.eventDateFrom.split(" ")[3]),
 		month: story.eventDateFrom.split(" ")[1],
+		activityType: story.activityType,
+		activityDate: story.eventDateFrom,
 	});
 
 	// Only the first story for long card
