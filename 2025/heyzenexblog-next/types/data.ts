@@ -24,4 +24,5 @@ export type StoryBookMeta = {
 	country: string;
 	nextPostSlug: string;
 	prevPostSlug: string;
+	activityType: string;
 };

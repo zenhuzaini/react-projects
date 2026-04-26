@@ -57,3 +57,7 @@ export type AccordionItemProps = {
 export type AccordionComponentProps = {
 	items: AccordionItemProps[];
 };
+
+export interface JustChildrenProps {
+	children: ReactNode;
+}

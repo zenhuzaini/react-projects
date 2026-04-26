@@ -5,9 +5,6 @@ import {
 	AvatarImage,
 } from "@/components/ui/avatar";
 import CheckSymbol from "@/icons/CheckSymbol";
-import ChevronRight from "@/icons/ChevronRight";
-import DotFilled from "@/icons/DotFilled";
-import React from "react";
 
 const ActivityAvatar = ({
 	url = "https://yt3.googleusercontent.com/4tN6FVc3O1GU8KNdNswDqHdvNYaunyHjrdvjd_RMLqLfZl_8RikDsLOEg6fok_z_ur5tQR5N=s900-c-k-c0x00ffffff-no-rj",
@@ -45,14 +42,16 @@ const ActivityAvatar = ({
 			<div>
 				<div className="flex flex-col text-xs md:text-sm">
 					<p className="text-primarytextInvert font-extralight">{avatarName}</p>
-					<p className="flex gap-2 text-[10px] items-center text-primarytextInvert md:text-sm tracking-tight">
+					<p className="flex gap-1 text-[10px] items-center text-primarytextInvert md:text-sm tracking-tight">
 						went
-						<span className="flex gap-0.5 items-center">
+						<span className="flex gap-1 items-center">
 							<h6 className="text-primaryaccent font-extrabold flex">
 								<span className="text-dot">#</span>
 								{activityType}
 							</h6>
-							<DotFilled size={4} className="text-primarytextInvert" />
+
+							<div className="rounded-3xl h-4 w-0.5 bg-dot" />
+
 							{formattedDate}
 						</span>
 					</p>
