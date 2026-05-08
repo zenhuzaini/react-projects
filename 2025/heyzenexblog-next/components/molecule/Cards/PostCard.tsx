@@ -1,6 +1,7 @@
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
 import { PhotoCardDetailType } from "@/types/components";
 import ActivityAvatar from "../User/Avatar/ActivityAvatar";
+import { EMPTY_STRING } from "@/const/vars";
 
 const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 	return (
@@ -24,7 +25,9 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 						activityType={photoDetail.activityType || "posted"}
 						alt="User Avatar"
 						avatarName="Zen"
-						publishedDate="2023-10-15"></ActivityAvatar>
+						publishedDate={
+							photoDetail?.activityDate || EMPTY_STRING
+						}></ActivityAvatar>
 				</div>
 			</div>
 		</div>
