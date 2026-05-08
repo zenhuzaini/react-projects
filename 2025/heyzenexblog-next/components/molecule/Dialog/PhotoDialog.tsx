@@ -24,7 +24,7 @@ export default function PhotoDialog({
 }) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className=" bg-transparent border-0 [&>button]:text-primarytextInvert p-0 [&>button]:hidden">
+			<DialogContent className="bg-transparent border-0 p-0 shadow-none w-fit max-w-[95vw]  [&>button]:text-primarytextInvert [&>button]:hidden">
 				<DialogHeader className="">
 					<DialogTitle className="text-primarytextInvert"></DialogTitle>
 					<DialogDescription></DialogDescription>
@@ -42,8 +42,12 @@ export default function PhotoDialog({
 							<span className="text-dot">.</span>
 						</h2>
 					</div>
-					<div className="h-[50vh] w-full">
+					<div className="flex items-center justify-center max-h-[90vh] max-w-[90vw]">
 						<ImageWithSkeleton
+							customClassName={
+								"object-contain w-auto h-auto max-h-[90vh] max-w-[90vw] rounded-xl"
+							}
+							fill={false}
 							fadeSpeed={fadeSpeed}
 							src={src}></ImageWithSkeleton>
 					</div>
