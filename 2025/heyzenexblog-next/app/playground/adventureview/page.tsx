@@ -1,7 +1,6 @@
-import { animationForArrow } from "@/animation/animation";
+"use client";
 import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import { PhotoHeaderSection } from "@/components/layout/StoryBookBlockLayouts/PhotoHeader";
-import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 
 import ActivityAvatar from "@/components/molecule/User/Avatar/ActivityAvatar";
 
@@ -12,12 +11,13 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 
 const BasicMap = dynamic(() => import("@/components/molecule/Map/BasicMap"), {
+	ssr: false,
 	loading: () => (
 		<div className="h-[70vh] bg-gray-200 animate-pulse rounded-2xl" />
 	),
 });
 
-const page = () => {
+const AdventureView = () => {
 	return (
 		<div>
 			<article className="flex flex-col gap-2 ">
@@ -106,4 +106,4 @@ const page = () => {
 	);
 };
 
-export default page;
+export default AdventureView;

@@ -6,5 +6,5 @@ applications:
     buildpacks:
       - nodejs_buildpack
     command: npm run start
-    memory: 2G
+    memory: 10G
     disk_quota: 10G
