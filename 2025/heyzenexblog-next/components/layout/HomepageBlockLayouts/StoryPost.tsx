@@ -48,7 +48,7 @@ const StoryPost = ({ stories }: { stories: StoryBookMeta[] }) => {
 
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col">{postContentLong}</div>
-				<div className="grid sm:grid-cols-4 gap-4">{postContent}</div>
+				<div className="grid lg:grid-cols-5 gap-4">{postContent}</div>
 			</div>
 		</div>
 	);
