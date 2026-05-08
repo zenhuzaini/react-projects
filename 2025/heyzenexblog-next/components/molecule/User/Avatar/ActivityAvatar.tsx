@@ -70,7 +70,9 @@ const ActivityAvatar = ({
 							<span className="text-dot">#</span> {activityType}
 						</span>
 						<span className={`rounded-3xl h-4 w-0.5 bg-dot ${textVariant}`} />
-						<p className={`${textVariant} font-extralight`}>{formattedDate}</p>
+						<span className={`${textVariant} font-extralight`}>
+							{formattedDate}
+						</span>
 					</span>
 				</p>
 			</div>
