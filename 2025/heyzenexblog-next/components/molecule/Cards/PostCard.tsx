@@ -10,7 +10,7 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 			<ImageWithSkeleton src={photoDetail.photoUrl} rounded="rounded-2xl" />
 
 			{/* Gradient overlay */}
-			<div className="absolute inset-0 bg-linear-0  from-black/40 via-black/20 to-transparent" />
+			<div className="absolute inset-0 bg-linear-0  from-black/80 via-black/20 to-transparent" />
 
 			{/* Content */}
 			<div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 flex flex-col gap-3">
