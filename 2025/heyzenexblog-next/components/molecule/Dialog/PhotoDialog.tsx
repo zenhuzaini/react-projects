@@ -30,8 +30,7 @@ export default function PhotoDialog({
 						flex items-center justify-center
 						w-auto max-w-[95vw]
 						h-auto max-h-[80vh] sm:max-h-[95vh]
-						fixed left-1/2 top-1/2
-						-translate-x-1/2 -translate-y-1/2
+						fixed 
 
 						duration-300
 						data-[state=open]:animate-in
