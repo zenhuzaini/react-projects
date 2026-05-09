@@ -26,13 +26,26 @@ export default function PhotoDialog({
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent
 				className="
-				bg-transparent border-0 p-0 shadow-none
-				flex items-center justify-center
-				w-auto max-w-[95vw]
-				h-auto max-h-[95vh]
-				left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-				fixed 
-				opacity-0 data-[state=open]:opacity-100 transition-opacity duration-200 [&>button]:text-primarytextInvert [&>button]:hidden">
+						bg-transparent border-0 p-0 shadow-none
+						flex items-center justify-center
+						w-auto max-w-[95vw]
+						h-auto max-h-[80vh] sm:max-h-[95vh]
+						fixed left-1/2 top-1/2
+						-translate-x-1/2 -translate-y-1/2
+
+						duration-300
+						data-[state=open]:animate-in
+						data-[state=closed]:animate-out
+						data-[state=closed]:fade-out-0
+						data-[state=open]:fade-in-0
+						data-[state=closed]:zoom-out-95
+						data-[state=open]:zoom-in-95
+
+						will-change-transform
+						transform-gpu
+
+						[&>button]:hidden
+					">
 				<div className="relative flex items-center justify-center">
 					<DialogTitle className="text-primarytextInvert"></DialogTitle>
 					<DialogDescription></DialogDescription>
