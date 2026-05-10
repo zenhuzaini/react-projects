@@ -82,7 +82,7 @@ const ActivityAvatar = ({
 						</span>
 
 						<span className="flex items-center gap-1">
-							<span className={`rounded-3xl h-4 w-0.5 bg-dot ${textVariant}`} />
+							<span className={`rounded-3xl h-3 w-0.5 bg-dot ${textVariant}`} />
 							<span className={`${textVariant} font-extralight`}>
 								{formattedDate}
 							</span>
