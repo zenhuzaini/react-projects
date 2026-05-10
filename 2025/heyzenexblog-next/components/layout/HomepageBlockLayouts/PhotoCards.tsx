@@ -40,7 +40,7 @@ const PhotoCardsSection = ({ photoLength = 6 }: { photoLength?: number }) => {
 					</Link>
 				</div>
 			);
-		}
+		},
 	);
 
 	return (

@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Variant = "default" | "light" | "dark";
 const ActivityAvatar = ({
-	url = "https://yt3.googleusercontent.com/4tN6FVc3O1GU8KNdNswDqHdvNYaunyHjrdvjd_RMLqLfZl_8RikDsLOEg6fok_z_ur5tQR5N=s900-c-k-c0x00ffffff-no-rj",
+	url = "https://res.cloudinary.com/djufavji1/image/upload/v1762553883/IMG_0139_Original_bu30wv.jpg",
 	alt,
 	avatarName,
 	publishedDate,
