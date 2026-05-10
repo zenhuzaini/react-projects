@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-type Variant = "default" | "light" | "hover-invert";
+type Variant = "default" | "light" | "dark";
 const ActivityAvatar = ({
 	url = "https://yt3.googleusercontent.com/4tN6FVc3O1GU8KNdNswDqHdvNYaunyHjrdvjd_RMLqLfZl_8RikDsLOEg6fok_z_ur5tQR5N=s900-c-k-c0x00ffffff-no-rj",
 	alt,
@@ -10,6 +10,7 @@ const ActivityAvatar = ({
 	shouldShowAvatar = true,
 	smallAvatar = false,
 	variant = "default",
+	// noAvatar = false,
 }: {
 	url?: string;
 	alt: string;
@@ -19,6 +20,7 @@ const ActivityAvatar = ({
 	shouldShowAvatar?: boolean;
 	smallAvatar?: boolean;
 	variant?: Variant;
+	// noAvatar?: boolean;
 }) => {
 	const date = new Date(publishedDate);
 
@@ -40,6 +42,11 @@ const ActivityAvatar = ({
 			textVariant = "text-white";
 			textAccentVariant = "text-white";
 			break;
+
+		case "dark":
+			textVariant = "text-primaryText";
+			textAccentVariant = "text-primaryText";
+			break;
 		default:
 			break;
 	}
@@ -55,16 +62,20 @@ const ActivityAvatar = ({
 			<div className="flex flex-col text-sm md:text-lg">
 				<div className="flex gap-2 items-center">
 					{smallAvatar && (
-						<Avatar className={smallAvatar ? "size-6" : "size-9 md:size-9"}>
-							<AvatarImage src={url} alt={alt} />
-							<AvatarFallback>{avatarName}</AvatarFallback>
-						</Avatar>
+						<>
+							<Avatar className={smallAvatar ? "size-6" : "size-9 md:size-9"}>
+								<AvatarImage src={url} alt={alt} />
+								<AvatarFallback>{avatarName}</AvatarFallback>
+							</Avatar>
+						</>
 					)}
-					<p className={`${textVariant} font-extralight`}>{avatarName}</p>
+					{shouldShowAvatar ? (
+						<p className={`${textVariant} font-extralight`}>{avatarName}</p>
+					) : null}
 				</div>
 				<p
 					className={`flex gap-1 text-[12px] items-center ${textVariant} md:text-sm tracking-tight`}>
-					went
+					{shouldShowAvatar ? "went" : ""}
 					<span className="flex gap-1 items-center">
 						<span className={` font-extrabold flex ${textAccentVariant}`}>
 							<span className="text-dot">#</span> {activityType}
