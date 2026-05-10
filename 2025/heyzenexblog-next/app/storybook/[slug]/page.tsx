@@ -2,8 +2,7 @@ import { animationForArrow } from "@/animation/animation";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import ChevronLeft from "@/icons/ChevronLeft";
 import ChevronRight from "@/icons/ChevronRight";
-import { faker } from "@faker-js/faker";
-import { Separator } from "@radix-ui/react-separator";
+
 import Link from "next/link";
 import EyeSymbol from "@/icons/EyeSymbol";
 import HeartOutlined from "@/icons/HeartOutlined";
@@ -13,6 +12,9 @@ import { Metadata } from "next";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
 import Chip from "@/components/ui/chip";
 import { createBaseMetadata } from "@/lib/seo";
+import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
+import ActivityAvatar from "@/components/molecule/User/Avatar/ActivityAvatar";
+import { formatDate } from "@/lib/utils";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
@@ -53,50 +55,38 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 	const { Content, metadata } = story;
 
-	const date = new Date(metadata.datePublished);
-	const parts = {
-		weekday: date.toLocaleDateString("en-US", { weekday: "short" }),
-		month: date.toLocaleDateString("en-US", { month: "short" }),
-		day: date.toLocaleDateString("en-US", { day: "2-digit" }),
-		year: date.getFullYear(),
-	};
+	const publishedDate = new Date(metadata.datePublished);
+	const isValidPublishedDate = !isNaN(publishedDate.getTime());
+	const formattedPublishedDate = formatDate(
+		metadata.datePublished,
+		isValidPublishedDate,
+	);
 
-	const formattedDate = `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year}`;
+	const activityDate = new Date(metadata.eventDateTo);
+	const isValidActivityDate = !isNaN(activityDate.getTime());
+	const formattedActivityDate = formatDate(
+		metadata.eventDateTo,
+		isValidActivityDate,
+	);
 
 	return (
 		<article className="flex flex-col gap-2 ">
 			{/* info top */}
-			<section className="flex flex-col gap-2">
-				<div className="flex justify-between items-center">
-					<div className="flex flex-col text-xs md:text-lg">
-						<p className="text-primarytextInvert font-extralight">StoryBook</p>
-						<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
-							<span className="font-extralight">Published on</span>{" "}
-							{formattedDate}
-						</p>
-					</div>
-					<div className="bg-primaryaccent w-fit sm:text-base text-[10px] p-2 flex justify-center items-center rounded">
-						<h3 className="text-primarycream font-extrabold">
-							<span className="text-dot">#</span>
-							{metadata.id}
-						</h3>
-					</div>
-				</div>
-				<div className="hidden md:flex">
-					<Separator className="bg-primaryaccent"></Separator>
-				</div>
-			</section>
+			<HeaderInfoSection
+				date={formattedPublishedDate}
+				id={metadata.id}></HeaderInfoSection>
 
 			{/* hero title & sats */}
+
 			<section className="flex flex-col gap-2 sm:gap-4">
 				<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
 					<ImageWithSkeleton alt={metadata.description} src={metadata.cover} />
 					<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
 
-					<div className="absolute bottom-0 m-5 w-[40%]">
+					<div className="absolute bottom-0 m-5 w-[30%]">
 						<div
 							className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
-							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.8]">
+							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.9]">
 								{metadata.title}
 								<span className="text-dot">.</span>
 							</h1>
@@ -105,7 +95,13 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 				</div>
 				{/* Stats */}
 				<div className="flex justify-between">
-					<div className="flex gap-0 sm:gap-2">
+					<ActivityAvatar
+						activityType={metadata.activityType}
+						alt="User Avatar"
+						avatarName="Zen"
+						publishedDate={formattedActivityDate}></ActivityAvatar>
+					{/* love stats */}
+					<div className="hidden gap-0 sm:gap-2">
 						<div className="flex text-sm md:text-lg gap-1 sm:gap-2  pl-2 pr-2 rounded-lg items-center">
 							<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
 							<span className="text-primarytextInvert">{metadata.views}</span>
@@ -117,17 +113,25 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 							<span className="text-primarytextInvert">{metadata.likes}</span>
 						</div>
 					</div>
-					<div className="hidden md:flex gap-2">
-						{metadata.tags.map((tag, _) => {
-							return <Chip key={_} text={tag}></Chip>;
-						})}
-					</div>
+					{/* Tags */}
 				</div>
 			</section>
 
 			{/* content */}
 			<section className="lg:ml-[20%] lg:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
 				<Content></Content>
+
+				<div className="mt-6 flex flex-col gap-2">
+					<span className="text-sm font-medium text-primaryText justify-start md:justify-center flex">
+						Tags:{" "}
+					</span>
+
+					<div className="flex flex-wrap gap-2 justify-start md:justify-center">
+						{metadata.tags.map((tag) => (
+							<Chip key={tag} text={tag} />
+						))}
+					</div>
+				</div>
 
 				<div className="flex justify-between mt-[5%]">
 					<Link href={`/`}>

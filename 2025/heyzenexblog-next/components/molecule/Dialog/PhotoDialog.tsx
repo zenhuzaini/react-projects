@@ -24,15 +24,35 @@ export default function PhotoDialog({
 }) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className=" bg-transparent border-0 [&>button]:text-primarytextInvert p-0 [&>button]:hidden">
-				<DialogHeader className="">
+			<DialogContent
+				className="
+						bg-transparent border-0 p-0 shadow-none
+						flex items-center justify-center
+						w-auto max-w-[95vw]
+						h-auto max-h-[80vh] sm:max-h-[95vh]
+						fixed 
+
+						duration-300
+						data-[state=open]:animate-in
+						data-[state=closed]:animate-out
+						data-[state=closed]:fade-out-0
+						data-[state=open]:fade-in-0
+						data-[state=closed]:zoom-out-95
+						data-[state=open]:zoom-in-95
+
+						will-change-transform
+						transform-gpu
+
+						[&>button]:hidden
+					">
+				<div className="relative flex items-center justify-center">
 					<DialogTitle className="text-primarytextInvert"></DialogTitle>
 					<DialogDescription></DialogDescription>
 					<Button
 						onClick={() => onOpenChange(false)}
 						variant="secondary"
 						size="icon"
-						className="absolute bg-mybackground  top-4 right-0 z-30 text-primarytextInvert hover:bg-primaryaccent"
+						className="absolute bg-mybackground  top-0 right-0 z-30 text-primarytextInvert hover:bg-primaryaccent"
 						aria-label="Close">
 						<XMark className="stroke-primaryText "></XMark>
 					</Button>
@@ -42,12 +62,16 @@ export default function PhotoDialog({
 							<span className="text-dot">.</span>
 						</h2>
 					</div>
-					<div className="h-[50vh] w-full">
+					<div className="flex items-center justify-center max-h-[90vh] max-w-[90vw]">
 						<ImageWithSkeleton
+							customClassName={
+								"block w-auto h-auto max-h-[90vh] max-w-[90vw] object-contain rounded-xl"
+							}
+							fill={false}
 							fadeSpeed={fadeSpeed}
 							src={src}></ImageWithSkeleton>
 					</div>
-				</DialogHeader>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
@@ -8,11 +9,15 @@ export const ImageWithSkeleton = ({
 	alt = "Just an image",
 	rounded = "rounded-2xl",
 	fadeSpeed,
+	customClassName,
+	fill = true,
 }: {
 	src: string;
 	alt?: string;
 	rounded?: string;
 	fadeSpeed?: "slow" | "medium" | "fast";
+	customClassName?: string;
+	fill?: boolean;
 }) => {
 	const [loading, setLoading] = useState(true);
 
@@ -20,7 +25,7 @@ export const ImageWithSkeleton = ({
 
 	switch (fadeSpeed) {
 		case "slow":
-			easeDuration = "duration-1000"; // max supported duration ~ 1 second
+			easeDuration = "duration-1000";
 			break;
 		case "medium":
 			easeDuration = "duration-700";
@@ -34,16 +39,40 @@ export const ImageWithSkeleton = ({
 	}
 
 	return (
-		<figure className={`relative h-full w-full overflow-hidden ${rounded}`}>
-			{loading && <Skeleton className="absolute inset-0 h-full w-full" />}
+		<figure
+			className={`relative overflow-hidden ${rounded} ${
+				fill ? "h-full w-full" : "w-fit h-fit"
+			}`}>
+			{loading && (
+				<Skeleton
+					className={`absolute inset-0 ${
+						fill ? "h-full w-full" : "h-[300px] w-[300px]"
+					}`}
+				/>
+			)}
+
 			<Image
 				src={src}
 				alt={alt}
-				fill
-				className={`object-cover transition-opacity ${easeDuration} ease-in ${
-					loading ? "opacity-0" : "opacity-100"
-				}`}
-				sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+				{...(fill
+					? {
+							fill: true,
+						}
+					: {
+							width: 1600,
+							height: 1200,
+						})}
+				className={
+					customClassName ||
+					`transition-opacity ${easeDuration} ease-in ${
+						fill ? "object-cover" : "object-contain"
+					} ${loading ? "opacity-0" : "opacity-100"}`
+				}
+				sizes={
+					fill
+						? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+						: "100vw"
+				}
 				onLoad={() => setLoading(false)}
 				loading="lazy"
 			/>

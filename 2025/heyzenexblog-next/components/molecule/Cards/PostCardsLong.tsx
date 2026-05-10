@@ -2,6 +2,8 @@ import ArrowRight from "@/icons/ArrowRight";
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
 import { PhotoCardDetailType } from "@/types/components";
 import { animationForArrow } from "@/animation/animation";
+import ActivityAvatar from "../User/Avatar/ActivityAvatar";
+import { EMPTY_STRING } from "@/const/vars";
 
 const PostCardsLong = ({
 	photoDetail,
@@ -23,23 +25,20 @@ const PostCardsLong = ({
 					<span className="text-primaryaccent">.</span>
 				</h2>
 
-				<p className="hidden font-extralight text-primarytextInvert text-[16px] tracking-tight leading-normal">
+				<p className="hidden md:flex font-extralight text-primarytextInvert text-[16px] tracking-tight leading-normal">
 					{photoDetail?.description}
 				</p>
 
 				<div className="flex sm:justify-between gap-2 sm:gap-0">
-					<div className="sm:flex-col sm:flex gap-0.5 sm:gap-0 text-xs sm:text-sm text-primarytextInvert font-extralight tracking-tight text-left">
-						<h2 className="sm:leading-[0.8]">
-							{photoDetail.city}, {photoDetail.country}
-						</h2>
-						<p className="">
-							{photoDetail.month} {photoDetail.year}
-						</p>
-					</div>
-
-					<div className="hidden flex-row text-xs font-extralight text-right">
-						<ArrowRight />
-					</div>
+					<ActivityAvatar
+						shouldShowAvatar={false}
+						variant="dark"
+						activityType={photoDetail.activityType || "posted"}
+						alt="User Avatar"
+						avatarName="Zen"
+						publishedDate={
+							photoDetail?.activityDate || EMPTY_STRING
+						}></ActivityAvatar>
 				</div>
 
 				<div className="hidden text-xs font-extralight self-end">

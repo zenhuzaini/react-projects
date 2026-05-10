@@ -2,9 +2,9 @@
 
 import PhotoDialog from "@/components/molecule/Dialog/PhotoDialog";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
+import { EMPTY_STRING } from "@/const/vars";
 import { PhotoCardDetailType } from "@/types/components";
-import { faker, ur } from "@faker-js/faker";
-import React, { useState } from "react";
+import { useState } from "react";
 
 // Each pattern returns a "grid-template" and an array of item configs (spans, row starts, etc)
 const getLayout = (n: number) => {
@@ -93,7 +93,7 @@ const PhotoCollectionGrid = ({ photo }: { photo: PhotoCardDetailType[] }) => {
 			<div className={`grid grid-cols-2 sm:${grid} gap-2 sm:gap-4`}>
 				{photo.map((image, idx) => {
 					const colSpan = items[idx]?.colSpan || 1;
-					let spanClass = "";
+					let spanClass = EMPTY_STRING;
 					if (colSpan === 2) spanClass = "col-span-2";
 					if (colSpan === 3) spanClass = "lg:col-span-3";
 					return (
@@ -118,7 +118,6 @@ const PhotoCollectionGrid = ({ photo }: { photo: PhotoCardDetailType[] }) => {
 					open={isDialogPhotoOpen}
 					onOpenChange={setIsDialogPhotoOpen}
 					src={selectedImage as string}
-					// Close action
 				/>
 			)}
 		</>

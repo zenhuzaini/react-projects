@@ -14,18 +14,27 @@ const StoryPost = ({ stories }: { stories: StoryBookMeta[] }) => {
 		country: story.country,
 		year: Number(story.eventDateFrom.split(" ")[3]),
 		month: story.eventDateFrom.split(" ")[1],
+		activityType: story.activityType,
+		activityDate: story.eventDateFrom,
 	});
+
+	// Sort by latest slug descending
+	const sortedStories = [...stories].sort((a, b) =>
+		b.slug.localeCompare(a.slug),
+	);
 
 	// Only the first story for long card
 	const postContentLong =
-		stories.length > 0 ? (
-			<Link href={`/storybook/${stories[0].slug}`} key={stories[0].slug}>
-				<PostCardsLong photoDetail={getPhotoDetail(stories[0])} />
+		sortedStories.length > 0 ? (
+			<Link
+				href={`/storybook/${sortedStories[0].slug}`}
+				key={sortedStories[0].slug}>
+				<PostCardsLong photoDetail={getPhotoDetail(sortedStories[0])} />
 			</Link>
 		) : null;
 
 	// All but the first story for regular cards
-	const postContent = stories.slice(1).map((story) => (
+	const postContent = sortedStories.slice(1).map((story) => (
 		<Link href={`/storybook/${story.slug}`} key={story.slug}>
 			<PostCard photoDetail={getPhotoDetail(story)} />
 		</Link>
@@ -46,7 +55,7 @@ const StoryPost = ({ stories }: { stories: StoryBookMeta[] }) => {
 
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col">{postContentLong}</div>
-				<div className="grid sm:grid-cols-4 gap-4">{postContent}</div>
+				<div className="grid lg:grid-cols-5 gap-4">{postContent}</div>
 			</div>
 		</div>
 	);
