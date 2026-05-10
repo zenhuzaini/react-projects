@@ -21,7 +21,7 @@ const PostCard = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 				<div className="flex text-xs sm:text-sm">
 					<ActivityAvatar
 						variant="light"
-						smallAvatar={true}
+						shouldShowAvatar={false}
 						activityType={photoDetail.activityType || "posted"}
 						alt="User Avatar"
 						avatarName="Zen"

@@ -76,13 +76,16 @@ const ActivityAvatar = ({
 				<p
 					className={`flex gap-1 text-[12px] items-center ${textVariant} md:text-sm tracking-tight`}>
 					{shouldShowAvatar ? "went" : ""}
-					<span className="flex gap-1 items-center">
-						<span className={` font-extrabold flex ${textAccentVariant}`}>
+					<span className="flex flex-wrap gap-1 items-center">
+						<span className={`font-extrabold flex ${textAccentVariant}`}>
 							<span className="text-dot">#</span> {activityType}
 						</span>
-						<span className={`rounded-3xl h-4 w-0.5 bg-dot ${textVariant}`} />
-						<span className={`${textVariant} font-extralight`}>
-							{formattedDate}
+
+						<span className="flex items-center gap-1">
+							<span className={`rounded-3xl h-4 w-0.5 bg-dot ${textVariant}`} />
+							<span className={`${textVariant} font-extralight`}>
+								{formattedDate}
+							</span>
 						</span>
 					</span>
 				</p>
