@@ -1,5 +1,6 @@
 import { animationForArrow } from "@/animation/animation";
 import PhotoCollectionGrid from "@/components/layout/StoryBookBlockLayouts/6_PhotoCollectionGrid/PhotoCollectionGrid";
+import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
 import ChevronLeft from "@/icons/ChevronLeft";
@@ -69,24 +70,10 @@ const PhotoBook = async ({ params }: { params: Promise<{ slug: string }> }) => {
 	return (
 		<div className="flex flex-col gap-2">
 			{/* info top */}
-			<div className="flex flex-col gap-2">
-				<div className="flex justify-between items-center">
-					<div className="flex flex-col text-xs md:text-lg">
-						<p className="text-primarytextInvert font-extralight">PhotoBook</p>
-						<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
-							<span className="font-extralight">Written on</span> 22 Jan 2025
-						</p>
-					</div>
-					<div className="bg-primaryaccent w-fit sm:text-base text-[10px] p-2 flex justify-center items-center rounded">
-						<h3 className="text-primarycream font-extrabold">
-							<span className="text-dot">#</span>1
-						</h3>
-					</div>
-				</div>
-				<div className="hidden md:flex">
-					<Separator className="bg-primaryaccent"></Separator>
-				</div>
-			</div>
+			<HeaderInfoSection
+				text="PhotoBook"
+				date={formattedPublishedDate}
+				id={metadata.id}></HeaderInfoSection>
 
 			{/* hero title */}
 			<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
@@ -106,8 +93,7 @@ const PhotoBook = async ({ params }: { params: Promise<{ slug: string }> }) => {
 			{/* content */}
 			<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-4 mt-[3%] ">
 				{/* <PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid> */}
-				<PhotoCollectionGrid
-					photo={photoMock({ length: 8 })}></PhotoCollectionGrid>
+				<Content></Content>
 
 				<div className="flex justify-between mt-10">
 					<Link href={`/`}>
