@@ -18,44 +18,48 @@ const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
 		activityDate: photo.eventDateFrom,
 	});
 
-	const photoContent = photoStory
-		.map((photo) => getPhotoDetail(photo))
-		.map((photoDetail, idx) => {
-			let colspan = "";
-			if (idx === 0) {
-				colspan = "col-span-2 ";
-				if (photoStory.length === 1) {
-					colspan = "col-span-3 ";
-				}
+	// Sort by latest slug descending
+	const sortedPhotobook = [...photoStory].sort((a, b) =>
+		b.slug.localeCompare(a.slug),
+	);
+
+	const photoContent = sortedPhotobook.map((photoDetail, idx) => {
+		console.log("Rendering photo card:", photoDetail, "at index", idx);
+		let colspan = "";
+		if (idx === 0) {
+			colspan = "col-span-2 ";
+			if (photoStory.length === 1) {
+				colspan = "col-span-3 ";
 			}
+		}
 
-			// Second card in the first row (completes row)
-			// no colspan needed: will fill 1 column
+		// Second card in the first row (completes row)
+		// no colspan needed: will fill 1 column
 
-			// Detect if this is the last item in the last row
-			const gridCols = 3;
-			const remainingPhotos = photoStory.length - 2;
+		// Detect if this is the last item in the last row
+		const gridCols = 3;
+		const remainingPhotos = photoStory.length - 2;
 
-			const leftover = remainingPhotos % gridCols;
-			const isLastPhoto = idx === photoStory.length - 1;
+		const leftover = remainingPhotos % gridCols;
+		const isLastPhoto = idx === photoStory.length - 1;
 
-			if (isLastPhoto && leftover === 1) {
-				colspan += "col-span-2 sm:col-span-3";
-			}
-			if (isLastPhoto && leftover === 2) {
-				colspan += "sm:col-span-2";
-			}
+		if (isLastPhoto && leftover === 1) {
+			colspan += "col-span-2 sm:col-span-3";
+		}
+		if (isLastPhoto && leftover === 2) {
+			colspan += "sm:col-span-2";
+		}
 
-			return (
-				<div
-					key={idx}
-					className={`${colspan} relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh] `}>
-					<Link key={idx} href={`/photobook/${photoDetail.id}`}>
-						<PhotoCards key={idx} photoDetail={photoDetail} />
-					</Link>
-				</div>
-			);
-		});
+		return (
+			<div
+				key={idx}
+				className={`${colspan} relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh] `}>
+				<Link key={idx} href={`/photobook/${photoDetail.slug}`}>
+					<PhotoCards key={idx} photoDetail={getPhotoDetail(photoDetail)} />
+				</Link>
+			</div>
+		);
+	});
 
 	return (
 		<div className="flex flex-col gap-5 sm:gap-10">
