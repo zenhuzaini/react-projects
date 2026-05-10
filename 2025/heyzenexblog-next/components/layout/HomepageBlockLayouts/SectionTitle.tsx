@@ -11,7 +11,7 @@ const SectionTitle = ({
 			THROUGH
 		</>
 	),
-	right = <>MY EYES</>,
+	right = <>MY LENS</>,
 }: SectionTitleProps) => {
 	return (
 		<div className="grid grid-cols-8">
