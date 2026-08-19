@@ -4,6 +4,7 @@ import PhotoCards from "../../molecule/Cards/PhotoCards";
 import Link from "next/link";
 import { PhotoBookMeta } from "@/types/data";
 import { PhotoCardDetailType } from "@/types/components";
+import { EMPTY_STRING } from "@/const/vars";
 
 const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
 	const getPhotoDetail = (photo: PhotoBookMeta): PhotoCardDetailType => ({
@@ -24,8 +25,7 @@ const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
 	);
 
 	const photoContent = sortedPhotobook.map((photoDetail, idx) => {
-		console.log("Rendering photo card:", photoDetail, "at index", idx);
-		let colspan = "";
+		let colspan = EMPTY_STRING;
 		if (idx === 0) {
 			colspan = "col-span-2 ";
 			if (photoStory.length === 1) {
