@@ -4,6 +4,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  //  app.useBodyParser('json', { limit: '50mb' });
+  //  app.useBodyParser('urlencoded', { limit: '50mb', extended: true });
 
   const config = new DocumentBuilder()
     .setTitle('Notion API')
@@ -13,6 +15,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 9000);
 }
 bootstrap();
