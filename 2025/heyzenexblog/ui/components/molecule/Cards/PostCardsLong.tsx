@@ -16,7 +16,8 @@ const PostCardsLong = ({
 			<div className="col-start-1 col-end-4 sm:col-end-5 w-full h-full">
 				<ImageWithSkeleton
 					rounded="rounded-tl-2xl rounded-bl-2xl"
-					src={photoDetail.photoUrl}></ImageWithSkeleton>
+					src={photoDetail.photoUrl}
+					loading="eager"></ImageWithSkeleton>
 			</div>
 			{/* but when I hover, it will open this. so the image above will have only 80%. I want this only for dekstop */}
 			<div className="px-3 md:px-6 col-start-4 col-end-7 sm:col-start-5 flex flex-col gap-5 justify-center">

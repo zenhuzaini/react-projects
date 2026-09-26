@@ -11,6 +11,7 @@ export const ImageWithSkeleton = ({
 	fadeSpeed,
 	customClassName,
 	fill = true,
+	loading = "lazy",
 }: {
 	src: string;
 	alt?: string;
@@ -18,8 +19,9 @@ export const ImageWithSkeleton = ({
 	fadeSpeed?: "slow" | "medium" | "fast";
 	customClassName?: string;
 	fill?: boolean;
+	loading?: "eager" | "lazy";
 }) => {
-	const [loading, setLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 
 	let easeDuration = "";
 
@@ -43,7 +45,7 @@ export const ImageWithSkeleton = ({
 			className={`relative overflow-hidden ${rounded} ${
 				fill ? "h-full w-full" : "w-fit h-fit"
 			}`}>
-			{loading && (
+			{isLoading && (
 				<Skeleton
 					className={`absolute inset-0 ${
 						fill ? "h-full w-full" : "h-[300px] w-[300px]"
@@ -66,15 +68,15 @@ export const ImageWithSkeleton = ({
 					customClassName ||
 					`transition-opacity ${easeDuration} ease-in ${
 						fill ? "object-cover" : "object-contain"
-					} ${loading ? "opacity-0" : "opacity-100"}`
+					} ${isLoading ? "opacity-0" : "opacity-100"}`
 				}
 				sizes={
 					fill
 						? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
 						: "100vw"
 				}
-				onLoad={() => setLoading(false)}
-				loading="lazy"
+				onLoad={() => setIsLoading(false)}
+				loading={loading}
 			/>
 		</figure>
 	);

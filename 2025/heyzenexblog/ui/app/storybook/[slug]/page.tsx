@@ -80,7 +80,11 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 			<section className="flex flex-col gap-2 sm:gap-4">
 				<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
-					<ImageWithSkeleton alt={metadata.description} src={metadata.cover} />
+					<ImageWithSkeleton
+						alt={metadata.description}
+						src={metadata.cover}
+						loading="eager"
+					/>
 					<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
 
 					<div className="absolute bottom-0 m-5 w-[30%]">
