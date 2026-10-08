@@ -6,11 +6,14 @@ import {
 	ArrowDownToLine,
 	ArrowUp,
 	Check,
+	ChevronDown,
 	Code2,
 	Eye,
 	GripVertical,
 	ImagePlus,
 	Layers3,
+	PanelLeftClose,
+	PanelLeftOpen,
 	Plus,
 	Quote,
 	Text,
@@ -18,7 +21,9 @@ import {
 	Type,
 	X,
 } from "lucide-react";
-import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
+import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
+import { photoMockStatic } from "@/mock/photo";
+import type { PhotoCardDetailType, StoryContentType } from "@/types/components";
 
 type BlockType = "paragraph" | "quote" | "image" | "gallery" | "section";
 
@@ -41,6 +46,7 @@ type StoryDraft = {
 	country: string;
 	activityType: string;
 	tags: string;
+	datePublished: string;
 	eventDateFrom: string;
 	eventDateTo: string;
 	blocks: StoryBlock[];
@@ -86,6 +92,7 @@ const createDraft = (
 	country: "",
 	activityType: "bikepacking",
 	tags: "",
+	datePublished: "",
 	eventDateFrom: "",
 	eventDateTo: "",
 	blocks: [createBlock("paragraph", blockId)],
@@ -100,6 +107,78 @@ const toSlug = (value: string) =>
 		.replace(/[^a-z0-9]+/g, "-")
 		.replace(/^-|-$/g, "");
 
+const toLocalDateTimeInput = (date: Date) => {
+	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+	return localDate.toISOString().slice(0, 16);
+};
+
+const toDatePublished = (value: string) =>
+	value ? new Date(value).toString() : "";
+
+const toStoryContent = (
+	blocks: StoryBlock[],
+	metadata: Pick<
+		StoryDraft,
+		"city" | "country" | "activityType" | "eventDateFrom"
+	>,
+): StoryContentType[] =>
+	blocks.flatMap((block) => {
+		let sectionID: string;
+		let photoUrls: PhotoCardDetailType[] = [];
+
+		switch (block.type) {
+			case "paragraph":
+				sectionID = "layout2";
+				break;
+			case "quote":
+				sectionID = "layout1";
+				break;
+			case "image":
+				sectionID = "layout5";
+				if (block.imageUrl.trim()) {
+					photoUrls = [
+						{
+							id: block.id,
+							photoUrl: block.imageUrl,
+							description: block.imageAlt || "Story photo",
+							city: metadata.city,
+							country: metadata.country,
+							activityType: metadata.activityType,
+							activityDate: metadata.eventDateFrom,
+						},
+					];
+				}
+				break;
+			case "gallery":
+				sectionID = "layout6";
+				photoUrls = block.gallery
+					.filter((photo) => photo.url.trim())
+					.map((photo, index) => ({
+						id: `${block.id}-${index}`,
+						photoUrl: photo.url,
+						description: photo.alt || "Gallery photo",
+						city: metadata.city,
+						country: metadata.country,
+						activityType: metadata.activityType,
+						activityDate: metadata.eventDateFrom,
+					}));
+				break;
+			case "section":
+				sectionID = "layout9";
+				break;
+		}
+
+		if (sectionID === "layout5" || sectionID === "layout6") {
+			return photoUrls.length
+				? [{ sectionID, textContent: block.text, photoUrls }]
+				: [];
+		}
+
+		return block.text.trim()
+			? [{ sectionID, textContent: block.text, photoUrls }]
+			: [];
+	});
+
 const toMdx = (draft: StoryDraft) => {
 	const metadata = {
 		slug: draft.slug || toSlug(draft.title),
@@ -109,7 +188,7 @@ const toMdx = (draft: StoryDraft) => {
 		likes: 0,
 		cover: draft.cover,
 		description: draft.description,
-		datePublished: draft.createdAt || draft.updatedAt,
+		datePublished: toDatePublished(draft.datePublished),
 		dateModified: draft.updatedAt,
 		eventDateTo: draft.eventDateTo,
 		eventDateFrom: draft.eventDateFrom,
@@ -164,15 +243,32 @@ const MystoryPlayground = () => {
 	const [dropIndex, setDropIndex] = useState<number | null>(null);
 	const [notice, setNotice] = useState("");
 	const [outputTab, setOutputTab] = useState<"mdx" | "preview">("mdx");
+	const [isSavedStoriesExpanded, setIsSavedStoriesExpanded] = useState(true);
+	const [isStoryDetailsOpen, setIsStoryDetailsOpen] = useState(true);
 
 	useEffect(() => {
 		try {
 			const storedDrafts = localStorage.getItem(STORAGE_KEY);
-			if (storedDrafts)
-				setSavedDrafts(JSON.parse(storedDrafts) as StoryDraft[]);
+			if (storedDrafts) {
+				const drafts = JSON.parse(storedDrafts) as StoryDraft[];
+				setSavedDrafts(
+					drafts.map((saved) => ({
+						...saved,
+						datePublished:
+							saved.datePublished ||
+							(saved.createdAt
+								? toLocalDateTimeInput(new Date(saved.createdAt))
+								: toLocalDateTimeInput(new Date(saved.updatedAt))),
+					})),
+				);
+			}
 		} catch {
 			setNotice("Saved drafts could not be read from this browser.");
 		}
+		setDraft((current) => ({
+			...current,
+			datePublished: current.datePublished || toLocalDateTimeInput(new Date()),
+		}));
 		setIsHydrated(true);
 	}, []);
 
@@ -223,13 +319,23 @@ const MystoryPlayground = () => {
 	};
 
 	const startNewDraft = () => {
-		setDraft(createDraft());
+		setDraft({
+			...createDraft(),
+			datePublished: toLocalDateTimeInput(new Date()),
+		});
 		setActiveDraftId(null);
 		setNotice("");
 	};
 
 	const loadDraft = (saved: StoryDraft) => {
-		setDraft(saved);
+		setDraft({
+			...saved,
+			datePublished:
+				saved.datePublished ||
+				(saved.createdAt
+					? toLocalDateTimeInput(new Date(saved.createdAt))
+					: toLocalDateTimeInput(new Date(saved.updatedAt))),
+		});
 		setActiveDraftId(saved.id);
 		setNotice("");
 	};
@@ -271,6 +377,10 @@ const MystoryPlayground = () => {
 	};
 
 	const mdx = toMdx(draft);
+	const storyContent = toStoryContent(draft.blocks, draft);
+	const storyPhotoUrls = storyContent.flatMap((content) => content.photoUrls);
+	const storyCover =
+		draft.cover || storyPhotoUrls[0]?.photoUrl || photoMockStatic[0].photoUrl;
 
 	return (
 		<main className="mx-auto w-full max-w-[1600px] pb-12 text-primaryText">
@@ -314,58 +424,102 @@ const MystoryPlayground = () => {
 				</div>
 			</header>
 
-			<div className="grid items-start gap-5 xl:grid-cols-[230px_minmax(400px,1fr)_minmax(360px,0.9fr)]">
-				<aside className="rounded-lg border border-primarybrown/20 bg-primarywhite p-4">
-					<div className="mb-4 flex items-center justify-between">
-						<h2 className="text-sm font-bold">Saved stories</h2>
-						<span className="rounded bg-secondarywhite px-2 py-1 text-xs text-primarygrey">
-							{savedDrafts.length}
-						</span>
+			<div
+				className={`grid items-start gap-5 ${isSavedStoriesExpanded ? "xl:grid-cols-[230px_minmax(400px,1fr)_minmax(360px,0.9fr)]" : "xl:grid-cols-[56px_minmax(400px,1fr)_minmax(360px,0.9fr)]"}`}>
+				<aside
+					id="saved-stories-panel"
+					className={`rounded-lg border border-primarybrown/20 bg-primarywhite ${isSavedStoriesExpanded ? "p-4" : "flex flex-row items-center gap-3 p-2 xl:flex-col"}`}>
+					<div
+						className={`flex items-center ${isSavedStoriesExpanded ? "mb-4 justify-between" : "flex-col gap-3"}`}>
+						<h2 className="w-full text-sm font-bold">
+							<button
+								type="button"
+								aria-expanded={isSavedStoriesExpanded}
+								aria-controls="saved-stories-content"
+								aria-label={`${isSavedStoriesExpanded ? "Collapse" : "Expand"} saved stories panel`}
+								title={`${isSavedStoriesExpanded ? "Collapse" : "Expand"} saved stories`}
+								onClick={() =>
+									setIsSavedStoriesExpanded((expanded) => !expanded)
+								}
+								className="flex min-h-7 w-full items-center gap-2 text-left">
+								<span className={isSavedStoriesExpanded ? "" : "sr-only"}>
+									Saved stories
+								</span>
+								<span className="rounded bg-secondarywhite px-2 py-1 text-xs font-normal text-primarygrey">
+									{savedDrafts.length}
+								</span>
+								{isSavedStoriesExpanded ? (
+									<PanelLeftClose size={16} className="ml-auto shrink-0" />
+								) : (
+									<PanelLeftOpen size={16} className="ml-auto shrink-0" />
+								)}
+							</button>
+						</h2>
 					</div>
-					{!isHydrated ? (
-						<p className="text-sm text-primarygrey">Loading drafts...</p>
-					) : savedDrafts.length === 0 ? (
-						<p className="border-t border-primarybrown/15 py-4 text-sm leading-5 text-primarygrey">
-							Your saved drafts will appear here.
-						</p>
-					) : (
-						<ul className="flex flex-col gap-1">
-							{savedDrafts.map((saved) => (
-								<li
-									key={saved.id}
-									className={`group flex items-start gap-1 rounded-md border p-2 ${activeDraftId === saved.id ? "border-secondaryforestgreen/50 bg-secondaryforestgreen/5" : "border-transparent hover:bg-secondarywhite"}`}>
-									<button
-										type="button"
-										onClick={() => loadDraft(saved)}
-										className="min-w-0 flex-1 text-left">
-										<span className="block truncate text-sm font-semibold">
-											{saved.title || "Untitled story"}
-										</span>
-										<span className="mt-1 block text-xs text-primarygrey">
-											{new Date(saved.updatedAt).toLocaleDateString()}
-										</span>
-									</button>
-									<button
-										type="button"
-										onClick={() => deleteDraft(saved.id)}
-										aria-label={`Delete ${saved.title}`}
-										title="Delete draft"
-										className="rounded p-1 text-primarygrey opacity-100 hover:bg-primaryred/10 hover:text-primaryred sm:opacity-0 sm:group-hover:opacity-100">
-										<Trash2 size={15} />
-									</button>
-								</li>
-							))}
-						</ul>
-					)}
+					<div
+						id="saved-stories-content"
+						className={isSavedStoriesExpanded ? "mt-4" : "hidden"}>
+						{!isHydrated ? (
+							<p className="text-sm text-primarygrey">Loading drafts...</p>
+						) : savedDrafts.length === 0 ? (
+							<p className="border-t border-primarybrown/15 py-4 text-sm leading-5 text-primarygrey">
+								Your saved drafts will appear here.
+							</p>
+						) : (
+							<ul className="flex flex-col gap-1">
+								{savedDrafts.map((saved) => (
+									<li
+										key={saved.id}
+										className={`group flex items-start gap-1 rounded-md border p-2 ${activeDraftId === saved.id ? "border-secondaryforestgreen/50 bg-secondaryforestgreen/5" : "border-transparent hover:bg-secondarywhite"}`}>
+										<button
+											type="button"
+											onClick={() => loadDraft(saved)}
+											className="min-w-0 flex-1 text-left">
+											<span className="block truncate text-sm font-semibold">
+												{saved.title || "Untitled story"}
+											</span>
+											<span className="mt-1 block text-xs text-primarygrey">
+												{new Date(saved.updatedAt).toLocaleDateString()}
+											</span>
+										</button>
+										<button
+											type="button"
+											onClick={() => deleteDraft(saved.id)}
+											aria-label={`Delete ${saved.title}`}
+											title="Delete draft"
+											className="rounded p-1 text-primarygrey opacity-100 hover:bg-primaryred/10 hover:text-primaryred sm:opacity-0 sm:group-hover:opacity-100">
+											<Trash2 size={15} />
+										</button>
+									</li>
+								))}
+							</ul>
+						)}
+					</div>
 				</aside>
 
 				<section className="min-w-0 space-y-5">
 					<div className="rounded-lg border border-primarybrown/20 bg-primarywhite p-4 sm:p-5">
 						<div className="mb-4 flex items-center justify-between border-b border-primarybrown/15 pb-3">
-							<h2 className="font-bold">Story details</h2>
+							<h2 className="font-bold">
+								<button
+									type="button"
+									aria-expanded={isStoryDetailsOpen}
+									aria-controls="story-details-fields"
+									aria-label={`${isStoryDetailsOpen ? "Collapse" : "Expand"} story details`}
+									onClick={() => setIsStoryDetailsOpen((open) => !open)}
+									className="flex min-h-8 items-center gap-2 text-left">
+									<span>Story details</span>
+									<ChevronDown
+										size={16}
+										className={`transition-transform ${isStoryDetailsOpen ? "rotate-180" : ""}`}
+									/>
+								</button>
+							</h2>
 							<span className="text-xs text-primarygrey">METADATA</span>
 						</div>
-						<div className="grid gap-3 sm:grid-cols-2">
+						<div
+							id="story-details-fields"
+							className={`${isStoryDetailsOpen ? "grid" : "hidden"} gap-3 sm:grid-cols-2`}>
 							<label className="sm:col-span-2">
 								<span className="mb-1 block text-xs font-semibold text-primarygrey">
 									Title
@@ -450,6 +604,19 @@ const MystoryPlayground = () => {
 									}
 									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
 									placeholder="Poland"
+								/>
+							</label>
+							<label>
+								<span className="mb-1 block text-xs font-semibold text-primarygrey">
+									Date published
+								</span>
+								<input
+									type="datetime-local"
+									value={draft.datePublished}
+									onChange={(event) =>
+										updateDraft({ datePublished: event.target.value })
+									}
+									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
 								/>
 							</label>
 							<label>
@@ -798,110 +965,24 @@ const MystoryPlayground = () => {
 						) : (
 							<div
 								role="tabpanel"
-								className="max-h-[70vh] min-h-[340px] overflow-auto bg-primarywhite text-primaryText">
-								{draft.cover.trim() && (
-									<div className="relative h-44 w-full overflow-hidden">
-										<ImageWithSkeleton
-											src={draft.cover}
-											alt={draft.title || "Story cover"}
-											rounded="rounded-none"
-											loading="eager"
-										/>
-									</div>
-								)}
-								<article className="mx-auto max-w-2xl px-5 py-6">
-									<header className="mb-6 border-b border-primarybrown/15 pb-5">
-										<p className="mb-2 text-xs font-bold uppercase text-secondaryforestgreen">
-											{[draft.city, draft.country].filter(Boolean).join(", ") ||
-												draft.activityType}
-										</p>
-										<h2 className="text-2xl font-extrabold leading-tight">
-											{draft.title || "Untitled story"}
-										</h2>
-										{draft.description && (
-											<p className="mt-3 text-sm leading-6 text-primarygrey">
-												{draft.description}
-											</p>
-										)}
-									</header>
-									<div className="flex flex-col gap-5 text-sm leading-6">
-										{draft.blocks.map((block) => {
-											switch (block.type) {
-												case "paragraph":
-													return block.text
-														.split(/\n\s*\n/)
-														.filter(Boolean)
-														.map((paragraph, index) => (
-															<p
-																key={`${block.id}-${index}`}
-																className="whitespace-pre-wrap">
-																{paragraph}
-															</p>
-														));
-												case "quote":
-													return block.text ? (
-														<blockquote
-															key={block.id}
-															className="border-l-4 border-fierceorange py-2 pl-4 text-xl font-semibold italic leading-8">
-															{block.text}
-														</blockquote>
-													) : null;
-												case "image":
-													return block.imageUrl.trim() ? (
-														<figure key={block.id}>
-															<div className="relative h-52 w-full overflow-hidden rounded-md">
-																<ImageWithSkeleton
-																	src={block.imageUrl}
-																	alt={block.imageAlt || "Story photo"}
-																	rounded="rounded-md"
-																/>
-															</div>
-															{block.imageAlt && (
-																<figcaption className="mt-2 text-xs text-primarygrey">
-																	{block.imageAlt}
-																</figcaption>
-															)}
-														</figure>
-													) : null;
-												case "gallery": {
-													const photos = block.gallery.filter((photo) =>
-														photo.url.trim(),
-													);
-													return photos.length ? (
-														<div
-															key={block.id}
-															className="grid grid-cols-2 gap-2">
-															{photos.map((photo, index) => (
-																<figure key={`${block.id}-${index}`}>
-																	<div className="relative h-28 overflow-hidden rounded-md">
-																		<ImageWithSkeleton
-																			src={photo.url}
-																			alt={photo.alt || "Gallery photo"}
-																			rounded="rounded-md"
-																		/>
-																	</div>
-																	{photo.alt && (
-																		<figcaption className="mt-1 text-xs text-primarygrey">
-																			{photo.alt}
-																		</figcaption>
-																	)}
-																</figure>
-															))}
-														</div>
-													) : null;
-												}
-												case "section":
-													return block.text ? (
-														<h3
-															key={block.id}
-															className="border-b border-primarybrown/20 pb-2 text-lg font-bold">
-															{block.text}
-														</h3>
-													) : null;
-											}
-										})}
-									</div>
-								</article>
+								className="max-h-[70vh] min-h-[340px] overflow-auto bg-mybackground p-4 text-primaryText">
+								<MainStoryBookPage
+									createdAt={
+										draft.datePublished
+											? new Date(draft.datePublished).toLocaleDateString(
+													"en-GB",
+												)
+											: ""
+									}
+									storyCover={storyCover}
+									storyId="2"
+									storyTitle={draft.title}
+									storyDescription={draft.description}
+									storyPhotoUrls={storyPhotoUrls}
+									storyContent={storyContent}
+									totalView={100}
+									totalLike={10}
+								/>
 							</div>
 						)}
 						<div className="flex items-center justify-between border-t border-primarybrown/15 px-4 py-3 text-xs text-primarygrey">
