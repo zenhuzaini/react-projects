@@ -7,6 +7,7 @@ import {
 	ArrowUp,
 	Check,
 	Code2,
+	Eye,
 	GripVertical,
 	ImagePlus,
 	Layers3,
@@ -17,6 +18,7 @@ import {
 	Type,
 	X,
 } from "lucide-react";
+import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 
 type BlockType = "paragraph" | "quote" | "image" | "gallery" | "section";
 
@@ -161,6 +163,7 @@ const MystoryPlayground = () => {
 	const [draggedBlockId, setDraggedBlockId] = useState<string | null>(null);
 	const [dropIndex, setDropIndex] = useState<number | null>(null);
 	const [notice, setNotice] = useState("");
+	const [outputTab, setOutputTab] = useState<"mdx" | "preview">("mdx");
 
 	useEffect(() => {
 		try {
@@ -758,24 +761,159 @@ const MystoryPlayground = () => {
 				</section>
 
 				<section className="min-w-0 xl:sticky xl:top-5">
-					<div className="overflow-hidden rounded-lg border border-primarybrown/25 bg-[#202522] text-[#e8eee8]">
-						<div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-							<div className="flex items-center gap-2 text-sm font-semibold">
-								<Code2 size={16} /> MDX output
+					<div
+						className={`overflow-hidden rounded-lg border border-primarybrown/25 ${outputTab === "mdx" ? "bg-[#202522] text-[#e8eee8]" : "bg-primarywhite text-primaryText"}`}>
+						<div className="flex items-center justify-between gap-3 border-b border-primarybrown/15 px-3 py-2">
+							<div
+								role="tablist"
+								aria-label="Output view"
+								className="flex items-center gap-1">
+								<button
+									type="button"
+									role="tab"
+									aria-selected={outputTab === "mdx"}
+									onClick={() => setOutputTab("mdx")}
+									className={`inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold ${outputTab === "mdx" ? "bg-primarywhite/10 text-inherit" : "text-primarygrey hover:bg-primarybrown/10"}`}>
+									<Code2 size={15} /> MDX
+								</button>
+								<button
+									type="button"
+									role="tab"
+									aria-selected={outputTab === "preview"}
+									onClick={() => setOutputTab("preview")}
+									className={`inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold ${outputTab === "preview" ? "bg-secondaryforestgreen text-white" : "text-primarygrey hover:bg-primarybrown/10"}`}>
+									<Eye size={15} /> Preview
+								</button>
 							</div>
 							<span className="text-xs text-white/50">
 								{draft.slug || "story"}.mdx
 							</span>
 						</div>
-						<pre className="max-h-[70vh] min-h-[340px] overflow-auto p-4 text-xs leading-5 sm:text-[13px]">
-							<code>{mdx}</code>
-						</pre>
-						<div className="flex items-center justify-between border-t border-white/10 px-4 py-3 text-xs text-white/55">
-							<span>Live source preview</span>
+						{outputTab === "mdx" ? (
+							<pre
+								role="tabpanel"
+								className="max-h-[70vh] min-h-[340px] overflow-auto p-4 text-xs leading-5 sm:text-[13px]">
+								<code>{mdx}</code>
+							</pre>
+						) : (
+							<div
+								role="tabpanel"
+								className="max-h-[70vh] min-h-[340px] overflow-auto bg-primarywhite text-primaryText">
+								{draft.cover.trim() && (
+									<div className="relative h-44 w-full overflow-hidden">
+										<ImageWithSkeleton
+											src={draft.cover}
+											alt={draft.title || "Story cover"}
+											rounded="rounded-none"
+											loading="eager"
+										/>
+									</div>
+								)}
+								<article className="mx-auto max-w-2xl px-5 py-6">
+									<header className="mb-6 border-b border-primarybrown/15 pb-5">
+										<p className="mb-2 text-xs font-bold uppercase text-secondaryforestgreen">
+											{[draft.city, draft.country].filter(Boolean).join(", ") ||
+												draft.activityType}
+										</p>
+										<h2 className="text-2xl font-extrabold leading-tight">
+											{draft.title || "Untitled story"}
+										</h2>
+										{draft.description && (
+											<p className="mt-3 text-sm leading-6 text-primarygrey">
+												{draft.description}
+											</p>
+										)}
+									</header>
+									<div className="flex flex-col gap-5 text-sm leading-6">
+										{draft.blocks.map((block) => {
+											switch (block.type) {
+												case "paragraph":
+													return block.text
+														.split(/\n\s*\n/)
+														.filter(Boolean)
+														.map((paragraph, index) => (
+															<p
+																key={`${block.id}-${index}`}
+																className="whitespace-pre-wrap">
+																{paragraph}
+															</p>
+														));
+												case "quote":
+													return block.text ? (
+														<blockquote
+															key={block.id}
+															className="border-l-4 border-fierceorange py-2 pl-4 text-xl font-semibold italic leading-8">
+															{block.text}
+														</blockquote>
+													) : null;
+												case "image":
+													return block.imageUrl.trim() ? (
+														<figure key={block.id}>
+															<div className="relative h-52 w-full overflow-hidden rounded-md">
+																<ImageWithSkeleton
+																	src={block.imageUrl}
+																	alt={block.imageAlt || "Story photo"}
+																	rounded="rounded-md"
+																/>
+															</div>
+															{block.imageAlt && (
+																<figcaption className="mt-2 text-xs text-primarygrey">
+																	{block.imageAlt}
+																</figcaption>
+															)}
+														</figure>
+													) : null;
+												case "gallery": {
+													const photos = block.gallery.filter((photo) =>
+														photo.url.trim(),
+													);
+													return photos.length ? (
+														<div
+															key={block.id}
+															className="grid grid-cols-2 gap-2">
+															{photos.map((photo, index) => (
+																<figure key={`${block.id}-${index}`}>
+																	<div className="relative h-28 overflow-hidden rounded-md">
+																		<ImageWithSkeleton
+																			src={photo.url}
+																			alt={photo.alt || "Gallery photo"}
+																			rounded="rounded-md"
+																		/>
+																	</div>
+																	{photo.alt && (
+																		<figcaption className="mt-1 text-xs text-primarygrey">
+																			{photo.alt}
+																		</figcaption>
+																	)}
+																</figure>
+															))}
+														</div>
+													) : null;
+												}
+												case "section":
+													return block.text ? (
+														<h3
+															key={block.id}
+															className="border-b border-primarybrown/20 pb-2 text-lg font-bold">
+															{block.text}
+														</h3>
+													) : null;
+											}
+										})}
+									</div>
+								</article>
+							</div>
+						)}
+						<div className="flex items-center justify-between border-t border-primarybrown/15 px-4 py-3 text-xs text-primarygrey">
+							<span>
+								{outputTab === "mdx"
+									? "Generated MDX source"
+									: "Live story preview"}
+							</span>
 							<button
 								type="button"
 								onClick={downloadMdx}
-								className="inline-flex items-center gap-1.5 text-white hover:text-primaryyellow">
+								className={`inline-flex items-center gap-1.5 ${outputTab === "mdx" ? "text-white hover:text-primaryyellow" : "text-primaryText hover:text-secondaryforestgreen"}`}>
 								<ArrowDownToLine size={14} /> Download
 							</button>
 						</div>
