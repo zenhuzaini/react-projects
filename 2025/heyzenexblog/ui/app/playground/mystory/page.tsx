@@ -39,6 +39,8 @@ type StoryDraft = {
 	country: string;
 	activityType: string;
 	tags: string;
+	eventDateFrom: string;
+	eventDateTo: string;
 	blocks: StoryBlock[];
 	createdAt: string;
 	updatedAt: string;
@@ -54,8 +56,11 @@ const blockOptions: { type: BlockType; label: string; icon: typeof Text }[] = [
 	{ type: "section", label: "Section title", icon: Type },
 ];
 
-const createBlock = (type: BlockType): StoryBlock => ({
-	id: crypto.randomUUID(),
+const createBlock = (
+	type: BlockType,
+	id = crypto.randomUUID(),
+): StoryBlock => ({
+	id,
 	type,
 	text: type === "paragraph" ? "Write your story here..." : "",
 	imageUrl: "",
@@ -66,8 +71,11 @@ const createBlock = (type: BlockType): StoryBlock => ({
 	],
 });
 
-const createDraft = (): StoryDraft => ({
-	id: crypto.randomUUID(),
+const createDraft = (
+	id = crypto.randomUUID(),
+	blockId = crypto.randomUUID(),
+): StoryDraft => ({
+	id,
 	title: "Untitled story",
 	slug: "untitled-story",
 	description: "",
@@ -76,9 +84,11 @@ const createDraft = (): StoryDraft => ({
 	country: "",
 	activityType: "bikepacking",
 	tags: "",
-	blocks: [createBlock("paragraph")],
-	createdAt: new Date().toISOString(),
-	updatedAt: new Date().toISOString(),
+	eventDateFrom: "",
+	eventDateTo: "",
+	blocks: [createBlock("paragraph", blockId)],
+	createdAt: "",
+	updatedAt: "",
 });
 
 const toSlug = (value: string) =>
@@ -99,8 +109,8 @@ const toMdx = (draft: StoryDraft) => {
 		description: draft.description,
 		datePublished: draft.createdAt || draft.updatedAt,
 		dateModified: draft.updatedAt,
-		eventDateTo: new Date().toISOString(),
-		eventDateFrom: new Date().toISOString(),
+		eventDateTo: draft.eventDateTo,
+		eventDateFrom: draft.eventDateFrom,
 		tags: draft.tags
 			.split(",")
 			.map((tag) => tag.trim())
@@ -142,7 +152,9 @@ const toMdx = (draft: StoryDraft) => {
 };
 
 const MystoryPlayground = () => {
-	const [draft, setDraft] = useState<StoryDraft>(createDraft);
+	const [draft, setDraft] = useState<StoryDraft>(() =>
+		createDraft("initial-draft", "initial-paragraph"),
+	);
 	const [savedDrafts, setSavedDrafts] = useState<StoryDraft[]>([]);
 	const [isHydrated, setIsHydrated] = useState(false);
 	const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
@@ -188,10 +200,12 @@ const MystoryPlayground = () => {
 	};
 
 	const saveDraft = () => {
+		const now = new Date().toISOString();
 		const updatedDraft = {
 			...draft,
 			slug: draft.slug || toSlug(draft.title),
-			updatedAt: new Date().toISOString(),
+			createdAt: draft.createdAt || now,
+			updatedAt: now,
 		};
 		const nextDrafts = activeDraftId
 			? savedDrafts.map((item) =>
@@ -433,6 +447,32 @@ const MystoryPlayground = () => {
 									}
 									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
 									placeholder="Poland"
+								/>
+							</label>
+							<label>
+								<span className="mb-1 block text-xs font-semibold text-primarygrey">
+									Event start
+								</span>
+								<input
+									type="date"
+									value={draft.eventDateFrom}
+									onChange={(event) =>
+										updateDraft({ eventDateFrom: event.target.value })
+									}
+									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+								/>
+							</label>
+							<label>
+								<span className="mb-1 block text-xs font-semibold text-primarygrey">
+									Event end
+								</span>
+								<input
+									type="date"
+									value={draft.eventDateTo}
+									onChange={(event) =>
+										updateDraft({ eventDateTo: event.target.value })
+									}
+									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
 								/>
 							</label>
 							<label>
