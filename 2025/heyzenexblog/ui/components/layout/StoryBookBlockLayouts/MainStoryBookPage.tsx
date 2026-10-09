@@ -24,6 +24,7 @@ const MainStoryBookPage = ({
 	storyId,
 	storyTitle,
 	storyDescription,
+	storyTags = [],
 	storyPhotoUrls,
 	storyContent,
 	totalView,
@@ -150,31 +151,28 @@ const MainStoryBookPage = ({
 					<div className="flex gap-0 sm:gap-2">
 						<div className="flex text-sm md:text-lg sm:gap-2  pl-2 pr-2 rounded-lg items-center">
 							<EyeSymbol className="stroke-primaryaccent" size={4}></EyeSymbol>{" "}
-							<span className="text-primarytextInvert">12.k</span>
+							<span className="text-primarytextInvert">
+								{totalView.toLocaleString()}
+							</span>
 						</div>
 						<div className="flex text-sm md:text-lg gap-1 sm:gap-2 pl-2 pr-2 rounded-lg items-center ">
 							<HeartOutlined
 								className="stroke-primaryaccent"
 								size={4}></HeartOutlined>
-							<span className="text-primarytextInvert">100</span>
+							<span className="text-primarytextInvert">
+								{totalLike.toLocaleString()}
+							</span>
 						</div>
 					</div>
-					<div className="hidden md:flex gap-2">
-						<div className="flex items-center justify-center">
-							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
-								<span className="text-dot">#</span>adventure
-							</h6>
-						</div>
-						<div className="flex items-center justify-center">
-							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
-								<span className="text-dot">#</span>travel
-							</h6>
-						</div>
-						<div className="flex items-center justify-center">
-							<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
-								<span className="text-dot">#</span>brazil
-							</h6>
-						</div>
+					<div className="hidden md:flex flex-wrap justify-end gap-2">
+						{storyTags.map((tag) => (
+							<div key={tag} className="flex items-center justify-center">
+								<h6 className="text-primarycream p-2 rounded-sm bg-primaryaccent text-sm">
+									<span className="text-dot">#</span>
+									{tag}
+								</h6>
+							</div>
+						))}
 					</div>
 				</div>
 			</section>

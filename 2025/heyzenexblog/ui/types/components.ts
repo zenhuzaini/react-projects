@@ -40,6 +40,7 @@ export type MainStoryBookPageProps = {
 	storyId: string;
 	storyTitle: string;
 	storyDescription: string;
+	storyTags?: string[];
 	storyPhotoUrls: PhotoCardDetailType[];
 	storyContent: StoryContentType[];
 	totalView: number;

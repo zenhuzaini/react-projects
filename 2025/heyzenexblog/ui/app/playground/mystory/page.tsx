@@ -46,6 +46,8 @@ type StoryDraft = {
 	country: string;
 	activityType: string;
 	tags: string;
+	views: number;
+	likes: number;
 	datePublished: string;
 	eventDateFrom: string;
 	eventDateTo: string;
@@ -84,18 +86,26 @@ const createDraft = (
 	blockId = crypto.randomUUID(),
 ): StoryDraft => ({
 	id,
-	title: "Untitled story",
-	slug: "untitled-story",
-	description: "",
-	cover: "",
-	city: "",
-	country: "",
+	title: "A Weekend Along the Velo Dunajec",
+	slug: "a-weekend-along-the-velo-dunajec",
+	description:
+		"A sample ride through the mountains, lakes, and forest roads of southern Poland.",
+	cover: photoMockStatic[0].photoUrl,
+	city: "Zakopane",
+	country: "Poland",
 	activityType: "bikepacking",
-	tags: "",
+	tags: "bikepacking, adventure, Poland",
+	views: 100,
+	likes: 10,
 	datePublished: "",
 	eventDateFrom: "",
 	eventDateTo: "",
-	blocks: [createBlock("paragraph", blockId)],
+	blocks: [
+		{
+			...createBlock("paragraph", blockId),
+			text: "A long weekend on the bike, following quiet paths through the mountains and finding a new reason to keep riding each day.",
+		},
+	],
 	createdAt: "",
 	updatedAt: "",
 });
@@ -114,6 +124,12 @@ const toLocalDateTimeInput = (date: Date) => {
 
 const toDatePublished = (value: string) =>
 	value ? new Date(value).toString() : "";
+
+const parseTags = (value: string) =>
+	value
+		.split(",")
+		.map((tag) => tag.trim())
+		.filter(Boolean);
 
 const toStoryContent = (
 	blocks: StoryBlock[],
@@ -184,18 +200,15 @@ const toMdx = (draft: StoryDraft) => {
 		slug: draft.slug || toSlug(draft.title),
 		title: draft.title,
 		id: 1,
-		views: 0,
-		likes: 0,
+		views: draft.views,
+		likes: draft.likes,
 		cover: draft.cover,
 		description: draft.description,
 		datePublished: toDatePublished(draft.datePublished),
 		dateModified: draft.updatedAt,
 		eventDateTo: draft.eventDateTo,
 		eventDateFrom: draft.eventDateFrom,
-		tags: draft.tags
-			.split(",")
-			.map((tag) => tag.trim())
-			.filter(Boolean),
+		tags: parseTags(draft.tags),
 		city: draft.city,
 		country: draft.country,
 		activityType: draft.activityType,
@@ -254,6 +267,8 @@ const MystoryPlayground = () => {
 				setSavedDrafts(
 					drafts.map((saved) => ({
 						...saved,
+						views: saved.views ?? 100,
+						likes: saved.likes ?? 10,
 						datePublished:
 							saved.datePublished ||
 							(saved.createdAt
@@ -330,6 +345,8 @@ const MystoryPlayground = () => {
 	const loadDraft = (saved: StoryDraft) => {
 		setDraft({
 			...saved,
+			views: saved.views ?? 100,
+			likes: saved.likes ?? 10,
 			datePublished:
 				saved.datePublished ||
 				(saved.createdAt
@@ -682,6 +699,34 @@ const MystoryPlayground = () => {
 									placeholder="solo, nature"
 								/>
 							</label>
+							<label>
+								<span className="mb-1 block text-xs font-semibold text-primarygrey">
+									Views
+								</span>
+								<input
+									type="number"
+									min={0}
+									value={draft.views}
+									onChange={(event) =>
+										updateDraft({ views: Number(event.target.value) })
+									}
+									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+								/>
+							</label>
+							<label>
+								<span className="mb-1 block text-xs font-semibold text-primarygrey">
+									Likes
+								</span>
+								<input
+									type="number"
+									min={0}
+									value={draft.likes}
+									onChange={(event) =>
+										updateDraft({ likes: Number(event.target.value) })
+									}
+									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+								/>
+							</label>
 						</div>
 					</div>
 
@@ -978,10 +1023,11 @@ const MystoryPlayground = () => {
 									storyId="2"
 									storyTitle={draft.title}
 									storyDescription={draft.description}
+									storyTags={parseTags(draft.tags)}
 									storyPhotoUrls={storyPhotoUrls}
 									storyContent={storyContent}
-									totalView={100}
-									totalLike={10}
+									totalView={draft.views}
+									totalLike={draft.likes}
 								/>
 							</div>
 						)}
