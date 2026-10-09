@@ -105,6 +105,7 @@ const MainStoryBookPage = ({
 						route={storyContent?.route}
 						description={storyContent?.textContent}
 						shouldShowDownloadGPX={storyContent?.shouldShowDownloadGPX}
+						title={storyContent?.title}
 					/>
 				);
 

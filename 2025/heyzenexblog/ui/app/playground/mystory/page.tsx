@@ -72,6 +72,7 @@ type StoryBlock = {
 	centerLongitude: string;
 	route: string;
 	shouldShowDownloadGPX: boolean;
+	mapTitle: string;
 };
 
 type StoryDraft = {
@@ -131,6 +132,7 @@ const createBlock = (
 	centerLongitude: "",
 	route: "",
 	shouldShowDownloadGPX: false,
+	mapTitle: "",
 });
 
 const createDraft = (
@@ -364,6 +366,7 @@ const toStoryContent = (
 						? { route: parseRoute(block.route) }
 						: {}),
 					shouldShowDownloadGPX: block.shouldShowDownloadGPX,
+					title: block.mapTitle,
 				},
 			];
 		}
@@ -446,6 +449,9 @@ const toMdx = (draft: StoryDraft) => {
 						...(route.length ? [`route={${JSON.stringify(route)}}`] : []),
 						...(block.shouldShowDownloadGPX
 							? ["shouldShowDownloadGPX={true}"]
+							: []),
+						...(block.mapTitle.trim()
+							? [`title={${JSON.stringify(block.mapTitle)}}`]
 							: []),
 						...(block.text.trim()
 							? [`description={${JSON.stringify(block.text)}}`]
@@ -1296,6 +1302,16 @@ const MystoryPlayground = () => {
 													/>
 													Show GPX download on map
 												</label>
+												<input
+													value={block.mapTitle}
+													onChange={(event) =>
+														updateBlock(block.id, {
+															mapTitle: event.target.value,
+														})
+													}
+													className="rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-span-2"
+													placeholder="Map title"
+												/>
 												<label className="flex flex-col gap-1 text-xs font-semibold text-primarygrey sm:col-span-2">
 													Import GPX route
 													<input
