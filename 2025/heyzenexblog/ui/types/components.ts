@@ -36,6 +36,7 @@ export type StoryContentType = {
 	url?: string;
 	center?: [number, number];
 	route?: [number, number][];
+	shouldShowDownloadGPX?: boolean;
 };
 
 export type MainStoryBookPageProps = {

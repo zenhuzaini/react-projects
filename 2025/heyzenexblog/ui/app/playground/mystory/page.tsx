@@ -71,6 +71,7 @@ type StoryBlock = {
 	centerLatitude: string;
 	centerLongitude: string;
 	route: string;
+	shouldShowDownloadGPX: boolean;
 };
 
 type StoryDraft = {
@@ -94,6 +95,8 @@ type StoryDraft = {
 };
 
 const STORAGE_KEY = "heyzenex-mystory-drafts";
+const MAX_GPX_FILE_SIZE = 20 * 1024 * 1024;
+const MAX_GPX_ROUTE_POINTS = 2000;
 
 const blockOptions: { type: BlockType; label: string; icon: typeof Text }[] = [
 	{ type: "paragraph", label: "Paragraph", icon: Text },
@@ -127,6 +130,7 @@ const createBlock = (
 	centerLatitude: "",
 	centerLongitude: "",
 	route: "",
+	shouldShowDownloadGPX: false,
 });
 
 const createDraft = (
@@ -180,8 +184,15 @@ const parseTags = (value: string) =>
 		.filter(Boolean);
 
 const parseCoordinatePair = (value: string): [number, number] | undefined => {
-	const coordinates = value.split(",").map((coordinate) => Number(coordinate.trim()));
-	if (coordinates.length !== 2 || coordinates.some((coordinate) => !Number.isFinite(coordinate))) {
+	const parts = value.split(",").map((coordinate) => coordinate.trim());
+	if (parts.length !== 2 || parts.some((coordinate) => !coordinate)) {
+		return undefined;
+	}
+	const coordinates = parts.map(Number);
+	if (
+		coordinates.length !== 2 ||
+		coordinates.some((coordinate) => !Number.isFinite(coordinate))
+	) {
 		return undefined;
 	}
 	return [coordinates[0], coordinates[1]];
@@ -191,7 +202,63 @@ const parseRoute = (value: string): [number, number][] =>
 	value
 		.split("\n")
 		.map((line) => parseCoordinatePair(line))
-		.filter((coordinates): coordinates is [number, number] => Boolean(coordinates));
+		.filter((coordinates): coordinates is [number, number] =>
+			Boolean(coordinates),
+		);
+
+const parseGpxRoute = (source: string): [number, number][] => {
+	if (/<!DOCTYPE|<!ENTITY/i.test(source)) {
+		throw new Error(
+			"GPX files with document types or entities are not supported.",
+		);
+	}
+
+	const document = new DOMParser().parseFromString(source, "application/xml");
+	if (document.getElementsByTagName("parsererror").length) {
+		throw new Error("The selected file is not valid GPX/XML.");
+	}
+
+	const elements = Array.from(document.getElementsByTagName("*"));
+	const trackNodes = elements.filter(
+		(element) => element.localName === "trkpt",
+	);
+	const routeNodes = elements.filter(
+		(element) => element.localName === "rtept",
+	);
+	const pointNodes = trackNodes.length ? trackNodes : routeNodes;
+	const points = pointNodes.flatMap((element) => {
+		const latitudeValue = element.getAttribute("lat");
+		const longitudeValue = element.getAttribute("lon");
+		if (latitudeValue === null || longitudeValue === null) return [];
+		const latitude = Number(latitudeValue);
+		const longitude = Number(longitudeValue);
+		if (
+			!Number.isFinite(latitude) ||
+			!Number.isFinite(longitude) ||
+			latitude < -90 ||
+			latitude > 90 ||
+			longitude < -180 ||
+			longitude > 180
+		) {
+			return [];
+		}
+		return [[latitude, longitude] as [number, number]];
+	});
+
+	if (points.length < 2) {
+		throw new Error(
+			"The GPX file must contain at least two track or route points.",
+		);
+	}
+	if (points.length <= MAX_GPX_ROUTE_POINTS) return points;
+
+	return Array.from({ length: MAX_GPX_ROUTE_POINTS }, (_, index) => {
+		const pointIndex = Math.round(
+			(index * (points.length - 1)) / (MAX_GPX_ROUTE_POINTS - 1),
+		);
+		return points[pointIndex];
+	});
+};
 
 const toStoryContent = (
 	blocks: StoryBlock[],
@@ -244,24 +311,24 @@ const toStoryContent = (
 			case "section":
 				sectionID = "layout9";
 				break;
-				case "checklist":
-					sectionID = "layout11";
-					break;
-				case "itemlist":
-					sectionID = "layout12";
-					break;
-				case "iframe":
-					sectionID = "layout13";
-					break;
-				case "divider":
-					sectionID = "layout14";
-					break;
-				case "highlight":
-					sectionID = "layout15";
-					break;
-				case "map":
-					sectionID = "layout10";
-					break;
+			case "checklist":
+				sectionID = "layout11";
+				break;
+			case "itemlist":
+				sectionID = "layout12";
+				break;
+			case "iframe":
+				sectionID = "layout13";
+				break;
+			case "divider":
+				sectionID = "layout14";
+				break;
+			case "highlight":
+				sectionID = "layout15";
+				break;
+			case "map":
+				sectionID = "layout10";
+				break;
 		}
 
 		if (sectionID === "layout5" || sectionID === "layout6") {
@@ -274,7 +341,9 @@ const toStoryContent = (
 		}
 		if (sectionID === "layout11" || sectionID === "layout12") {
 			const items = block.items.filter((item) => item.label.trim());
-			return items.length ? [{ sectionID, textContent: "", photoUrls, items }] : [];
+			return items.length
+				? [{ sectionID, textContent: "", photoUrls, items }]
+				: [];
 		}
 		if (sectionID === "layout13") {
 			return block.url.trim()
@@ -294,6 +363,7 @@ const toStoryContent = (
 					...(parseRoute(block.route).length
 						? { route: parseRoute(block.route) }
 						: {}),
+					shouldShowDownloadGPX: block.shouldShowDownloadGPX,
 				},
 			];
 		}
@@ -374,6 +444,9 @@ const toMdx = (draft: StoryDraft) => {
 					const props = [
 						...(center ? [`center={${JSON.stringify(center)}}`] : []),
 						...(route.length ? [`route={${JSON.stringify(route)}}`] : []),
+						...(block.shouldShowDownloadGPX
+							? ["shouldShowDownloadGPX={true}"]
+							: []),
 						...(block.text.trim()
 							? [`description={${JSON.stringify(block.text)}}`]
 							: []),
@@ -458,6 +531,35 @@ const MystoryPlayground = () => {
 		const items = [...block.items];
 		items[index] = { ...items[index], ...updates };
 		updateBlock(block.id, { items });
+	};
+
+	const importGpxRoute = async (blockId: string, file: File) => {
+		if (file.size > MAX_GPX_FILE_SIZE) {
+			setNotice("GPX files must be smaller than 20 MB.");
+			return;
+		}
+
+		try {
+			const route = parseGpxRoute(await file.text());
+			const centerLatitude =
+				route.reduce((sum, point) => sum + point[0], 0) / route.length;
+			const centerLongitude =
+				route.reduce((sum, point) => sum + point[1], 0) / route.length;
+			updateBlock(blockId, {
+				centerLatitude: centerLatitude.toFixed(6),
+				centerLongitude: centerLongitude.toFixed(6),
+				route: route
+					.map(([latitude, longitude]) => `${latitude}, ${longitude}`)
+					.join("\n"),
+			});
+			setNotice(`Imported ${route.length} route points from ${file.name}.`);
+		} catch (error) {
+			setNotice(
+				error instanceof Error
+					? error.message
+					: "Could not read this GPX file.",
+			);
+		}
 	};
 
 	const addBlock = (type: BlockType, index = draft.blocks.length) => {
@@ -1100,133 +1202,160 @@ const MystoryPlayground = () => {
 												placeholder="Section title"
 											/>
 										)}
-											{block.type === "highlight" && (
-												<input
+										{block.type === "highlight" && (
+											<input
+												value={block.text}
+												onChange={(event) =>
+													updateBlock(block.id, { text: event.target.value })
+												}
+												className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+												placeholder="Highlighted text"
+											/>
+										)}
+										{(block.type === "checklist" ||
+											block.type === "itemlist") && (
+											<div className="space-y-2">
+												{block.items.map((item, itemIndex) => (
+													<div
+														key={`${block.id}-item-${itemIndex}`}
+														className="flex items-center gap-2">
+														{block.type === "checklist" && (
+															<input
+																type="checkbox"
+																checked={item.done}
+																onChange={(event) =>
+																	updateListItem(block, itemIndex, {
+																		done: event.target.checked,
+																	})
+																}
+																className="size-4 accent-primaryaccent"
+															/>
+														)}
+														<input
+															value={item.label}
+															onChange={(event) =>
+																updateListItem(block, itemIndex, {
+																	label: event.target.value,
+																})
+															}
+															className="min-w-0 flex-1 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+															placeholder={`Item ${itemIndex + 1}`}
+														/>
+														<button
+															type="button"
+															onClick={() =>
+																updateBlock(block.id, {
+																	items: block.items.filter(
+																		(_, index) => index !== itemIndex,
+																	),
+																})
+															}
+															aria-label={`Remove item ${itemIndex + 1}`}
+															className="rounded p-2 text-primaryred hover:bg-primaryred/10">
+															<X size={15} />
+														</button>
+													</div>
+												))}
+												<button
+													type="button"
+													onClick={() =>
+														updateBlock(block.id, {
+															items: [
+																...block.items,
+																{ label: "", done: false },
+															],
+														})
+													}
+													className="inline-flex items-center gap-1 text-xs font-semibold text-secondaryforestgreen">
+													<Plus size={14} /> Add item
+												</button>
+											</div>
+										)}
+										{block.type === "iframe" && (
+											<input
+												value={block.url}
+												onChange={(event) =>
+													updateBlock(block.id, { url: event.target.value })
+												}
+												className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+												placeholder="Embed URL"
+											/>
+										)}
+										{block.type === "map" && (
+											<div className="grid gap-2 sm:grid-cols-2">
+												<label className="flex items-center gap-2 text-sm font-medium text-primaryText sm:col-span-2">
+													<input
+														type="checkbox"
+														checked={block.shouldShowDownloadGPX}
+														onChange={(event) =>
+															updateBlock(block.id, {
+																shouldShowDownloadGPX: event.target.checked,
+															})
+														}
+														className="size-4 accent-primaryaccent"
+													/>
+													Show GPX download on map
+												</label>
+												<label className="flex flex-col gap-1 text-xs font-semibold text-primarygrey sm:col-span-2">
+													Import GPX route
+													<input
+														type="file"
+														accept=".gpx,application/gpx+xml,application/xml,text/xml"
+														onChange={(event) => {
+															const file = event.currentTarget.files?.[0];
+															event.currentTarget.value = "";
+															if (file) void importGpxRoute(block.id, file);
+														}}
+														className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm font-normal outline-none file:mr-3 file:rounded file:border-0 file:bg-secondaryforestgreen/10 file:px-3 file:py-1 file:font-semibold file:text-secondaryforestgreen"
+													/>
+												</label>
+												<textarea
 													value={block.text}
 													onChange={(event) =>
 														updateBlock(block.id, { text: event.target.value })
 													}
-													className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
-													placeholder="Highlighted text"
+													rows={2}
+													className="resize-y rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-span-2"
+													placeholder="Map description"
 												/>
-											)}
-											{(block.type === "checklist" || block.type === "itemlist") && (
-												<div className="space-y-2">
-													{block.items.map((item, itemIndex) => (
-														<div
-															key={`${block.id}-item-${itemIndex}`}
-															className="flex items-center gap-2">
-															{block.type === "checklist" && (
-																<input
-																	type="checkbox"
-																	checked={item.done}
-																	onChange={(event) =>
-																		updateListItem(block, itemIndex, {
-																			done: event.target.checked,
-																		})
-																	}
-																	className="size-4 accent-primaryaccent"
-																/>
-															)}
-															<input
-																value={item.label}
-																onChange={(event) =>
-																	updateListItem(block, itemIndex, {
-																		label: event.target.value,
-																	})
-																}
-																className="min-w-0 flex-1 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
-																placeholder={`Item ${itemIndex + 1}`}
-															/>
-															<button
-																type="button"
-																onClick={() =>
-																	updateBlock(block.id, {
-																		items: block.items.filter(
-																			(_, index) => index !== itemIndex,
-																		),
-																	})
-																}
-																aria-label={`Remove item ${itemIndex + 1}`}
-																className="rounded p-2 text-primaryred hover:bg-primaryred/10">
-																<X size={15} />
-															</button>
-														</div>
-													))}
-													<button
-														type="button"
-														onClick={() =>
-															updateBlock(block.id, {
-																items: [
-																	...block.items,
-																	{ label: "", done: false },
-																],
-															})
-														}
-														className="inline-flex items-center gap-1 text-xs font-semibold text-secondaryforestgreen">
-														<Plus size={14} /> Add item
-													</button>
-												</div>
-											)}
-											{block.type === "iframe" && (
 												<input
-													value={block.url}
+													inputMode="decimal"
+													value={block.centerLatitude}
 													onChange={(event) =>
-														updateBlock(block.id, { url: event.target.value })
+														updateBlock(block.id, {
+															centerLatitude: event.target.value,
+														})
 													}
-													className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
-													placeholder="Embed URL"
+													className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+													placeholder="Center latitude"
 												/>
-											)}
-											{block.type === "map" && (
-												<div className="grid gap-2 sm:grid-cols-2">
-													<textarea
-														value={block.text}
-														onChange={(event) =>
-															updateBlock(block.id, { text: event.target.value })
-														}
-														rows={2}
-														className="resize-y rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-span-2"
-														placeholder="Map description"
-													/>
-													<input
-														inputMode="decimal"
-														value={block.centerLatitude}
-														onChange={(event) =>
-															updateBlock(block.id, {
-																centerLatitude: event.target.value,
-															})
-														}
-														className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
-														placeholder="Center latitude"
-													/>
-													<input
-														inputMode="decimal"
-														value={block.centerLongitude}
-														onChange={(event) =>
-															updateBlock(block.id, {
-																centerLongitude: event.target.value,
-															})
-														}
-														className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
-														placeholder="Center longitude"
-													/>
-													<textarea
-														value={block.route}
-														onChange={(event) =>
-															updateBlock(block.id, { route: event.target.value })
-														}
-														rows={3}
-														className="resize-y rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-span-2"
-														placeholder="Route coordinates, one latitude, longitude pair per line"
-													/>
-												</div>
-											)}
-											{block.type === "divider" && (
-												<div className="py-2">
-													<div className="h-1 w-full rounded-full bg-primaryaccent" />
-												</div>
-											)}
+												<input
+													inputMode="decimal"
+													value={block.centerLongitude}
+													onChange={(event) =>
+														updateBlock(block.id, {
+															centerLongitude: event.target.value,
+														})
+													}
+													className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+													placeholder="Center longitude"
+												/>
+												<textarea
+													value={block.route}
+													onChange={(event) =>
+														updateBlock(block.id, { route: event.target.value })
+													}
+													rows={3}
+													className="resize-y rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-span-2"
+													placeholder="Route coordinates, one latitude, longitude pair per line"
+												/>
+											</div>
+										)}
+										{block.type === "divider" && (
+											<div className="py-2">
+												<div className="h-1 w-full rounded-full bg-primaryaccent" />
+											</div>
+										)}
 										{block.type === "image" && (
 											<div className="grid gap-2">
 												<input

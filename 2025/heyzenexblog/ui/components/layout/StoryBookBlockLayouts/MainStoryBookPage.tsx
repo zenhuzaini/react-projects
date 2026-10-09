@@ -103,7 +103,9 @@ const MainStoryBookPage = ({
 						key={idx}
 						center={storyContent?.center}
 						route={storyContent?.route}
-						description={storyContent?.textContent}></MapWithDescription>
+						description={storyContent?.textContent}
+						shouldShowDownloadGPX={storyContent?.shouldShowDownloadGPX}
+					/>
 				);
 
 			case "layout11":
