@@ -12,8 +12,14 @@ import {
 	CloudUpload,
 	Eye,
 	GripVertical,
+	Highlighter,
 	ImagePlus,
+	Link2,
 	Layers3,
+	List,
+	ListChecks,
+	MapPin,
+	Minus,
 	PanelLeftClose,
 	PanelLeftOpen,
 	Plus,
@@ -38,7 +44,20 @@ import { photoMockStatic } from "@/mock/photo";
 import type { PhotoCardDetailType, StoryContentType } from "@/types/components";
 import Heading from "@/components/molecule/Headings/Heading";
 
-type BlockType = "paragraph" | "quote" | "image" | "gallery" | "section";
+type BlockType =
+	| "paragraph"
+	| "quote"
+	| "image"
+	| "gallery"
+	| "section"
+	| "checklist"
+	| "itemlist"
+	| "iframe"
+	| "map"
+	| "divider"
+	| "highlight";
+
+type StoryListItem = { label: string; done: boolean };
 
 type StoryBlock = {
 	id: string;
@@ -47,6 +66,11 @@ type StoryBlock = {
 	imageUrl: string;
 	imageAlt: string;
 	gallery: { url: string; alt: string }[];
+	items: StoryListItem[];
+	url: string;
+	centerLatitude: string;
+	centerLongitude: string;
+	route: string;
 };
 
 type StoryDraft = {
@@ -77,6 +101,12 @@ const blockOptions: { type: BlockType; label: string; icon: typeof Text }[] = [
 	{ type: "image", label: "Photo", icon: ImagePlus },
 	{ type: "gallery", label: "Gallery", icon: Layers3 },
 	{ type: "section", label: "Section title", icon: Type },
+	{ type: "checklist", label: "Checklist", icon: ListChecks },
+	{ type: "itemlist", label: "Item list", icon: List },
+	{ type: "iframe", label: "Map embed", icon: Link2 },
+	{ type: "map", label: "Map with description", icon: MapPin },
+	{ type: "divider", label: "Divider", icon: Minus },
+	{ type: "highlight", label: "Highlight", icon: Highlighter },
 ];
 
 const createBlock = (
@@ -92,6 +122,11 @@ const createBlock = (
 		{ url: "", alt: "" },
 		{ url: "", alt: "" },
 	],
+	items: [],
+	url: "",
+	centerLatitude: "",
+	centerLongitude: "",
+	route: "",
 });
 
 const createDraft = (
@@ -144,6 +179,20 @@ const parseTags = (value: string) =>
 		.map((tag) => tag.trim())
 		.filter(Boolean);
 
+const parseCoordinatePair = (value: string): [number, number] | undefined => {
+	const coordinates = value.split(",").map((coordinate) => Number(coordinate.trim()));
+	if (coordinates.length !== 2 || coordinates.some((coordinate) => !Number.isFinite(coordinate))) {
+		return undefined;
+	}
+	return [coordinates[0], coordinates[1]];
+};
+
+const parseRoute = (value: string): [number, number][] =>
+	value
+		.split("\n")
+		.map((line) => parseCoordinatePair(line))
+		.filter((coordinates): coordinates is [number, number] => Boolean(coordinates));
+
 const toStoryContent = (
 	blocks: StoryBlock[],
 	metadata: Pick<
@@ -151,7 +200,7 @@ const toStoryContent = (
 		"city" | "country" | "activityType" | "eventDateFrom"
 	>,
 ): StoryContentType[] =>
-	blocks.flatMap((block) => {
+	blocks.flatMap<StoryContentType>((block): StoryContentType[] => {
 		let sectionID: string;
 		let photoUrls: PhotoCardDetailType[] = [];
 
@@ -195,12 +244,58 @@ const toStoryContent = (
 			case "section":
 				sectionID = "layout9";
 				break;
+				case "checklist":
+					sectionID = "layout11";
+					break;
+				case "itemlist":
+					sectionID = "layout12";
+					break;
+				case "iframe":
+					sectionID = "layout13";
+					break;
+				case "divider":
+					sectionID = "layout14";
+					break;
+				case "highlight":
+					sectionID = "layout15";
+					break;
+				case "map":
+					sectionID = "layout10";
+					break;
 		}
 
 		if (sectionID === "layout5" || sectionID === "layout6") {
 			return photoUrls.length
 				? [{ sectionID, textContent: block.text, photoUrls }]
 				: [];
+		}
+		if (sectionID === "layout14") {
+			return [{ sectionID, textContent: "", photoUrls }];
+		}
+		if (sectionID === "layout11" || sectionID === "layout12") {
+			const items = block.items.filter((item) => item.label.trim());
+			return items.length ? [{ sectionID, textContent: "", photoUrls, items }] : [];
+		}
+		if (sectionID === "layout13") {
+			return block.url.trim()
+				? [{ sectionID, textContent: "", photoUrls, url: block.url }]
+				: [];
+		}
+		if (sectionID === "layout10") {
+			const center = parseCoordinatePair(
+				`${block.centerLatitude},${block.centerLongitude}`,
+			);
+			return [
+				{
+					sectionID,
+					textContent: block.text,
+					photoUrls,
+					...(center ? { center } : {}),
+					...(parseRoute(block.route).length
+						? { route: parseRoute(block.route) }
+						: {}),
+				},
+			];
 		}
 
 		return block.text.trim()
@@ -250,6 +345,47 @@ const toMdx = (draft: StoryDraft) => {
 				}
 				case "section":
 					return `<Section text=${JSON.stringify(block.text)} />`;
+				case "checklist": {
+					const items = block.items
+						.filter((item) => item.label.trim())
+						.map(
+							(item) =>
+								`\t{ label: ${JSON.stringify(item.label)}, done: ${item.done} },`,
+						)
+						.join("\n");
+					return `<Checklist items={[\n${items}\n]} />`;
+				}
+				case "itemlist": {
+					const items = block.items
+						.filter((item) => item.label.trim())
+						.map((item) => `\t{ label: ${JSON.stringify(item.label)} },`)
+						.join("\n");
+					return `<ItemList items={[\n${items}\n]} />`;
+				}
+				case "iframe":
+					return block.url.trim()
+						? `<IframeWithLoader url={${JSON.stringify(block.url)}} />`
+						: "";
+				case "map": {
+					const center = parseCoordinatePair(
+						`${block.centerLatitude},${block.centerLongitude}`,
+					);
+					const route = parseRoute(block.route);
+					const props = [
+						...(center ? [`center={${JSON.stringify(center)}}`] : []),
+						...(route.length ? [`route={${JSON.stringify(route)}}`] : []),
+						...(block.text.trim()
+							? [`description={${JSON.stringify(block.text)}}`]
+							: []),
+					].join(" ");
+					return `<MapWithDescription${props ? ` ${props}` : ""} />`;
+				}
+				case "divider":
+					return "<hr />";
+				case "highlight":
+					return block.text.trim()
+						? `<Highlight>${block.text}</Highlight>`
+						: "";
 			}
 		})
 		.filter(Boolean)
@@ -313,6 +449,16 @@ const MystoryPlayground = () => {
 				block.id === id ? { ...block, ...updates } : block,
 			),
 		}));
+
+	const updateListItem = (
+		block: StoryBlock,
+		index: number,
+		updates: Partial<StoryListItem>,
+	) => {
+		const items = [...block.items];
+		items[index] = { ...items[index], ...updates };
+		updateBlock(block.id, { items });
+	};
 
 	const addBlock = (type: BlockType, index = draft.blocks.length) => {
 		const nextBlocks = [...draft.blocks];
@@ -954,6 +1100,133 @@ const MystoryPlayground = () => {
 												placeholder="Section title"
 											/>
 										)}
+											{block.type === "highlight" && (
+												<input
+													value={block.text}
+													onChange={(event) =>
+														updateBlock(block.id, { text: event.target.value })
+													}
+													className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+													placeholder="Highlighted text"
+												/>
+											)}
+											{(block.type === "checklist" || block.type === "itemlist") && (
+												<div className="space-y-2">
+													{block.items.map((item, itemIndex) => (
+														<div
+															key={`${block.id}-item-${itemIndex}`}
+															className="flex items-center gap-2">
+															{block.type === "checklist" && (
+																<input
+																	type="checkbox"
+																	checked={item.done}
+																	onChange={(event) =>
+																		updateListItem(block, itemIndex, {
+																			done: event.target.checked,
+																		})
+																	}
+																	className="size-4 accent-primaryaccent"
+																/>
+															)}
+															<input
+																value={item.label}
+																onChange={(event) =>
+																	updateListItem(block, itemIndex, {
+																		label: event.target.value,
+																	})
+																}
+																className="min-w-0 flex-1 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+																placeholder={`Item ${itemIndex + 1}`}
+															/>
+															<button
+																type="button"
+																onClick={() =>
+																	updateBlock(block.id, {
+																		items: block.items.filter(
+																			(_, index) => index !== itemIndex,
+																		),
+																	})
+																}
+																aria-label={`Remove item ${itemIndex + 1}`}
+																className="rounded p-2 text-primaryred hover:bg-primaryred/10">
+																<X size={15} />
+															</button>
+														</div>
+													))}
+													<button
+														type="button"
+														onClick={() =>
+															updateBlock(block.id, {
+																items: [
+																	...block.items,
+																	{ label: "", done: false },
+																],
+															})
+														}
+														className="inline-flex items-center gap-1 text-xs font-semibold text-secondaryforestgreen">
+														<Plus size={14} /> Add item
+													</button>
+												</div>
+											)}
+											{block.type === "iframe" && (
+												<input
+													value={block.url}
+													onChange={(event) =>
+														updateBlock(block.id, { url: event.target.value })
+													}
+													className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+													placeholder="Embed URL"
+												/>
+											)}
+											{block.type === "map" && (
+												<div className="grid gap-2 sm:grid-cols-2">
+													<textarea
+														value={block.text}
+														onChange={(event) =>
+															updateBlock(block.id, { text: event.target.value })
+														}
+														rows={2}
+														className="resize-y rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-span-2"
+														placeholder="Map description"
+													/>
+													<input
+														inputMode="decimal"
+														value={block.centerLatitude}
+														onChange={(event) =>
+															updateBlock(block.id, {
+																centerLatitude: event.target.value,
+															})
+														}
+														className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+														placeholder="Center latitude"
+													/>
+													<input
+														inputMode="decimal"
+														value={block.centerLongitude}
+														onChange={(event) =>
+															updateBlock(block.id, {
+																centerLongitude: event.target.value,
+															})
+														}
+														className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+														placeholder="Center longitude"
+													/>
+													<textarea
+														value={block.route}
+														onChange={(event) =>
+															updateBlock(block.id, { route: event.target.value })
+														}
+														rows={3}
+														className="resize-y rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-span-2"
+														placeholder="Route coordinates, one latitude, longitude pair per line"
+													/>
+												</div>
+											)}
+											{block.type === "divider" && (
+												<div className="py-2">
+													<div className="h-1 w-full rounded-full bg-primaryaccent" />
+												</div>
+											)}
 										{block.type === "image" && (
 											<div className="grid gap-2">
 												<input

@@ -32,6 +32,10 @@ export type StoryContentType = {
 	sectionID: string;
 	textContent: string;
 	photoUrls: PhotoCardDetailType[];
+	items?: { label: string; done?: boolean }[];
+	url?: string;
+	center?: [number, number];
+	route?: [number, number][];
 };
 
 export type MainStoryBookPageProps = {

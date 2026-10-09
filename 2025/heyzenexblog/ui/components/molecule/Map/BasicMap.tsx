@@ -3,10 +3,16 @@ import { Map, MapTileLayer } from "@/components/ui/map";
 import { Polyline } from "react-leaflet";
 import type { LatLngExpression } from "leaflet";
 
-export default function BasicMap() {
-	const center: LatLngExpression = [43.6532, -79.3832];
+export default function BasicMap({
+	center: initialCenter,
+	route: initialRoute,
+}: {
+	center?: LatLngExpression;
+	route?: LatLngExpression[];
+}) {
+	const center: LatLngExpression = initialCenter ?? [43.6532, -79.3832];
 
-	const route: LatLngExpression[] = [
+	const route: LatLngExpression[] = initialRoute ?? [
 		[43.6532, -79.3832],
 		[43.66, -79.38],
 		[43.67, -79.37],

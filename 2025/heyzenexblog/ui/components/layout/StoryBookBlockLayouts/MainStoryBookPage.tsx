@@ -17,6 +17,10 @@ import { photoMockStatic } from "@/mock/photo";
 import SectionTitle from "./9_SectionTitle/SectionTitle";
 import EyeSymbol from "@/icons/EyeSymbol";
 import HeartOutlined from "@/icons/HeartOutlined";
+import MapWithDescription from "./10_MapDescription/MapWithDescription";
+import Checklist from "./Lists/Lists";
+import ItemList from "./Lists/ItemLists";
+import { IframeWithLoader } from "@/components/molecule/Iframe/IframeWithLoader";
 
 const MainStoryBookPage = ({
 	createdAt,
@@ -92,6 +96,40 @@ const MainStoryBookPage = ({
 					</div>
 				);
 				break;
+
+			case "layout10":
+				return (
+					<MapWithDescription
+						key={idx}
+						center={storyContent?.center}
+						route={storyContent?.route}
+						description={storyContent?.textContent}></MapWithDescription>
+				);
+
+			case "layout11":
+				return <Checklist key={idx} items={storyContent.items ?? []} />;
+
+			case "layout12":
+				return <ItemList key={idx} items={storyContent.items ?? []} />;
+
+			case "layout13":
+				return storyContent.url ? (
+					<IframeWithLoader key={idx} src={storyContent.url} />
+				) : null;
+
+			case "layout14":
+				return (
+					<div key={idx} className="sm:flex w-full items-center justify-end">
+						<div className="h-1 w-full rounded-3xl bg-primaryaccent" />
+					</div>
+				);
+
+			case "layout15":
+				return (
+					<strong key={idx} className="font-bold text-primaryaccent">
+						{storyContent.textContent}
+					</strong>
+				);
 
 			default:
 				return (
