@@ -1,3 +1,5 @@
+import { EMPTY_STRING } from "@/const/vars";
+
 const ShortDescription = ({
 	text,
 	shouldCenter = false,
@@ -9,6 +11,9 @@ const ShortDescription = ({
 	shouldItalic?: boolean;
 	fontSize?: "small" | "medium" | "large";
 }) => {
+	const trimmedText = text.trimEnd();
+	const appendPeriod = trimmedText.length > 0 && !/[.!?…]$/.test(trimmedText);
+
 	let fontSizeClassName = "";
 	switch (fontSize) {
 		case "small":
@@ -28,15 +33,15 @@ const ShortDescription = ({
 	return (
 		<p
 			className={`${fontSizeClassName}  font-extralight text-primarytextInvert ${
-				shouldCenter ? "text-center" : ""
-			} ${shouldItalic ? "italic" : ""}`}>
+				shouldCenter ? "text-center" : EMPTY_STRING
+			} ${shouldItalic ? "italic" : EMPTY_STRING}`}>
 			<span className="text-2xl md:text-4xl font-bold text-primaryaccent">
-				"
+				&quot;
 			</span>
 			{text}
-			<span className="text-dot">.</span>
+			{appendPeriod && <span className="text-dot">.</span>}
 			<span className="text-2xl md:text-4xl font-bold text-primaryaccent">
-				"
+				&quot;
 			</span>
 		</p>
 	);

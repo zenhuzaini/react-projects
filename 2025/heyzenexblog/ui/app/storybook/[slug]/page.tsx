@@ -79,7 +79,7 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 			{/* hero title & sats */}
 
 			<section className="flex flex-col gap-2 sm:gap-4">
-				<div className="relative rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
+				<div className="relative h-[40vh] min-h-80 w-full rounded-2xl sm:h-[50vh] sm:min-h-[380px] md:h-[60vh] md:min-h-[420px]">
 					<ImageWithSkeleton
 						alt={metadata.description}
 						src={metadata.cover}
@@ -87,10 +87,10 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					/>
 					<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-2xl z-0"></div>
 
-					<div className="absolute bottom-0 m-5 w-[30%]">
+					<div className="absolute bottom-0 left-0 m-4 w-3/4 max-w-2xl sm:m-5">
 						<div
 							className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
-							<h1 className="text-accenttext text-2xl sm:text-3xl md:text-6xl font-extrabold tracking-tighter leading-[0.9]">
+							<h1 className="wrap-break-words text-2xl font-extrabold leading-[0.95] text-accenttext sm:text-4xl md:text-5xl">
 								{metadata.title}
 								<span className="text-dot">.</span>
 							</h1>

@@ -13,8 +13,8 @@ const HeaderInfoSection = ({
 		<section>
 			<div className="flex justify-between items-center">
 				<div className="flex flex-col text-xs md:text-lg">
-					<p className="text-primarytextInvert font-extralight">{text}</p>
-					<p className="text-[10px] text-primarytextInvert md:text-sm tracking-tight">
+					<p className="text-primarytextInvert font-semibold">{text}</p>
+					<p className="text-xs text-primarytextInvert md:text-sm tracking-tight">
 						<span className="font-extralight">Published on</span> {date}
 					</p>
 				</div>
