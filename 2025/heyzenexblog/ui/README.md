@@ -24,8 +24,31 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Publishing Story Drafts
+
+The Story Builder's Publish action creates or updates an MDX file in
+`2025/heyzenexblog/ui/contents/mystorybook` on the configured GitHub branch.
+The server needs these environment variables:
+
+- `GITHUB_TOKEN`: a fine-grained GitHub token with Contents read/write access to
+  `zenhuzaini/react-projects`.
+- `PUBLISH_SECRET`: a random key of at least 32 characters entered in the Publish dialog. It is not
+  stored by the browser or sent to GitHub.
+- `GITHUB_BRANCH`: optional; defaults to `main`.
+- `GITHUB_REPOSITORY`: optional; defaults to `zenhuzaini/react-projects`.
+
+For local development, set the variables in an untracked `.env.local` file.
+For Cloud Foundry, set the server environment and restage the app:
+
+```bash
+cf set-env heyzenex GITHUB_TOKEN "<fine-grained-token>"
+cf set-env heyzenex PUBLISH_SECRET "$(openssl rand -hex 32)"
+cf set-env heyzenex GITHUB_BRANCH main
+cf restage heyzenex
+```
+
+Never commit the token or publisher key. Publishing commits directly to the
+configured branch, so that branch must allow the app's GitHub token to write.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 

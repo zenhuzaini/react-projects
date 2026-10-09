@@ -1,6 +1,7 @@
 "use client";
 
-import { DragEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { DragEvent, FormEvent } from "react";
 import {
 	ArrowDown,
 	ArrowDownToLine,
@@ -8,6 +9,7 @@ import {
 	Check,
 	ChevronDown,
 	Code2,
+	CloudUpload,
 	Eye,
 	GripVertical,
 	ImagePlus,
@@ -22,6 +24,15 @@ import {
 	X,
 } from "lucide-react";
 import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { photoMockStatic } from "@/mock/photo";
 import type { PhotoCardDetailType, StoryContentType } from "@/types/components";
 
@@ -258,6 +269,9 @@ const MystoryPlayground = () => {
 	const [outputTab, setOutputTab] = useState<"mdx" | "preview">("mdx");
 	const [isSavedStoriesExpanded, setIsSavedStoriesExpanded] = useState(true);
 	const [isStoryDetailsOpen, setIsStoryDetailsOpen] = useState(true);
+	const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
+	const [publishSecret, setPublishSecret] = useState("");
+	const [isPublishing, setIsPublishing] = useState(false);
 
 	useEffect(() => {
 		try {
@@ -365,6 +379,74 @@ const MystoryPlayground = () => {
 		setNotice("Draft deleted");
 	};
 
+	const publishDraft = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		if (isPublishing) return;
+
+		const slug = draft.slug || toSlug(draft.title);
+		if (!slug) {
+			setNotice("Add a title before publishing.");
+			return;
+		}
+
+		setIsPublishing(true);
+		setNotice("");
+		const now = new Date().toISOString();
+		const publishedDraft = {
+			...draft,
+			slug,
+			createdAt: draft.createdAt || now,
+			updatedAt: now,
+		};
+
+		try {
+			const response = await fetch("/api/stories/publish", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"x-publish-secret": publishSecret,
+				},
+				body: JSON.stringify({
+					slug,
+					title: publishedDraft.title,
+					content: toMdx(publishedDraft),
+				}),
+			});
+			const result = (await response.json().catch(() => ({}))) as {
+				error?: string;
+				path?: string;
+				branch?: string;
+			};
+
+			if (!response.ok) {
+				throw new Error(result.error || "Could not publish this story.");
+			}
+
+			const nextDrafts = activeDraftId
+				? savedDrafts.map((saved) =>
+						saved.id === activeDraftId ? publishedDraft : saved,
+					)
+				: [publishedDraft, ...savedDrafts];
+			setDraft(publishedDraft);
+			setSavedDrafts(nextDrafts);
+			setActiveDraftId(publishedDraft.id);
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(nextDrafts));
+			setNotice(
+				`Published ${result.path || `${slug}.mdx`} to ${result.branch || "GitHub"}.`,
+			);
+			setIsPublishDialogOpen(false);
+			setPublishSecret("");
+		} catch (error) {
+			setNotice(
+				error instanceof Error
+					? error.message
+					: "Could not publish this story.",
+			);
+		} finally {
+			setIsPublishing(false);
+		}
+	};
+
 	const downloadMdx = () => {
 		const file = new Blob([toMdx(draft)], {
 			type: "text/markdown;charset=utf-8",
@@ -437,6 +519,12 @@ const MystoryPlayground = () => {
 						onClick={downloadMdx}
 						className="inline-flex h-10 items-center gap-2 rounded-md bg-fierceorange px-4 text-sm font-semibold text-white hover:brightness-95">
 						<ArrowDownToLine size={16} /> Export MDX
+					</button>
+					<button
+						type="button"
+						onClick={() => setIsPublishDialogOpen(true)}
+						className="inline-flex h-10 items-center gap-2 rounded-md bg-primaryaccent px-4 text-sm font-semibold text-white hover:brightness-95">
+						<CloudUpload size={16} /> Publish
 					</button>
 				</div>
 			</header>
@@ -1047,6 +1135,58 @@ const MystoryPlayground = () => {
 					</div>
 				</section>
 			</div>
+			<Dialog
+				open={isPublishDialogOpen}
+				onOpenChange={(open) => {
+					setIsPublishDialogOpen(open);
+					if (!open) setPublishSecret("");
+				}}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Publish story to GitHub</DialogTitle>
+						<DialogDescription>
+							This creates or updates{" "}
+							<span className="font-medium text-primaryText">
+								{draft.slug || toSlug(draft.title) || "story"}.mdx
+							</span>{" "}
+							on the configured branch. Enter the publisher key to authorize
+							this commit.
+						</DialogDescription>
+					</DialogHeader>
+					<form onSubmit={publishDraft} className="space-y-4">
+						<label className="block">
+							<span className="mb-1 block text-sm font-medium">
+								Publisher key
+							</span>
+							<input
+								type="password"
+								value={publishSecret}
+								autoComplete="off"
+								required
+								onChange={(event) => setPublishSecret(event.target.value)}
+								className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+								placeholder="Enter publisher key"
+							/>
+						</label>
+						<DialogFooter>
+							<DialogClose asChild>
+								<button
+									type="button"
+									disabled={isPublishing}
+									className="inline-flex h-10 items-center justify-center rounded-md border border-primarybrown/30 px-4 text-sm font-semibold">
+									Cancel
+								</button>
+							</DialogClose>
+							<button
+								type="submit"
+								disabled={isPublishing || !publishSecret.trim()}
+								className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primaryaccent px-4 text-sm font-semibold text-white disabled:opacity-60">
+								{isPublishing ? "Publishing..." : "Publish commit"}
+							</button>
+						</DialogFooter>
+					</form>
+				</DialogContent>
+			</Dialog>
 		</main>
 	);
 };
