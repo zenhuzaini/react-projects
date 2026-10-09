@@ -12,6 +12,15 @@ import { motion } from "framer-motion";
 import LightDarkSwitcher from "@/components/molecule/Switch/LightDarkSwitcher";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "radix-ui";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuShortcut,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
@@ -246,15 +255,29 @@ const Header = () => {
 
 			{/* Desktop switch */}
 			<div className="hidden lg:flex col-start-7">
-				<Link href="/playground/content" className="flex items-center gap-1 ">
-					<div>
-						<TerminalIcon size={5}></TerminalIcon>
-					</div>
-					<span>
-						playground
-						<span className="text-dot font-extrabold">.</span>
-					</span>
-				</Link>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<div className="flex items-center gap-1 text-primaryText">
+							<div>
+								<TerminalIcon size={5}></TerminalIcon>
+							</div>
+							<span>
+								playground
+								<span className="text-dot font-extrabold">.</span>
+							</span>
+						</div>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent className="w-9" align="start">
+						<DropdownMenuGroup>
+							<DropdownMenuItem>
+								<Link href="/playground/mystory">StoryBook</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem>
+								<Link href="/playground/myphotobook">PhotoBook</Link>
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 			<div className="hidden lg:flex col-start-8 col-end-8 justify-center items-center bg-primaryaccent rounded-b-2xl">
 				<div className="flex gap-3 items-center">
