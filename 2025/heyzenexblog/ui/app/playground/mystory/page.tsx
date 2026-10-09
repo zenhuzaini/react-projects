@@ -24,6 +24,7 @@ import {
 	X,
 } from "lucide-react";
 import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
+
 import {
 	Dialog,
 	DialogClose,
@@ -35,6 +36,7 @@ import {
 } from "@/components/ui/dialog";
 import { photoMockStatic } from "@/mock/photo";
 import type { PhotoCardDetailType, StoryContentType } from "@/types/components";
+import Heading from "@/components/molecule/Headings/Heading";
 
 type BlockType = "paragraph" | "quote" | "image" | "gallery" | "section";
 
@@ -483,18 +485,12 @@ const MystoryPlayground = () => {
 
 	return (
 		<main className="mx-auto w-full max-w-[1600px] pb-12 text-primaryText">
-			<header className="mb-7 flex flex-col justify-between gap-5 border-b border-primarybrown/20 pb-6 md:flex-row md:items-end">
-				<div>
-					<p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-primaryfreshgreen">
-						Playground / My Story
-					</p>
-					<h1 className="text-3xl font-extrabold sm:text-4xl">Story builder</h1>
-					<p className="mt-2 max-w-2xl text-sm text-primarygrey">
-						Arrange story blocks, save drafts in this browser, and export a
-						ready-to-edit MDX file.
-					</p>
-				</div>
-				<div className="flex flex-wrap items-center gap-2">
+			<header className="mb-7 flex flex-col gap-4 border-b border-primarybrown/20 pb-6 md:flex-row md:items-stretch">
+				<Heading
+					title="Story builder"
+					description="Arrange story blocks, save drafts in this browser, and export a ready-to-edit MDX file."
+				/>
+				<div className="flex flex-wrap items-center gap-2 md:justify-end">
 					{notice && (
 						<span
 							aria-live="polite"
