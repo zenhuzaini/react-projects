@@ -90,12 +90,22 @@ type StoryBlock = {
 	shouldShowDownloadGPX: boolean;
 	mapTitle: string;
 	rawMdx: string;
+	insideCenter?: boolean;
+	rawOutsideCenter?: boolean;
+};
+
+type ImportedStoryBlock = Partial<Omit<StoryBlock, "id" | "type">> & {
+	type: BlockType;
+	insideCenter?: boolean;
+	rawOutsideCenter?: boolean;
 };
 
 type ExistingStorySummary = { slug: string; title: string };
 type ExistingStoryResponse = {
 	slug: string;
 	body: string;
+	blocks?: ImportedStoryBlock[];
+	supportingMdx?: string;
 	metadata: {
 		slug?: string;
 		id?: number;
@@ -136,6 +146,7 @@ type StoryDraft = {
 	eventDateTo: string;
 	nextPostSlug: string;
 	prevPostSlug: string;
+	supportingMdx?: string;
 	blocks: StoryBlock[];
 	createdAt: string;
 	updatedAt: string;
@@ -216,6 +227,62 @@ const createDraft = (
 	createdAt: "",
 	updatedAt: "",
 });
+
+const normalizeSavedDraft = (saved: StoryDraft): StoryDraft => {
+	const fallbackDraft = createDraft(saved.id);
+	const fallbackDate = new Date(saved.createdAt || saved.updatedAt || "");
+	return {
+		...fallbackDraft,
+		...saved,
+		storyId: saved.storyId ?? 1,
+		nextPostSlug: saved.nextPostSlug ?? "",
+		prevPostSlug: saved.prevPostSlug ?? "",
+		imageQuality: saved.imageQuality ?? "auto:good",
+		views: saved.views ?? 100,
+		likes: saved.likes ?? 10,
+		supportingMdx: saved.supportingMdx ?? "",
+		datePublished:
+			saved.datePublished ||
+			(Number.isNaN(fallbackDate.getTime())
+				? toLocalDateTimeInput(new Date())
+				: toLocalDateTimeInput(fallbackDate)),
+		blocks: Array.isArray(saved.blocks)
+			? saved.blocks.map((block) => {
+					const defaults = createBlock(block.type, block.id);
+					return {
+						...defaults,
+						...block,
+						text: typeof block.text === "string" ? block.text : defaults.text,
+						rawMdx: typeof block.rawMdx === "string" ? block.rawMdx : "",
+						gallery: Array.isArray(block.gallery)
+							? block.gallery.map((photo) => ({
+									url: typeof photo.url === "string" ? photo.url : "",
+									alt: typeof photo.alt === "string" ? photo.alt : "",
+								}))
+							: defaults.gallery,
+						items: Array.isArray(block.items)
+							? block.items.map((item) => ({
+									label: typeof item.label === "string" ? item.label : "",
+									done: item.done === true,
+								}))
+							: defaults.items,
+					};
+				})
+			: fallbackDraft.blocks,
+	};
+};
+
+const stampDraft = (draft: StoryDraft, timestamp: string): StoryDraft => ({
+	...draft,
+	slug: draft.slug || toSlug(draft.title),
+	createdAt: draft.createdAt || timestamp,
+	updatedAt: timestamp,
+});
+
+const upsertSavedDraft = (drafts: StoryDraft[], draft: StoryDraft) =>
+	drafts.some((saved) => saved.id === draft.id)
+		? drafts.map((saved) => (saved.id === draft.id ? draft : saved))
+		: [draft, ...drafts];
 
 const toSlug = (value: string) =>
 	value
@@ -332,6 +399,7 @@ const toStoryContent = (
 	>,
 ): StoryContentType[] =>
 	blocks.flatMap<StoryContentType>((block): StoryContentType[] => {
+		if (block.type === "raw" && block.rawOutsideCenter) return [];
 		let sectionID: string;
 		let photoUrls: PhotoCardDetailType[] = [];
 
@@ -465,83 +533,108 @@ const toMdx = (draft: StoryDraft) => {
 		prevPostSlug: draft.prevPostSlug,
 	};
 
-	const blocks = draft.blocks
-		.map((block) => {
-			switch (block.type) {
-				case "paragraph":
-					return block.text.trim();
-				case "quote":
-					return `<Quo\n\ttext={${JSON.stringify(block.text)}}\n\tshouldCenter={true}\n/>`;
-				case "image":
-					return `<Pho photo={{ photoUrl: ${JSON.stringify(block.imageUrl)}, description: ${JSON.stringify(block.imageAlt)} }} />`;
-				case "gallery": {
-					const photos = block.gallery
-						.filter((photo) => photo.url.trim())
-						.map(
-							(photo) =>
-								`\t{ photoUrl: ${JSON.stringify(photo.url)}, description: ${JSON.stringify(photo.alt)} },`,
-						)
-						.join("\n");
-					return `<PhoCol photo={[\n${photos}\n]} />`;
+	const serializedBlocks = draft.blocks
+		.map((block) => ({
+			block,
+			source: (() => {
+				switch (block.type) {
+					case "paragraph":
+						return block.rawMdx?.trim() || block.text.trim();
+					case "quote":
+						return `<Quo\n\ttext={${JSON.stringify(block.text)}}\n\tshouldCenter={true}\n/>`;
+					case "image":
+						return `<Pho photo={{ photoUrl: ${JSON.stringify(block.imageUrl)}, description: ${JSON.stringify(block.imageAlt)} }} />`;
+					case "gallery": {
+						const photos = block.gallery
+							.filter((photo) => photo.url.trim())
+							.map(
+								(photo) =>
+									`\t{ photoUrl: ${JSON.stringify(photo.url)}, description: ${JSON.stringify(photo.alt)} },`,
+							)
+							.join("\n");
+						return `<PhoCol photo={[\n${photos}\n]} />`;
+					}
+					case "section":
+						return `<Section text=${JSON.stringify(block.text)} />`;
+					case "checklist": {
+						const items = block.items
+							.filter((item) => item.label.trim())
+							.map(
+								(item) =>
+									`\t{ label: ${JSON.stringify(item.label)}, done: ${item.done} },`,
+							)
+							.join("\n");
+						return `<Checklist items={[\n${items}\n]} />`;
+					}
+					case "itemlist": {
+						const items = block.items
+							.filter((item) => item.label.trim())
+							.map((item) => `\t{ label: ${JSON.stringify(item.label)} },`)
+							.join("\n");
+						return `<ItemList items={[\n${items}\n]} />`;
+					}
+					case "iframe":
+						return block.url.trim()
+							? `<IframeWithLoader url={${JSON.stringify(block.url)}} />`
+							: "";
+					case "map": {
+						const center = parseCoordinatePair(
+							`${block.centerLatitude},${block.centerLongitude}`,
+						);
+						const route = parseRoute(block.route);
+						const props = [
+							...(center ? [`center={${JSON.stringify(center)}}`] : []),
+							...(route.length ? [`route={${JSON.stringify(route)}}`] : []),
+							...(block.shouldShowDownloadGPX
+								? ["shouldShowDownloadGPX={true}"]
+								: []),
+							...(block.mapTitle.trim()
+								? [`title={${JSON.stringify(block.mapTitle)}}`]
+								: []),
+							...(block.text.trim()
+								? [`description={${JSON.stringify(block.text)}}`]
+								: []),
+						].join(" ");
+						return `<MapWithDescription${props ? ` ${props}` : ""} />`;
+					}
+					case "divider":
+						return "<hr />";
+					case "highlight":
+						return block.text.trim()
+							? `<Highlight>{${JSON.stringify(block.text)}}</Highlight>`
+							: "";
+					case "raw":
+						return block.rawMdx;
 				}
-				case "section":
-					return `<Section text=${JSON.stringify(block.text)} />`;
-				case "checklist": {
-					const items = block.items
-						.filter((item) => item.label.trim())
-						.map(
-							(item) =>
-								`\t{ label: ${JSON.stringify(item.label)}, done: ${item.done} },`,
-						)
-						.join("\n");
-					return `<Checklist items={[\n${items}\n]} />`;
-				}
-				case "itemlist": {
-					const items = block.items
-						.filter((item) => item.label.trim())
-						.map((item) => `\t{ label: ${JSON.stringify(item.label)} },`)
-						.join("\n");
-					return `<ItemList items={[\n${items}\n]} />`;
-				}
-				case "iframe":
-					return block.url.trim()
-						? `<IframeWithLoader url={${JSON.stringify(block.url)}} />`
-						: "";
-				case "map": {
-					const center = parseCoordinatePair(
-						`${block.centerLatitude},${block.centerLongitude}`,
-					);
-					const route = parseRoute(block.route);
-					const props = [
-						...(center ? [`center={${JSON.stringify(center)}}`] : []),
-						...(route.length ? [`route={${JSON.stringify(route)}}`] : []),
-						...(block.shouldShowDownloadGPX
-							? ["shouldShowDownloadGPX={true}"]
-							: []),
-						...(block.mapTitle.trim()
-							? [`title={${JSON.stringify(block.mapTitle)}}`]
-							: []),
-						...(block.text.trim()
-							? [`description={${JSON.stringify(block.text)}}`]
-							: []),
-					].join(" ");
-					return `<MapWithDescription${props ? ` ${props}` : ""} />`;
-				}
-				case "divider":
-					return "<hr />";
-				case "highlight":
-					return block.text.trim()
-						? `<Highlight>{${JSON.stringify(block.text)}}</Highlight>`
-						: "";
-				case "raw":
-					return block.rawMdx;
-			}
-		})
+			})(),
+		}))
+		.filter((item) => Boolean(item.source));
+	const isImportedLayout = draft.blocks.some(
+		(block) => block.insideCenter !== undefined || block.rawOutsideCenter,
+	);
+	const hasRawSourceBlock = draft.blocks.some((block) => block.type === "raw");
+	const groups: { insideCenter: boolean; source: string }[] = [];
+	for (const item of serializedBlocks) {
+		const insideCenter = isImportedLayout
+			? item.block.insideCenter === true && !item.block.rawOutsideCenter
+			: !hasRawSourceBlock;
+		const previous = groups[groups.length - 1];
+		if (previous?.insideCenter === insideCenter) {
+			previous.source += `\n\n${item.source}`;
+		} else {
+			groups.push({ insideCenter, source: item.source as string });
+		}
+	}
+	const contentBody = groups
+		.map((group) =>
+			group.insideCenter
+				? `<Center>\n${group.source}\n</Center>`
+				: group.source,
+		)
+		.join("\n\n");
+	const body = [draft.supportingMdx?.trim(), contentBody]
 		.filter(Boolean)
 		.join("\n\n");
-
-	const hasImportedMdx = draft.blocks.some((block) => block.type === "raw");
-	const body = hasImportedMdx ? blocks : `<Center>\n${blocks}\n</Center>`;
 	return `export const metadata = ${JSON.stringify(metadata, null, 2)};\n\n${body}\n`;
 };
 
@@ -596,22 +689,7 @@ const MystoryPlayground = () => {
 			const storedDrafts = localStorage.getItem(STORAGE_KEY);
 			if (storedDrafts) {
 				const drafts = JSON.parse(storedDrafts) as StoryDraft[];
-				setSavedDrafts(
-					drafts.map((saved) => ({
-						...saved,
-						storyId: saved.storyId ?? 1,
-						nextPostSlug: saved.nextPostSlug ?? "",
-						prevPostSlug: saved.prevPostSlug ?? "",
-						imageQuality: saved.imageQuality ?? "auto:good",
-						views: saved.views ?? 100,
-						likes: saved.likes ?? 10,
-						datePublished:
-							saved.datePublished ||
-							(saved.createdAt
-								? toLocalDateTimeInput(new Date(saved.createdAt))
-								: toLocalDateTimeInput(new Date(saved.updatedAt))),
-					})),
-				);
+				setSavedDrafts(drafts.map(normalizeSavedDraft));
 			}
 		} catch {
 			setNotice("Saved drafts could not be read from this browser.");
@@ -623,6 +701,30 @@ const MystoryPlayground = () => {
 		setIsHydrated(true);
 	}, []);
 
+	useEffect(() => {
+		if (!isHydrated || !activeDraftId) return;
+		const saved = savedDrafts.find((item) => item.id === activeDraftId);
+		if (saved && JSON.stringify(saved) === JSON.stringify(draft)) return;
+
+		const timeout = window.setTimeout(() => {
+			const timestamp = new Date().toISOString();
+			const updatedDraft = stampDraft(
+				{ ...draft, id: activeDraftId },
+				timestamp,
+			);
+			const nextDrafts = upsertSavedDraft(savedDrafts, updatedDraft);
+			setDraft(updatedDraft);
+			setSavedDrafts(nextDrafts);
+			try {
+				localStorage.setItem(STORAGE_KEY, JSON.stringify(nextDrafts));
+			} catch {
+				setNotice("Draft could not be saved in this browser.");
+			}
+		}, 500);
+
+		return () => window.clearTimeout(timeout);
+	}, [activeDraftId, draft, isHydrated, savedDrafts]);
+
 	const updateDraft = (updates: Partial<StoryDraft>) =>
 		setDraft((current) => ({ ...current, ...updates }));
 
@@ -630,7 +732,15 @@ const MystoryPlayground = () => {
 		setDraft((current) => ({
 			...current,
 			blocks: current.blocks.map((block) =>
-				block.id === id ? { ...block, ...updates } : block,
+				block.id === id
+					? {
+							...block,
+							...updates,
+							...(block.type === "paragraph" && updates.text !== undefined
+								? { rawMdx: "" }
+								: {}),
+						}
+					: block,
 			),
 		}));
 
@@ -664,8 +774,17 @@ const MystoryPlayground = () => {
 			? createdAt
 			: modifiedDate;
 		const slug = metadata.slug || result.slug || fallbackSlug;
+		const importedBlocks = result.blocks?.length
+			? result.blocks.map((block) => ({
+					...createBlock(block.type),
+					...block,
+					id: crypto.randomUUID(),
+				}))
+			: result.body.trim() && !result.supportingMdx
+				? [{ ...createBlock("raw"), rawMdx: result.body }]
+				: [];
 
-		setDraft({
+		const importedDraft = {
 			...createDraft(),
 			id: crypto.randomUUID(),
 			storyId: metadata.id ?? 1,
@@ -687,11 +806,13 @@ const MystoryPlayground = () => {
 			eventDateTo: toLocalDateInput(metadata.eventDateTo),
 			nextPostSlug: metadata.nextPostSlug || "",
 			prevPostSlug: metadata.prevPostSlug || "",
+			supportingMdx: result.supportingMdx || "",
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
-			blocks: [{ ...createBlock("raw"), rawMdx: result.body }],
-		});
-		setActiveDraftId(null);
+			blocks: importedBlocks,
+		};
+		setDraft(importedDraft);
+		setActiveDraftId(importedDraft.id);
 		setIsStoryDetailsOpen(true);
 		setOutputTab("mdx");
 		setIsStoryLibraryOpen(false);
@@ -961,50 +1082,39 @@ const MystoryPlayground = () => {
 		updateDraft({ blocks: nextBlocks });
 	};
 
-	const saveDraft = () => {
-		const now = new Date().toISOString();
-		const updatedDraft = {
-			...draft,
-			slug: draft.slug || toSlug(draft.title),
-			createdAt: draft.createdAt || now,
-			updatedAt: now,
-		};
-		const nextDrafts = activeDraftId
-			? savedDrafts.map((item) =>
-					item.id === activeDraftId ? updatedDraft : item,
-				)
-			: [updatedDraft, ...savedDrafts];
-		setDraft(updatedDraft);
-		setSavedDrafts(nextDrafts);
-		setActiveDraftId(updatedDraft.id);
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(nextDrafts));
-		setNotice(activeDraftId ? "Draft updated" : "Draft saved");
-	};
-
 	const startNewDraft = () => {
-		setDraft({
-			...createDraft(),
-			datePublished: toLocalDateTimeInput(new Date()),
-		});
-		setActiveDraftId(null);
-		setNotice("");
+		const timestamp = new Date().toISOString();
+		const currentSaved = activeDraftId
+			? savedDrafts.find((item) => item.id === activeDraftId)
+			: undefined;
+		const draftsToKeep =
+			currentSaved && JSON.stringify(currentSaved) !== JSON.stringify(draft)
+				? upsertSavedDraft(
+						savedDrafts,
+						stampDraft({ ...draft, id: activeDraftId as string }, timestamp),
+					)
+				: savedDrafts;
+		const newDraft = stampDraft(
+			{
+				...createDraft(),
+				datePublished: toLocalDateTimeInput(new Date()),
+			},
+			timestamp,
+		);
+		const nextDrafts = upsertSavedDraft(draftsToKeep, newDraft);
+		setDraft(newDraft);
+		setSavedDrafts(nextDrafts);
+		setActiveDraftId(newDraft.id);
+		setNotice("New draft created and saved automatically.");
+		try {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(nextDrafts));
+		} catch {
+			setNotice("Draft could not be saved in this browser.");
+		}
 	};
 
 	const loadDraft = (saved: StoryDraft) => {
-		setDraft({
-			...saved,
-			storyId: saved.storyId ?? 1,
-			nextPostSlug: saved.nextPostSlug ?? "",
-			prevPostSlug: saved.prevPostSlug ?? "",
-			imageQuality: saved.imageQuality ?? "auto:good",
-			views: saved.views ?? 100,
-			likes: saved.likes ?? 10,
-			datePublished:
-				saved.datePublished ||
-				(saved.createdAt
-					? toLocalDateTimeInput(new Date(saved.createdAt))
-					: toLocalDateTimeInput(new Date(saved.updatedAt))),
-		});
+		setDraft(normalizeSavedDraft(saved));
 		setActiveDraftId(saved.id);
 		setNotice("");
 	};
@@ -1013,7 +1123,19 @@ const MystoryPlayground = () => {
 		const nextDrafts = savedDrafts.filter((item) => item.id !== id);
 		setSavedDrafts(nextDrafts);
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(nextDrafts));
-		if (activeDraftId === id) startNewDraft();
+		if (activeDraftId === id) {
+			const nextDraft = nextDrafts[0];
+			if (nextDraft) {
+				setDraft(normalizeSavedDraft(nextDraft));
+				setActiveDraftId(nextDraft.id);
+			} else {
+				setDraft({
+					...createDraft(),
+					datePublished: toLocalDateTimeInput(new Date()),
+				});
+				setActiveDraftId(null);
+			}
+		}
 		setNotice("Draft deleted");
 	};
 
@@ -1126,6 +1248,13 @@ const MystoryPlayground = () => {
 	const storyPhotoUrls = storyContent.flatMap((content) => content.photoUrls);
 	const storyCover =
 		draft.cover || storyPhotoUrls[0]?.photoUrl || photoMockStatic[0].photoUrl;
+	const isDraftSaved =
+		activeDraftId !== null &&
+		savedDrafts.some(
+			(saved) =>
+				saved.id === activeDraftId &&
+				JSON.stringify(saved) === JSON.stringify(draft),
+		);
 
 	return (
 		<main className="mx-auto w-full max-w-[1600px] pb-12 text-primaryText">
@@ -1154,12 +1283,22 @@ const MystoryPlayground = () => {
 						className="inline-flex h-10 items-center gap-2 rounded-md border border-primarybrown/30 px-3 text-sm font-semibold hover:bg-primarywhite">
 						<Plus size={16} /> New
 					</button>
-					<button
-						type="button"
-						onClick={saveDraft}
-						className="inline-flex h-10 items-center gap-2 rounded-md bg-secondaryforestgreen px-4 text-sm font-semibold text-white hover:bg-navbar">
-						<Check size={16} /> Save draft
-					</button>
+					{activeDraftId && (
+						<span
+							aria-live="polite"
+							title={isDraftSaved ? "All changes saved" : "Saving changes"}
+							className={`inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm font-semibold ${isDraftSaved ? "bg-secondaryforestgreen/10 text-secondaryforestgreen" : "bg-primaryaccent/10 text-primaryaccent"}`}>
+							{isDraftSaved ? (
+								<>
+									<Check size={16} /> Saved
+								</>
+							) : (
+								<>
+									<LoaderCircle size={16} className="animate-spin" /> Saving
+								</>
+							)}
+						</span>
+					)}
 					<button
 						type="button"
 						onClick={downloadMdx}
