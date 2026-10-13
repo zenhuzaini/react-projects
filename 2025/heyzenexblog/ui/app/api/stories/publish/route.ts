@@ -6,6 +6,7 @@ export const runtime = "nodejs";
 const DEFAULT_REPOSITORY = "zenhuzaini/react-projects";
 const DEFAULT_BRANCH = "main";
 const STORY_DIRECTORY = "2025/heyzenexblog/ui/contents/mystorybook";
+const PHOTOBOOK_DIRECTORY = "2025/heyzenexblog/ui/contents/myphotobook";
 const MAX_CONTENT_LENGTH = 1_000_000;
 
 const errorResponse = (error: string, status: number) =>
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
 	}
 
 	const body = payload as Record<string, unknown>;
+	const collection = body.collection ?? "story";
 	const slug = typeof body.slug === "string" ? body.slug : "";
 	const title = typeof body.title === "string" ? body.title : slug;
 	const content = typeof body.content === "string" ? body.content : "";
@@ -58,6 +60,9 @@ export async function POST(request: Request) {
 	}
 	if (!content.trim()) {
 		return errorResponse("MDX content is empty.", 400);
+	}
+	if (collection !== "story" && collection !== "photobook") {
+		return errorResponse("Content collection is invalid.", 400);
 	}
 	if (content.length > MAX_CONTENT_LENGTH) {
 		return errorResponse("MDX content is too large.", 413);
@@ -71,7 +76,9 @@ export async function POST(request: Request) {
 		);
 	}
 	const branch = process.env.GITHUB_BRANCH || DEFAULT_BRANCH;
-	const encodedPath = `${STORY_DIRECTORY}/${slug}.mdx`
+	const directory =
+		collection === "photobook" ? PHOTOBOOK_DIRECTORY : STORY_DIRECTORY;
+	const encodedPath = `${directory}/${slug}.mdx`
 		.split("/")
 		.map(encodeURIComponent)
 		.join("/");
@@ -124,7 +131,7 @@ export async function POST(request: Request) {
 			commit?: { html_url?: string };
 		};
 		return NextResponse.json({
-			path: `${STORY_DIRECTORY}/${slug}.mdx`,
+			path: `${directory}/${slug}.mdx`,
 			branch,
 			commitUrl: result.commit?.html_url ?? null,
 		});
