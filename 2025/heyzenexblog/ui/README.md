@@ -34,16 +34,32 @@ The server needs these environment variables:
   `zenhuzaini/react-projects`.
 - `PUBLISH_SECRET`: a random key of at least 32 characters entered in the Publish dialog. It is not
   stored by the browser or sent to GitHub.
+- `CLOUDINARY_URL`: the server-only Cloudinary URL containing the account name,
+  API key, and API secret. Never use a `NEXT_PUBLIC_` prefix or commit this value.
 - `GITHUB_BRANCH`: optional; defaults to `main`.
 - `GITHUB_REPOSITORY`: optional; defaults to `zenhuzaini/react-projects`.
 
-For local development, set the variables in an untracked `.env.local` file.
+For local development, fill in the blank values in the ignored `.env.local`
+template, then restart the Next.js server. Do not add real secrets to
+`manifest.yml` or commit them.
+The `dev` and `start` scripts use Node's system CA store (`--use-system-ca`) so
+TLS works in environments whose trusted certificates are installed at the OS
+level. Use a Node version that supports this option (Node 22.15 or newer).
+
+The Story Builder's image optimization selector applies an incoming quality
+transformation to new uploads: `auto:eco` prioritizes smaller files,
+`auto:good` is balanced, and `auto:best` prioritizes image detail. This changes
+the stored Cloudinary image; existing images are unchanged. Delivery uses
+`f_auto` to choose an efficient format for the visitor's browser.
+
 For Cloud Foundry, set the server environment and restage the app:
 
 ```bash
 cf set-env heyzenex GITHUB_TOKEN "<fine-grained-token>"
 cf set-env heyzenex PUBLISH_SECRET "$(openssl rand -hex 32)"
+cf set-env heyzenex CLOUDINARY_URL "cloudinary://<api-key>:<api-secret>@<cloud-name>"
 cf set-env heyzenex GITHUB_BRANCH main
+cf set-env heyzenex GITHUB_REPOSITORY zenhuzaini/react-projects
 cf restage heyzenex
 ```
 

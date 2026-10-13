@@ -7,6 +7,7 @@ import { schibstedGrotesk } from "@/components/ui/fonts";
 import PageTransition from "@/animation/PageTransition";
 import { createBaseMetadata } from "../lib/seo";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "@/components/ui/toast";
 
 export const metadata: Metadata = createBaseMetadata({
 	title: "Zen Huzaini's Photography and Travel Blog",
@@ -47,6 +48,7 @@ export default function RootLayout({
 					<div role="contentinfo">
 						<Footer></Footer>
 					</div>
+					<Toaster />
 				</div>
 				<Analytics></Analytics>
 			</body>

@@ -16,6 +16,7 @@ import {
 	ImagePlus,
 	Link2,
 	Layers3,
+	LoaderCircle,
 	List,
 	ListChecks,
 	MapPin,
@@ -27,6 +28,7 @@ import {
 	Text,
 	Trash2,
 	Type,
+	Upload,
 	X,
 } from "lucide-react";
 import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
@@ -43,6 +45,7 @@ import {
 import { photoMockStatic } from "@/mock/photo";
 import type { PhotoCardDetailType, StoryContentType } from "@/types/components";
 import Heading from "@/components/molecule/Headings/Heading";
+import { toast } from "@/components/ui/toast";
 
 type BlockType =
 	| "paragraph"
@@ -58,6 +61,14 @@ type BlockType =
 	| "highlight";
 
 type StoryListItem = { label: string; done: boolean };
+type ImageQuality = "auto:eco" | "auto:good" | "auto:best";
+type ImageUploadTarget =
+	| { kind: "cover" }
+	| { kind: "block"; blockId: string; galleryIndex?: number };
+type PendingImageUpload = ImageUploadTarget & {
+	file: File;
+	imageQuality: ImageQuality;
+};
 
 type StoryBlock = {
 	id: string;
@@ -81,6 +92,7 @@ type StoryDraft = {
 	slug: string;
 	description: string;
 	cover: string;
+	imageQuality: ImageQuality;
 	city: string;
 	country: string;
 	activityType: string;
@@ -145,6 +157,7 @@ const createDraft = (
 	description:
 		"A sample ride through the mountains, lakes, and forest roads of southern Poland.",
 	cover: photoMockStatic[0].photoUrl,
+	imageQuality: "auto:good",
 	city: "Zakopane",
 	country: "Poland",
 	activityType: "bikepacking",
@@ -488,6 +501,8 @@ const MystoryPlayground = () => {
 	const [isStoryDetailsOpen, setIsStoryDetailsOpen] = useState(true);
 	const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
 	const [publishSecret, setPublishSecret] = useState("");
+	const [pendingImageUpload, setPendingImageUpload] =
+		useState<PendingImageUpload | null>(null);
 	const [isPublishing, setIsPublishing] = useState(false);
 
 	useEffect(() => {
@@ -498,6 +513,7 @@ const MystoryPlayground = () => {
 				setSavedDrafts(
 					drafts.map((saved) => ({
 						...saved,
+						imageQuality: saved.imageQuality ?? "auto:good",
 						views: saved.views ?? 100,
 						likes: saved.likes ?? 10,
 						datePublished:
@@ -537,6 +553,125 @@ const MystoryPlayground = () => {
 		const items = [...block.items];
 		items[index] = { ...items[index], ...updates };
 		updateBlock(block.id, { items });
+	};
+
+	const uploadImage = async (
+		file: File,
+		target: ImageUploadTarget,
+		secret: string,
+		imageQuality: ImageQuality,
+	) => {
+		setIsPublishing(true);
+		const uploadTask = (async () => {
+			try {
+				const formData = new FormData();
+				formData.set("file", file);
+				formData.set("quality", imageQuality);
+				const response = await fetch("/api/images/upload", {
+					method: "POST",
+					headers: { "x-publish-secret": secret },
+					body: formData,
+				});
+				const result = (await response.json().catch(() => ({}))) as {
+					error?: string;
+					url?: string;
+				};
+				if (!response.ok || !result.url) {
+					throw new Error(result.error || "Could not upload this image.");
+				}
+
+				setDraft((current) => {
+					if (target.kind === "cover") {
+						return { ...current, cover: result.url! };
+					}
+
+					return {
+						...current,
+						blocks: current.blocks.map((block) => {
+							if (block.id !== target.blockId) return block;
+							if (target.galleryIndex === undefined) {
+								return { ...block, imageUrl: result.url! };
+							}
+							return {
+								...block,
+								gallery: block.gallery.map((photo, index) =>
+									index === target.galleryIndex
+										? { ...photo, url: result.url! }
+										: photo,
+								),
+							};
+						}),
+					};
+				});
+				setPendingImageUpload(null);
+				setIsPublishDialogOpen(false);
+				return file.name;
+			} finally {
+				setIsPublishing(false);
+			}
+		})();
+
+		return toast
+			.promise(uploadTask, {
+				loading: {
+					title: "Uploading image",
+					description: `Uploading ${file.name} to Cloudinary…`,
+					type: "loading",
+					timeout: 0,
+				},
+				success: (fileName) => ({
+					title: "Upload complete",
+					description: `${fileName} uploaded. Its URL was added to the draft.`,
+					type: "success",
+				}),
+				error: (error) => ({
+					title: "Upload failed",
+					description:
+						error instanceof Error
+							? error.message
+							: "Could not upload this image.",
+					type: "error",
+					priority: "high",
+				}),
+			})
+			.catch(() => undefined);
+	};
+
+	const handleImageUpload = (
+		file: File | undefined,
+		target: ImageUploadTarget,
+	) => {
+		if (!file) return;
+		if (!file.type.startsWith("image/")) {
+			toast.add({
+				title: "Unsupported file",
+				description: "Choose an image file to upload.",
+				type: "error",
+				priority: "high",
+			});
+			return;
+		}
+		if (file.size > 10 * 1024 * 1024) {
+			toast.add({
+				title: "Image too large",
+				description: "Images must be 10 MB or smaller.",
+				type: "error",
+				priority: "high",
+			});
+			return;
+		}
+
+		if (publishSecret) {
+			void uploadImage(file, target, publishSecret, draft.imageQuality);
+			return;
+		}
+
+		setPendingImageUpload({
+			...target,
+			file,
+			imageQuality: draft.imageQuality,
+		});
+		setIsPublishDialogOpen(true);
 	};
 
 	const importGpxRoute = async (blockId: string, file: File) => {
@@ -615,6 +750,7 @@ const MystoryPlayground = () => {
 	const loadDraft = (saved: StoryDraft) => {
 		setDraft({
 			...saved,
+			imageQuality: saved.imageQuality ?? "auto:good",
 			views: saved.views ?? 100,
 			likes: saved.likes ?? 10,
 			datePublished:
@@ -638,6 +774,15 @@ const MystoryPlayground = () => {
 	const publishDraft = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		if (isPublishing) return;
+		if (pendingImageUpload) {
+			await uploadImage(
+				pendingImageUpload.file,
+				pendingImageUpload,
+				publishSecret,
+				pendingImageUpload.imageQuality,
+			);
+			return;
+		}
 
 		const slug = draft.slug || toSlug(draft.title);
 		if (!slug) {
@@ -691,7 +836,6 @@ const MystoryPlayground = () => {
 				`Published ${result.path || `${slug}.mdx`} to ${result.branch || "GitHub"}.`,
 			);
 			setIsPublishDialogOpen(false);
-			setPublishSecret("");
 		} catch (error) {
 			setNotice(
 				error instanceof Error
@@ -772,7 +916,10 @@ const MystoryPlayground = () => {
 					</button>
 					<button
 						type="button"
-						onClick={() => setIsPublishDialogOpen(true)}
+						onClick={() => {
+							setPendingImageUpload(null);
+							setIsPublishDialogOpen(true);
+						}}
 						className="inline-flex h-10 items-center gap-2 rounded-md bg-primaryaccent px-4 text-sm font-semibold text-white hover:brightness-95">
 						<CloudUpload size={16} /> Publish
 					</button>
@@ -922,19 +1069,37 @@ const MystoryPlayground = () => {
 									{draft.description.length}/160
 								</span>
 							</label>
-							<label className="sm:col-span-2">
-								<span className="mb-1 block text-xs font-semibold text-primarygrey">
+							<div className="sm:col-span-2">
+								<label
+									htmlFor="story-cover-url"
+									className="mb-1 block text-xs font-semibold text-primarygrey">
 									Cover image URL
-								</span>
-								<input
-									value={draft.cover}
-									onChange={(event) =>
-										updateDraft({ cover: event.target.value })
-									}
-									className="w-full rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
-									placeholder="https://..."
-								/>
-							</label>
+								</label>
+								<div className="flex gap-2">
+									<input
+										id="story-cover-url"
+										value={draft.cover}
+										onChange={(event) =>
+											updateDraft({ cover: event.target.value })
+										}
+										className="min-w-0 flex-1 rounded-md border border-primarybrown/25 bg-transparent px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+										placeholder="https://..."
+									/>
+									<label className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-md border border-primarybrown/25 px-3 py-2 text-xs font-semibold hover:bg-primarywhite">
+										<Upload size={14} /> Upload
+										<input
+											type="file"
+											accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+											className="sr-only"
+											onChange={(event) => {
+												const file = event.currentTarget.files?.[0];
+												event.currentTarget.value = "";
+												handleImageUpload(file, { kind: "cover" });
+											}}
+										/>
+									</label>
+								</div>
+							</div>
 							<label>
 								<span className="mb-1 block text-xs font-semibold text-primarygrey">
 									City
@@ -1069,6 +1234,32 @@ const MystoryPlayground = () => {
 					</div>
 
 					<div className="rounded-lg border border-primarybrown/20 bg-primarywhite p-4 sm:p-5">
+						<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+							<div>
+								<h2 className="font-bold">Upload settings</h2>
+								<p className="mt-1 text-xs text-primarygrey">
+									Quality applies to new cover, photo, and gallery uploads.
+								</p>
+							</div>
+							<label className="flex flex-col gap-1 text-xs font-semibold text-primarygrey sm:w-64">
+								<span>Cloudinary image quality</span>
+								<select
+									value={draft.imageQuality}
+									onChange={(event) =>
+										updateDraft({
+											imageQuality: event.target.value as ImageQuality,
+										})
+									}
+									className="w-full rounded-md border border-primarybrown/25 bg-mybackground px-3 py-2 text-sm font-normal text-primaryText outline-none focus:border-secondaryforestgreen">
+									<option value="auto:eco">Smaller files</option>
+									<option value="auto:good">Balanced</option>
+									<option value="auto:best">Highest quality</option>
+								</select>
+							</label>
+						</div>
+					</div>
+
+					<div className="rounded-lg border border-primarybrown/20 bg-primarywhite p-4 sm:p-5">
 						<div className="mb-4 flex items-center justify-between">
 							<div>
 								<h2 className="font-bold">Story content</h2>
@@ -1076,9 +1267,11 @@ const MystoryPlayground = () => {
 									Drag a block into the canvas, or drag blocks to reorder.
 								</p>
 							</div>
-							<span className="text-xs text-primarygrey">
-								{draft.blocks.length} BLOCKS
-							</span>
+							<div className="flex items-center">
+								<span className="text-xs text-primarygrey">
+									{draft.blocks.length} BLOCKS
+								</span>
+							</div>
 						</div>
 						<div className="mb-4 flex flex-wrap gap-2">
 							{blockOptions.map(({ type, label, icon: Icon }) => (
@@ -1394,6 +1587,22 @@ const MystoryPlayground = () => {
 													className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
 													placeholder="Photo description"
 												/>
+												<label className="inline-flex w-fit cursor-pointer items-center gap-2 rounded-md border border-primarybrown/25 px-3 py-2 text-xs font-semibold hover:bg-primarywhite">
+													<Upload size={14} /> Upload to Cloudinary
+													<input
+														type="file"
+														accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+														className="sr-only"
+														onChange={(event) => {
+															const file = event.currentTarget.files?.[0];
+															event.currentTarget.value = "";
+															handleImageUpload(file, {
+																kind: "block",
+																blockId: block.id,
+															});
+														}}
+													/>
+												</label>
 											</div>
 										)}
 										{block.type === "gallery" && (
@@ -1401,7 +1610,7 @@ const MystoryPlayground = () => {
 												{block.gallery.map((photo, photoIndex) => (
 													<div
 														key={`${block.id}-${photoIndex}`}
-														className="grid gap-2 sm:grid-cols-2">
+														className="grid gap-x-2 gap-y-2 sm:grid-cols-[minmax(0,1fr)_auto]">
 														<input
 															value={photo.url}
 															onChange={(event) => {
@@ -1412,38 +1621,52 @@ const MystoryPlayground = () => {
 																};
 																updateBlock(block.id, { gallery });
 															}}
-															className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
+															className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-start-1 sm:row-start-1"
 															placeholder={`Photo ${photoIndex + 1} URL`}
 														/>
-														<div className="flex gap-2">
+														<label className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-primarybrown/25 px-3 py-2 text-xs font-semibold hover:bg-primarywhite sm:col-start-2 sm:row-start-1">
+															<Upload size={14} /> Upload
 															<input
-																value={photo.alt}
+																type="file"
+																accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+																className="sr-only"
 																onChange={(event) => {
-																	const gallery = [...block.gallery];
-																	gallery[photoIndex] = {
-																		...photo,
-																		alt: event.target.value,
-																	};
-																	updateBlock(block.id, { gallery });
+																	const file = event.currentTarget.files?.[0];
+																	event.currentTarget.value = "";
+																	handleImageUpload(file, {
+																		kind: "block",
+																		blockId: block.id,
+																		galleryIndex: photoIndex,
+																	});
 																}}
-																className="min-w-0 flex-1 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen"
-																placeholder="Description"
 															/>
-															<button
-																type="button"
-																onClick={() =>
-																	updateBlock(block.id, {
-																		gallery: block.gallery.filter(
-																			(_, itemIndex) =>
-																				itemIndex !== photoIndex,
-																		),
-																	})
-																}
-																aria-label="Remove gallery photo"
-																className="rounded p-2 text-primaryred hover:bg-primaryred/10">
-																<X size={15} />
-															</button>
-														</div>
+														</label>
+														<input
+															value={photo.alt}
+															onChange={(event) => {
+																const gallery = [...block.gallery];
+																gallery[photoIndex] = {
+																	...photo,
+																	alt: event.target.value,
+																};
+																updateBlock(block.id, { gallery });
+															}}
+															className="min-w-0 rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen sm:col-start-1 sm:row-start-2"
+															placeholder="Description"
+														/>
+														<button
+															type="button"
+															onClick={() =>
+																updateBlock(block.id, {
+																	gallery: block.gallery.filter(
+																		(_, itemIndex) => itemIndex !== photoIndex,
+																	),
+																})
+															}
+															aria-label="Remove gallery photo"
+															className="rounded p-2 text-primaryred hover:bg-primaryred/10 sm:col-start-2 sm:row-start-2">
+															<X size={15} />
+														</button>
 													</div>
 												))}
 												<button
@@ -1549,22 +1772,34 @@ const MystoryPlayground = () => {
 					</div>
 				</section>
 			</div>
-			<Dialog
-				open={isPublishDialogOpen}
-				onOpenChange={(open) => {
-					setIsPublishDialogOpen(open);
-					if (!open) setPublishSecret("");
-				}}>
+			<Dialog open={isPublishDialogOpen} onOpenChange={setIsPublishDialogOpen}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Publish story to GitHub</DialogTitle>
+						<DialogTitle>
+							{pendingImageUpload
+								? "Authorize Cloudinary upload"
+								: "Publish story to GitHub"}
+						</DialogTitle>
 						<DialogDescription>
-							This creates or updates{" "}
-							<span className="font-medium text-primaryText">
-								{draft.slug || toSlug(draft.title) || "story"}.mdx
-							</span>{" "}
-							on the configured branch. Enter the publisher key to authorize
-							this commit.
+							{pendingImageUpload ? (
+								<>
+									Upload{" "}
+									<span className="font-medium text-primaryText">
+										{pendingImageUpload.file.name}
+									</span>{" "}
+									securely to Cloudinary. The returned image URL will be added
+									to the story draft.
+								</>
+							) : (
+								<>
+									This creates or updates{" "}
+									<span className="font-medium text-primaryText">
+										{draft.slug || toSlug(draft.title) || "story"}.mdx
+									</span>{" "}
+									on the configured branch. Enter the publisher key to authorize
+									this commit.
+								</>
+							)}
 						</DialogDescription>
 					</DialogHeader>
 					<form onSubmit={publishDraft} className="space-y-4">
@@ -1587,6 +1822,10 @@ const MystoryPlayground = () => {
 								<button
 									type="button"
 									disabled={isPublishing}
+									onClick={() => {
+										setPublishSecret("");
+										setPendingImageUpload(null);
+									}}
 									className="inline-flex h-10 items-center justify-center rounded-md border border-primarybrown/30 px-4 text-sm font-semibold">
 									Cancel
 								</button>
@@ -1595,7 +1834,20 @@ const MystoryPlayground = () => {
 								type="submit"
 								disabled={isPublishing || !publishSecret.trim()}
 								className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primaryaccent px-4 text-sm font-semibold text-white disabled:opacity-60">
-								{isPublishing ? "Publishing..." : "Publish commit"}
+								{isPublishing ? (
+									pendingImageUpload ? (
+										<>
+											<LoaderCircle size={16} className="animate-spin" />{" "}
+											Uploading...
+										</>
+									) : (
+										"Publishing..."
+									)
+								) : pendingImageUpload ? (
+									"Upload image"
+								) : (
+									"Publish commit"
+								)}
 							</button>
 						</DialogFooter>
 					</form>
