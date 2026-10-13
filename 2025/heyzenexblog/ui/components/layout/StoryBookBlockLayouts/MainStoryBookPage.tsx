@@ -134,6 +134,16 @@ const MainStoryBookPage = ({
 					</strong>
 				);
 
+			case "layout16":
+				return (
+					<div
+						key={idx}
+						className="rounded-md border border-dashed border-primarybrown/30 p-4 text-sm text-primarygrey">
+						Imported MDX source is preserved and editable in the Story content
+						block.
+					</div>
+				);
+
 			default:
 				return (
 					<PhotoCollectionGrid

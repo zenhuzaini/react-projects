@@ -8,9 +8,12 @@ import {
 	ArrowUp,
 	Check,
 	ChevronDown,
+	ChevronLeft,
+	ChevronRight,
 	Code2,
 	CloudUpload,
 	Eye,
+	FolderOpen,
 	GripVertical,
 	Highlighter,
 	ImagePlus,
@@ -25,6 +28,7 @@ import {
 	PanelLeftOpen,
 	Plus,
 	Quote,
+	Search,
 	Text,
 	Trash2,
 	Type,
@@ -58,7 +62,8 @@ type BlockType =
 	| "iframe"
 	| "map"
 	| "divider"
-	| "highlight";
+	| "highlight"
+	| "raw";
 
 type StoryListItem = { label: string; done: boolean };
 type ImageQuality = "auto:eco" | "auto:good" | "auto:best";
@@ -84,10 +89,37 @@ type StoryBlock = {
 	route: string;
 	shouldShowDownloadGPX: boolean;
 	mapTitle: string;
+	rawMdx: string;
+};
+
+type ExistingStorySummary = { slug: string; title: string };
+type ExistingStoryResponse = {
+	slug: string;
+	body: string;
+	metadata: {
+		slug?: string;
+		id?: number;
+		title?: string;
+		description?: string;
+		cover?: string;
+		city?: string;
+		country?: string;
+		activityType?: string;
+		tags?: string[];
+		views?: number;
+		likes?: number;
+		datePublished?: string;
+		dateModified?: string;
+		eventDateFrom?: string;
+		eventDateTo?: string;
+		nextPostSlug?: string;
+		prevPostSlug?: string;
+	};
 };
 
 type StoryDraft = {
 	id: string;
+	storyId: number;
 	title: string;
 	slug: string;
 	description: string;
@@ -102,6 +134,8 @@ type StoryDraft = {
 	datePublished: string;
 	eventDateFrom: string;
 	eventDateTo: string;
+	nextPostSlug: string;
+	prevPostSlug: string;
 	blocks: StoryBlock[];
 	createdAt: string;
 	updatedAt: string;
@@ -110,6 +144,7 @@ type StoryDraft = {
 const STORAGE_KEY = "heyzenex-mystory-drafts";
 const MAX_GPX_FILE_SIZE = 20 * 1024 * 1024;
 const MAX_GPX_ROUTE_POINTS = 2000;
+const STORY_LIBRARY_PAGE_SIZE = 5;
 
 const blockOptions: { type: BlockType; label: string; icon: typeof Text }[] = [
 	{ type: "paragraph", label: "Paragraph", icon: Text },
@@ -123,6 +158,7 @@ const blockOptions: { type: BlockType; label: string; icon: typeof Text }[] = [
 	{ type: "map", label: "Map with description", icon: MapPin },
 	{ type: "divider", label: "Divider", icon: Minus },
 	{ type: "highlight", label: "Highlight", icon: Highlighter },
+	{ type: "raw", label: "MDX source", icon: Code2 },
 ];
 
 const createBlock = (
@@ -145,6 +181,7 @@ const createBlock = (
 	route: "",
 	shouldShowDownloadGPX: false,
 	mapTitle: "",
+	rawMdx: "",
 });
 
 const createDraft = (
@@ -152,6 +189,7 @@ const createDraft = (
 	blockId = crypto.randomUUID(),
 ): StoryDraft => ({
 	id,
+	storyId: 1,
 	title: "A Weekend Along the Velo Dunajec",
 	slug: "a-weekend-along-the-velo-dunajec",
 	description:
@@ -167,6 +205,8 @@ const createDraft = (
 	datePublished: "",
 	eventDateFrom: "",
 	eventDateTo: "",
+	nextPostSlug: "",
+	prevPostSlug: "",
 	blocks: [
 		{
 			...createBlock("paragraph", blockId),
@@ -187,6 +227,15 @@ const toSlug = (value: string) =>
 const toLocalDateTimeInput = (date: Date) => {
 	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 	return localDate.toISOString().slice(0, 16);
+};
+
+const toLocalDateInput = (value: string | undefined) => {
+	if (!value) return "";
+	if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10);
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return "";
+	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+	return localDate.toISOString().slice(0, 10);
 };
 
 const toDatePublished = (value: string) =>
@@ -344,6 +393,9 @@ const toStoryContent = (
 			case "map":
 				sectionID = "layout10";
 				break;
+			case "raw":
+				sectionID = "layout16";
+				break;
 		}
 
 		if (sectionID === "layout5" || sectionID === "layout6") {
@@ -383,6 +435,9 @@ const toStoryContent = (
 				},
 			];
 		}
+		if (sectionID === "layout16") {
+			return [{ sectionID, textContent: "", photoUrls, rawMdx: block.rawMdx }];
+		}
 
 		return block.text.trim()
 			? [{ sectionID, textContent: block.text, photoUrls }]
@@ -393,7 +448,7 @@ const toMdx = (draft: StoryDraft) => {
 	const metadata = {
 		slug: draft.slug || toSlug(draft.title),
 		title: draft.title,
-		id: 1,
+		id: draft.storyId,
 		views: draft.views,
 		likes: draft.likes,
 		cover: draft.cover,
@@ -406,8 +461,8 @@ const toMdx = (draft: StoryDraft) => {
 		city: draft.city,
 		country: draft.country,
 		activityType: draft.activityType,
-		nextPostSlug: "",
-		prevPostSlug: "",
+		nextPostSlug: draft.nextPostSlug,
+		prevPostSlug: draft.prevPostSlug,
 	};
 
 	const blocks = draft.blocks
@@ -476,14 +531,18 @@ const toMdx = (draft: StoryDraft) => {
 					return "<hr />";
 				case "highlight":
 					return block.text.trim()
-						? `<Highlight>${block.text}</Highlight>`
+						? `<Highlight>{${JSON.stringify(block.text)}}</Highlight>`
 						: "";
+				case "raw":
+					return block.rawMdx;
 			}
 		})
 		.filter(Boolean)
 		.join("\n\n");
 
-	return `export const metadata = ${JSON.stringify(metadata, null, 2)};\n\n<Center>\n${blocks}\n</Center>\n`;
+	const hasImportedMdx = draft.blocks.some((block) => block.type === "raw");
+	const body = hasImportedMdx ? blocks : `<Center>\n${blocks}\n</Center>`;
+	return `export const metadata = ${JSON.stringify(metadata, null, 2)};\n\n${body}\n`;
 };
 
 const MystoryPlayground = () => {
@@ -499,11 +558,38 @@ const MystoryPlayground = () => {
 	const [outputTab, setOutputTab] = useState<"mdx" | "preview">("mdx");
 	const [isSavedStoriesExpanded, setIsSavedStoriesExpanded] = useState(true);
 	const [isStoryDetailsOpen, setIsStoryDetailsOpen] = useState(true);
+	const [isStoryLibraryOpen, setIsStoryLibraryOpen] = useState(false);
+	const [storySearchQuery, setStorySearchQuery] = useState("");
+	const [storyLibraryPage, setStoryLibraryPage] = useState(1);
+	const [existingStories, setExistingStories] = useState<
+		ExistingStorySummary[]
+	>([]);
+	const [isLoadingStoryLibrary, setIsLoadingStoryLibrary] = useState(false);
+	const [isImportingExternalStory, setIsImportingExternalStory] =
+		useState(false);
+	const [loadingStorySlug, setLoadingStorySlug] = useState<string | null>(null);
+	const [storyLibraryError, setStoryLibraryError] = useState("");
 	const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
 	const [publishSecret, setPublishSecret] = useState("");
 	const [pendingImageUpload, setPendingImageUpload] =
 		useState<PendingImageUpload | null>(null);
 	const [isPublishing, setIsPublishing] = useState(false);
+	const filteredExistingStories = existingStories.filter((story) => {
+		const query = storySearchQuery.trim().toLowerCase();
+		return (
+			!query ||
+			story.title.toLowerCase().includes(query) ||
+			story.slug.toLowerCase().includes(query)
+		);
+	});
+	const storyLibraryPageCount = Math.max(
+		1,
+		Math.ceil(filteredExistingStories.length / STORY_LIBRARY_PAGE_SIZE),
+	);
+	const paginatedExistingStories = filteredExistingStories.slice(
+		(storyLibraryPage - 1) * STORY_LIBRARY_PAGE_SIZE,
+		storyLibraryPage * STORY_LIBRARY_PAGE_SIZE,
+	);
 
 	useEffect(() => {
 		try {
@@ -513,6 +599,9 @@ const MystoryPlayground = () => {
 				setSavedDrafts(
 					drafts.map((saved) => ({
 						...saved,
+						storyId: saved.storyId ?? 1,
+						nextPostSlug: saved.nextPostSlug ?? "",
+						prevPostSlug: saved.prevPostSlug ?? "",
 						imageQuality: saved.imageQuality ?? "auto:good",
 						views: saved.views ?? 100,
 						likes: saved.likes ?? 10,
@@ -553,6 +642,160 @@ const MystoryPlayground = () => {
 		const items = [...block.items];
 		items[index] = { ...items[index], ...updates };
 		updateBlock(block.id, { items });
+	};
+
+	const applyImportedStory = (
+		result: ExistingStoryResponse,
+		fallbackSlug: string,
+		fallbackTitle: string,
+	) => {
+		const metadata = result.metadata;
+		const now = new Date().toISOString();
+		const publishedDate = metadata.datePublished
+			? new Date(metadata.datePublished)
+			: new Date();
+		const modifiedDate = metadata.dateModified
+			? new Date(metadata.dateModified)
+			: publishedDate;
+		const createdAt = Number.isNaN(publishedDate.getTime())
+			? new Date(now)
+			: publishedDate;
+		const updatedAt = Number.isNaN(modifiedDate.getTime())
+			? createdAt
+			: modifiedDate;
+		const slug = metadata.slug || result.slug || fallbackSlug;
+
+		setDraft({
+			...createDraft(),
+			id: crypto.randomUUID(),
+			storyId: metadata.id ?? 1,
+			title: metadata.title || fallbackTitle,
+			slug,
+			description: metadata.description || "",
+			cover: metadata.cover || photoMockStatic[0].photoUrl,
+			imageQuality: draft.imageQuality,
+			city: metadata.city || "",
+			country: metadata.country || "",
+			activityType: metadata.activityType || "bikepacking",
+			tags: metadata.tags?.join(", ") || "",
+			views: metadata.views ?? 0,
+			likes: metadata.likes ?? 0,
+			datePublished: toLocalDateTimeInput(
+				Number.isNaN(publishedDate.getTime()) ? new Date() : publishedDate,
+			),
+			eventDateFrom: toLocalDateInput(metadata.eventDateFrom),
+			eventDateTo: toLocalDateInput(metadata.eventDateTo),
+			nextPostSlug: metadata.nextPostSlug || "",
+			prevPostSlug: metadata.prevPostSlug || "",
+			createdAt: createdAt.toISOString(),
+			updatedAt: updatedAt.toISOString(),
+			blocks: [{ ...createBlock("raw"), rawMdx: result.body }],
+		});
+		setActiveDraftId(null);
+		setIsStoryDetailsOpen(true);
+		setOutputTab("mdx");
+		setIsStoryLibraryOpen(false);
+		setNotice(`Loaded ${metadata.title || fallbackTitle}.`);
+	};
+
+	const openStoryLibrary = async () => {
+		setIsStoryLibraryOpen(true);
+		setStorySearchQuery("");
+		setStoryLibraryPage(1);
+		setIsLoadingStoryLibrary(true);
+		setStoryLibraryError("");
+		try {
+			const response = await fetch("/api/stories/library");
+			const result = (await response.json().catch(() => ({}))) as {
+				error?: string;
+				stories?: ExistingStorySummary[];
+			};
+			if (!response.ok) {
+				throw new Error(result.error || "Could not load the story library.");
+			}
+			setExistingStories(result.stories ?? []);
+		} catch (error) {
+			setStoryLibraryError(
+				error instanceof Error
+					? error.message
+					: "Could not load the story library.",
+			);
+		} finally {
+			setIsLoadingStoryLibrary(false);
+		}
+	};
+
+	const importExternalStory = async (file: File | undefined) => {
+		if (!file) return;
+		if (!/\.(md|mdx)$/i.test(file.name)) {
+			setStoryLibraryError("Choose a .md or .mdx file.");
+			return;
+		}
+
+		setIsImportingExternalStory(true);
+		setStoryLibraryError("");
+		try {
+			const formData = new FormData();
+			formData.set("file", file);
+			const response = await fetch("/api/stories/library", {
+				method: "POST",
+				body: formData,
+			});
+			const result = (await response.json().catch(() => ({}))) as
+				| ExistingStoryResponse
+				| { error?: string };
+			if (!response.ok || !("metadata" in result) || !result.body) {
+				throw new Error(
+					"error" in result
+						? result.error || "Could not import this MDX file."
+						: "Could not import this MDX file.",
+				);
+			}
+
+			const fallbackTitle = file.name.replace(/\.(md|mdx)$/i, "");
+			const fallbackSlug = toSlug(fallbackTitle) || "imported-story";
+			applyImportedStory(result, fallbackSlug, fallbackTitle);
+		} catch (error) {
+			setStoryLibraryError(
+				error instanceof Error
+					? error.message
+					: "Could not import this MDX file.",
+			);
+		} finally {
+			setIsImportingExternalStory(false);
+		}
+	};
+
+	const loadExistingStory = async (slug: string) => {
+		setLoadingStorySlug(slug);
+		setStoryLibraryError("");
+		try {
+			const response = await fetch(
+				`/api/stories/library?slug=${encodeURIComponent(slug)}`,
+			);
+			const result = (await response.json().catch(() => ({}))) as
+				| ExistingStoryResponse
+				| { error?: string };
+			if (!response.ok || !("metadata" in result)) {
+				throw new Error(
+					"error" in result
+						? result.error || "Could not load this story."
+						: "Could not load this story.",
+				);
+			}
+
+			applyImportedStory(
+				result,
+				result.slug,
+				result.metadata.title || result.slug,
+			);
+		} catch (error) {
+			setStoryLibraryError(
+				error instanceof Error ? error.message : "Could not load this story.",
+			);
+		} finally {
+			setLoadingStorySlug(null);
+		}
 	};
 
 	const uploadImage = async (
@@ -750,6 +993,9 @@ const MystoryPlayground = () => {
 	const loadDraft = (saved: StoryDraft) => {
 		setDraft({
 			...saved,
+			storyId: saved.storyId ?? 1,
+			nextPostSlug: saved.nextPostSlug ?? "",
+			prevPostSlug: saved.prevPostSlug ?? "",
 			imageQuality: saved.imageQuality ?? "auto:good",
 			views: saved.views ?? 100,
 			likes: saved.likes ?? 10,
@@ -896,6 +1142,12 @@ const MystoryPlayground = () => {
 							{notice}
 						</span>
 					)}
+					<button
+						type="button"
+						onClick={openStoryLibrary}
+						className="inline-flex h-10 items-center gap-2 rounded-md border border-primarybrown/30 px-3 text-sm font-semibold hover:bg-primarywhite">
+						<FolderOpen size={16} /> Open MDX
+					</button>
 					<button
 						type="button"
 						onClick={startNewDraft}
@@ -1411,6 +1663,26 @@ const MystoryPlayground = () => {
 												placeholder="Highlighted text"
 											/>
 										)}
+										{block.type === "raw" && (
+											<div className="space-y-2">
+												<p className="text-xs text-primarygrey">
+													Imported MDX is preserved here. Edit the source
+													directly; metadata remains editable in Story details.
+												</p>
+												<textarea
+													value={block.rawMdx}
+													onChange={(event) =>
+														updateBlock(block.id, {
+															rawMdx: event.target.value,
+														})
+													}
+													rows={18}
+													spellCheck={false}
+													className="w-full resize-y rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 font-mono text-xs leading-5 outline-none focus:border-secondaryforestgreen"
+													placeholder="Existing MDX source"
+												/>
+											</div>
+										)}
 										{(block.type === "checklist" ||
 											block.type === "itemlist") && (
 											<div className="space-y-2">
@@ -1772,6 +2044,152 @@ const MystoryPlayground = () => {
 					</div>
 				</section>
 			</div>
+			<Dialog open={isStoryLibraryOpen} onOpenChange={setIsStoryLibraryOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Open existing story</DialogTitle>
+						<DialogDescription>
+							Choose an MDX story from the project library to edit its metadata
+							and source.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="flex flex-col gap-2 sm:flex-row">
+						<label className="relative flex min-w-0 flex-1 items-center">
+							<Search
+								size={16}
+								className="pointer-events-none absolute left-3 text-primarygrey"
+							/>
+							<input
+								type="search"
+								value={storySearchQuery}
+								onChange={(event) => {
+									setStorySearchQuery(event.target.value);
+									setStoryLibraryPage(1);
+								}}
+								placeholder="Search stories"
+								aria-label="Search stories by title or filename"
+								className="h-10 w-full rounded-md border border-primarybrown/25 bg-primarywhite pl-9 pr-3 text-sm outline-none focus:border-secondaryforestgreen"
+							/>
+						</label>
+						<label
+							className={`inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md border border-primarybrown/30 px-3 text-sm font-semibold hover:bg-primarywhite ${isImportingExternalStory ? "cursor-wait opacity-60" : ""}`}>
+							{isImportingExternalStory ? (
+								<LoaderCircle size={16} className="animate-spin" />
+							) : (
+								<Upload size={16} />
+							)}
+							Import MDX
+							<input
+								type="file"
+								accept=".md,.mdx,text/markdown"
+								disabled={isImportingExternalStory}
+								className="sr-only"
+								onChange={(event) => {
+									void importExternalStory(event.currentTarget.files?.[0]);
+									event.currentTarget.value = "";
+								}}
+							/>
+						</label>
+					</div>
+					<div className="max-h-[min(60vh,28rem)] space-y-2 overflow-y-auto">
+						{isLoadingStoryLibrary && (
+							<p className="flex items-center gap-2 py-6 text-sm text-primarygrey">
+								<LoaderCircle size={16} className="animate-spin" /> Loading
+								stories...
+							</p>
+						)}
+						{storyLibraryError && (
+							<p role="alert" className="py-4 text-sm text-red-700">
+								{storyLibraryError}
+							</p>
+						)}
+						{!isLoadingStoryLibrary &&
+							!storyLibraryError &&
+							existingStories.length === 0 && (
+								<p className="py-6 text-sm text-primarygrey">
+									No MDX stories were found in the library.
+								</p>
+							)}
+						{!isLoadingStoryLibrary &&
+							!storyLibraryError &&
+							existingStories.length > 0 &&
+							filteredExistingStories.length === 0 && (
+								<p className="py-6 text-sm text-primarygrey">
+									No stories match “{storySearchQuery}”.
+								</p>
+							)}
+						{!storyLibraryError &&
+							paginatedExistingStories.map((story) => (
+								<button
+									key={story.slug}
+									type="button"
+									disabled={
+										loadingStorySlug !== null || isImportingExternalStory
+									}
+									onClick={() => loadExistingStory(story.slug)}
+									className="flex w-full items-center justify-between gap-3 rounded-md border border-primarybrown/20 px-3 py-3 text-left hover:bg-primarywhite disabled:opacity-60">
+									<span className="min-w-0">
+										<span className="block truncate text-sm font-semibold text-primaryText">
+											{story.title}
+										</span>
+										<span className="block truncate text-xs text-primarygrey">
+											/{story.slug}.mdx
+										</span>
+									</span>
+									{loadingStorySlug === story.slug && (
+										<LoaderCircle
+											size={16}
+											className="shrink-0 animate-spin"
+											aria-label="Loading story"
+										/>
+									)}
+								</button>
+							))}
+					</div>
+					{filteredExistingStories.length > 0 && (
+						<div className="flex items-center justify-between gap-3 text-xs text-primarygrey">
+							<span>
+								Showing {(storyLibraryPage - 1) * STORY_LIBRARY_PAGE_SIZE + 1}–
+								{Math.min(
+									storyLibraryPage * STORY_LIBRARY_PAGE_SIZE,
+									filteredExistingStories.length,
+								)}{" "}
+								of {filteredExistingStories.length}
+							</span>
+							<div className="flex items-center gap-2">
+								<button
+									type="button"
+									aria-label="Previous page"
+									disabled={storyLibraryPage <= 1}
+									onClick={() => setStoryLibraryPage((page) => page - 1)}
+									className="inline-flex size-8 items-center justify-center rounded border border-primarybrown/25 disabled:opacity-40">
+									<ChevronLeft size={16} />
+								</button>
+								<span>
+									Page {storyLibraryPage} of {storyLibraryPageCount}
+								</span>
+								<button
+									type="button"
+									aria-label="Next page"
+									disabled={storyLibraryPage >= storyLibraryPageCount}
+									onClick={() => setStoryLibraryPage((page) => page + 1)}
+									className="inline-flex size-8 items-center justify-center rounded border border-primarybrown/25 disabled:opacity-40">
+									<ChevronRight size={16} />
+								</button>
+							</div>
+						</div>
+					)}
+					<DialogFooter>
+						<DialogClose asChild>
+							<button
+								type="button"
+								className="inline-flex h-10 items-center justify-center rounded-md border border-primarybrown/30 px-4 text-sm font-semibold">
+								Close
+							</button>
+						</DialogClose>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 			<Dialog open={isPublishDialogOpen} onOpenChange={setIsPublishDialogOpen}>
 				<DialogContent>
 					<DialogHeader>
