@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
 import type { StoryBookMeta } from "@/types/data";
+import { EMPTY_STRING } from "@/const/vars";
 
 const PAGE_SIZE = 3;
+type SortOrder = "latest" | "oldest";
 
 const formatDate = (value: string) => {
 	const date = new Date(value);
@@ -17,22 +20,42 @@ const formatDate = (value: string) => {
 };
 
 const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
+	const prefersReducedMotion = useReducedMotion();
 	const [query, setQuery] = useState("");
 	const [page, setPage] = useState(1);
+	const [sortOrder, setSortOrder] = useState<SortOrder>("latest");
+	const [selectedTag, setSelectedTag] = useState("all");
 	const normalizedQuery = query.trim().toLowerCase();
-	const filteredStories = stories.filter((story) =>
-		[
-			story.title,
-			story.slug,
-			story.description,
-			story.city,
-			story.country,
-			...story.tags,
-		]
-			.join(" ")
-			.toLowerCase()
-			.includes(normalizedQuery),
-	);
+	const tags = Array.from(
+		new Set(stories.flatMap((story) => story.tags ?? [])),
+	).sort((first, second) => first.localeCompare(second));
+	const filteredStories = stories
+		.filter((story) => {
+			const matchesQuery = [
+				story.title,
+				story.slug,
+				story.description,
+				story.city,
+				story.country,
+				...story.tags,
+			]
+				.join(" ")
+				.toLowerCase()
+				.includes(normalizedQuery);
+			const matchesTag =
+				selectedTag === "all" ||
+				story.tags.some((tag) => tag.toLowerCase() === selectedTag);
+			return matchesQuery && matchesTag;
+		})
+		.sort((first, second) => {
+			const firstTime = new Date(first.datePublished).getTime();
+			const secondTime = new Date(second.datePublished).getTime();
+			const firstTimestamp = Number.isNaN(firstTime) ? 0 : firstTime;
+			const secondTimestamp = Number.isNaN(secondTime) ? 0 : secondTime;
+			return sortOrder === "latest"
+				? secondTimestamp - firstTimestamp
+				: firstTimestamp - secondTimestamp;
+		});
 	const pageCount = Math.max(1, Math.ceil(filteredStories.length / PAGE_SIZE));
 	const currentPage = Math.min(page, pageCount);
 	const visibleStories = filteredStories.slice(
@@ -44,8 +67,8 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 		<section className="flex flex-col gap-5 sm:gap-8">
 			<SectionTitle left="My" right="STORIES" />
 
-			<div className="flex flex-col gap-3 border-y border-primarybrown/20 py-4 sm:flex-row sm:items-center sm:justify-between">
-				<label className="relative flex w-full max-w-xl items-center">
+			<div className="flex flex-col gap-3 border-y border-primarybrown/20 py-4 lg:flex-row lg:items-center lg:justify-between">
+				<label className="relative flex w-full min-w-0 flex-1 items-center">
 					<Search
 						size={18}
 						aria-hidden="true"
@@ -67,7 +90,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 							type="button"
 							aria-label="Clear search"
 							onClick={() => {
-								setQuery("");
+								setQuery(EMPTY_STRING);
 								setPage(1);
 							}}
 							className="absolute right-2 inline-flex size-8 items-center justify-center rounded text-primarygrey hover:bg-secondarywhite hover:text-primaryText">
@@ -75,59 +98,107 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 						</button>
 					)}
 				</label>
-				<p aria-live="polite" className="shrink-0 text-sm text-primarygrey">
-					{filteredStories.length}{" "}
-					{filteredStories.length === 1 ? "story" : "stories"}
-				</p>
+				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+					<label className="flex min-w-0 flex-col gap-1 text-xs font-semibold text-primarygrey">
+						<span>Sort by</span>
+						<select
+							aria-label="Sort stories"
+							value={sortOrder}
+							onChange={(event) => {
+								setSortOrder(event.target.value as SortOrder);
+								setPage(1);
+							}}
+							className="h-10 min-w-0 rounded-md border border-primarybrown/25 bg-primarywhite px-3 text-sm font-normal text-primaryText outline-none focus:border-secondaryforestgreen sm:min-w-36">
+							<option value="latest">Latest first</option>
+							<option value="oldest">Oldest first</option>
+						</select>
+					</label>
+					<label className="flex min-w-0 flex-col gap-1 text-xs font-semibold text-primarygrey">
+						<span>Filter by tag</span>
+						<select
+							aria-label="Filter stories by tag"
+							value={selectedTag}
+							onChange={(event) => {
+								setSelectedTag(event.target.value);
+								setPage(1);
+							}}
+							className="h-10 min-w-0 rounded-md border border-primarybrown/25 bg-primarywhite px-3 text-sm font-normal text-primaryText outline-none focus:border-secondaryforestgreen sm:min-w-36">
+							<option value="all">All tags</option>
+							{tags.map((tag) => (
+								<option key={tag} value={tag.toLowerCase()}>
+									#{tag}
+								</option>
+							))}
+						</select>
+					</label>
+				</div>
 			</div>
 
 			{visibleStories.length ? (
-				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{visibleStories.map((story) => (
-						<Link
-							key={story.slug}
-							href={`/storybook/${story.slug}`}
-							aria-label={`${story.title}, ${story.city}, ${story.country}`}
-							className="group relative mx-auto block aspect-9/16 w-full max-w-[360px] overflow-hidden rounded-2xl border border-primarybrown/20 bg-primarymidnight shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen">
-							<ImageWithSkeleton
-								src={story.cover}
-								alt={story.title}
-								rounded="rounded-2xl"
-								customClassName="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-							/>
-							<div className="absolute inset-0 bg-linear-to-b from-primarymidnight/35 via-transparent to-primarymidnight/90" />
-							<div className="absolute inset-x-0 top-0 space-y-5 p-5 sm:space-y-7 sm:p-6">
-								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/75">
-									StoryBook{" "}
-									<span className="text-primaryaccent">#{story.id}</span>
-								</p>
-								<h2 className="line-clamp-4 text-3xl font-light leading-[1.08] text-white sm:text-4xl">
-									{story.title}
-								</h2>
-								<div className="h-px w-full bg-white/60" />
-								<p className="text-sm font-medium text-white/85">
-									{story.city}
-									{story.city && story.country ? ", " : ""}
-									{story.country}
-								</p>
-							</div>
-							<div className="absolute inset-x-0 bottom-0 space-y-3 p-5 sm:p-6">
-								<p className="line-clamp-4 text-sm leading-5 text-white/85">
-									{story.description}
-								</p>
-								<div className="flex items-center justify-between gap-3 border-t border-white/40 pt-3 text-xs text-white/80">
-									<span>{formatDate(story.datePublished)}</span>
-									<span className="truncate text-right">
-										{story.tags
-											.slice(0, 2)
-											.map((tag) => `#${tag}`)
-											.join("  ")}
-									</span>
-								</div>
-							</div>
-						</Link>
-					))}
-				</div>
+				<AnimatePresence mode="wait" initial={false}>
+					<motion.div
+						key={currentPage}
+						initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: prefersReducedMotion ? 0 : -4 }}
+						transition={{
+							opacity: {
+								duration: prefersReducedMotion ? 0.01 : 0.38,
+								ease: "easeInOut",
+							},
+							y: {
+								duration: prefersReducedMotion ? 0.01 : 0.42,
+								ease: [0.22, 1, 0.36, 1],
+							},
+						}}>
+						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+							{visibleStories.map((story) => (
+								<Link
+									key={story.slug}
+									href={`/storybook/${story.slug}`}
+									aria-label={`${story.title}, ${story.city}, ${story.country}`}
+									className="group relative block aspect-9/16 w-full min-w-0 overflow-hidden rounded-2xl border border-primarybrown/20 bg-primarymidnight shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen">
+									<ImageWithSkeleton
+										src={story.cover}
+										alt={story.title}
+										rounded="rounded-2xl"
+										customClassName="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+									/>
+									<div className="absolute inset-0 bg-linear-to-b from-primarymidnight/35 via-transparent to-primarymidnight/90" />
+									<div className="absolute inset-x-0 top-0 space-y-5 p-5 sm:space-y-7 sm:p-6">
+										<p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/75">
+											StoryBook{" "}
+											<span className="text-primaryaccent">#{story.id}</span>
+										</p>
+										<h2 className="line-clamp-4 text-3xl font-light leading-[1.08] text-white sm:text-4xl">
+											{story.title}
+										</h2>
+										<div className="h-px w-full bg-white/60" />
+										<p className="text-sm font-medium text-white/85">
+											{story.city}
+											{story.city && story.country ? ", " : ""}
+											{story.country}
+										</p>
+									</div>
+									<div className="absolute inset-x-0 bottom-0 space-y-3 p-5 sm:p-6">
+										<p className="line-clamp-4 text-sm leading-5 text-white/85">
+											{story.description}
+										</p>
+										<div className="flex items-center justify-between gap-3 border-t border-white/40 pt-3 text-xs text-white/80">
+											<span>{formatDate(story.datePublished)}</span>
+											<span className="truncate text-right">
+												{story.tags
+													.slice(0, 2)
+													.map((tag) => `#${tag}`)
+													.join("  ")}
+											</span>
+										</div>
+									</div>
+								</Link>
+							))}
+						</div>
+					</motion.div>
+				</AnimatePresence>
 			) : (
 				<div className="border-y border-primarybrown/20 py-16 text-center">
 					<h2 className="text-lg font-semibold text-primaryText">
@@ -145,8 +216,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 					className="flex items-center justify-between border-t border-primarybrown/20 pt-4">
 					<p className="text-sm text-primarygrey">
 						Showing {(currentPage - 1) * PAGE_SIZE + 1}–
-						{Math.min(currentPage * PAGE_SIZE, filteredStories.length)} of{" "}
-						{filteredStories.length}
+						{Math.min(currentPage * PAGE_SIZE, filteredStories.length)}
 					</p>
 					<div className="flex items-center gap-3">
 						<button
