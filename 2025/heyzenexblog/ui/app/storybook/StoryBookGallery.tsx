@@ -6,6 +6,13 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import type { StoryBookMeta } from "@/types/data";
 import { EMPTY_STRING } from "@/const/vars";
 
@@ -99,38 +106,65 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 					)}
 				</label>
 				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
-					<label className="flex min-w-0 flex-col gap-1 text-xs font-semibold text-primarygrey">
-						<span>Sort by</span>
-						<select
-							aria-label="Sort stories"
+					<div className="min-w-0">
+						<Select
+							items={[
+								{ label: "Latest first", value: "latest" },
+								{ label: "Oldest first", value: "oldest" },
+							]}
 							value={sortOrder}
-							onChange={(event) => {
-								setSortOrder(event.target.value as SortOrder);
+							onValueChange={(value) => {
+								if (value !== null) setSortOrder(value as SortOrder);
 								setPage(1);
-							}}
-							className="h-10 min-w-0 rounded-md border border-primarybrown/25 bg-primarywhite px-3 text-sm font-normal text-primaryText outline-none focus:border-secondaryforestgreen sm:min-w-36">
-							<option value="latest">Latest first</option>
-							<option value="oldest">Oldest first</option>
-						</select>
-					</label>
-					<label className="flex min-w-0 flex-col gap-1 text-xs font-semibold text-primarygrey">
-						<span>Filter by tag</span>
-						<select
-							aria-label="Filter stories by tag"
+							}}>
+							<SelectTrigger aria-label="Sort stories" className="sm:min-w-36">
+								<SelectValue>
+									{(value: string | null) =>
+										`Sort by · ${value === "oldest" ? "Oldest first" : "Latest first"}`
+									}
+								</SelectValue>
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="latest">Latest first</SelectItem>
+								<SelectItem value="oldest">Oldest first</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+					<div className="min-w-0">
+						<Select
+							items={[
+								{ label: "All tags", value: "all" },
+								...tags.map((tag) => ({
+									label: `#${tag}`,
+									value: tag.toLowerCase(),
+								})),
+							]}
 							value={selectedTag}
-							onChange={(event) => {
-								setSelectedTag(event.target.value);
+							onValueChange={(value) => {
+								if (value !== null) setSelectedTag(value);
 								setPage(1);
-							}}
-							className="h-10 min-w-0 rounded-md border border-primarybrown/25 bg-primarywhite px-3 text-sm font-normal text-primaryText outline-none focus:border-secondaryforestgreen sm:min-w-36">
-							<option value="all">All tags</option>
-							{tags.map((tag) => (
-								<option key={tag} value={tag.toLowerCase()}>
-									#{tag}
-								</option>
-							))}
-						</select>
-					</label>
+							}}>
+							<SelectTrigger
+								aria-label="Filter stories by tag"
+								className="sm:min-w-36">
+								<SelectValue>
+									{(value: string | null) =>
+										value === "all" || value === null
+											? "Filter by tag · All tags"
+											: `Filter by tag · #${value}`
+									}
+								</SelectValue>
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="all">All tags</SelectItem>
+								{tags.map((tag) => (
+									<SelectItem key={tag} value={tag.toLowerCase()}>
+										#{tag}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
 				</div>
 			</div>
 

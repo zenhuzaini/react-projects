@@ -50,6 +50,13 @@ import { photoMockStatic } from "@/mock/photo";
 import type { PhotoCardDetailType, StoryContentType } from "@/types/components";
 import Heading from "@/components/molecule/Headings/Heading";
 import { toast } from "@/components/ui/toast";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 
 type BlockType =
 	| "paragraph"
@@ -1560,25 +1567,41 @@ const MystoryPlayground = () => {
 								<span className="mb-1 block text-xs font-semibold text-primarygrey">
 									Activity
 								</span>
-								<select
-									value={draft.activityType}
-									onChange={(event) =>
-										updateDraft({ activityType: event.target.value })
-									}
-									className="w-full rounded-md border border-primarybrown/25 bg-mybackground px-3 py-2 text-sm outline-none focus:border-secondaryforestgreen">
-									{[
+								<Select
+									items={[
 										"bikepacking",
 										"cycling",
 										"hiking",
 										"travel",
 										"photography",
 										"other",
-									].map((activity) => (
-										<option key={activity} value={activity}>
-											{activity}
-										</option>
-									))}
-								</select>
+									].map((activity) => ({ label: activity, value: activity }))}
+									value={draft.activityType}
+									onValueChange={(value) => {
+										if (typeof value === "string") {
+											updateDraft({ activityType: value });
+										}
+									}}>
+									<SelectTrigger
+										aria-label="Activity"
+										className="w-full bg-mybackground">
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										{[
+											"bikepacking",
+											"cycling",
+											"hiking",
+											"travel",
+											"photography",
+											"other",
+										].map((activity) => (
+											<SelectItem key={activity} value={activity}>
+												{activity}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
 							</label>
 							<label>
 								<span className="mb-1 block text-xs font-semibold text-primarygrey">
@@ -1634,18 +1657,29 @@ const MystoryPlayground = () => {
 							</div>
 							<label className="flex flex-col gap-1 text-xs font-semibold text-primarygrey sm:w-64">
 								<span>Cloudinary image quality</span>
-								<select
+								<Select
+									items={[
+										{ label: "Smaller files", value: "auto:eco" },
+										{ label: "Balanced", value: "auto:good" },
+										{ label: "Highest quality", value: "auto:best" },
+									]}
 									value={draft.imageQuality}
-									onChange={(event) =>
-										updateDraft({
-											imageQuality: event.target.value as ImageQuality,
-										})
-									}
-									className="w-full rounded-md border border-primarybrown/25 bg-mybackground px-3 py-2 text-sm font-normal text-primaryText outline-none focus:border-secondaryforestgreen">
-									<option value="auto:eco">Smaller files</option>
-									<option value="auto:good">Balanced</option>
-									<option value="auto:best">Highest quality</option>
-								</select>
+									onValueChange={(value) => {
+										if (typeof value === "string") {
+											updateDraft({ imageQuality: value as ImageQuality });
+										}
+									}}>
+									<SelectTrigger
+										aria-label="Cloudinary image quality"
+										className="w-full bg-mybackground">
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="auto:eco">Smaller files</SelectItem>
+										<SelectItem value="auto:good">Balanced</SelectItem>
+										<SelectItem value="auto:best">Highest quality</SelectItem>
+									</SelectContent>
+								</Select>
 							</label>
 						</div>
 					</div>
