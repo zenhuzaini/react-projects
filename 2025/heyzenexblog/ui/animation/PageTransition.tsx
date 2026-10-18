@@ -14,6 +14,7 @@ export default function PageTransition({
 		<AnimatePresence>
 			<motion.div
 				key={pathname}
+				className="flex flex-1 flex-col"
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				exit={undefined} // Disable exit animation for no fade-out
