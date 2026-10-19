@@ -133,10 +133,10 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 							}}>
 							<SelectTrigger
 								aria-label="Sort photobooks"
-								className="sm:min-w-36">
-								<SelectValue>
+								className="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm">
+								<SelectValue className="min-w-0 flex-1 truncate whitespace-nowrap">
 									{(value: string | null) =>
-										`Sort by · ${value === "oldest" ? "Oldest first" : "Latest first"}`
+										`Sort · ${value === "oldest" ? "Oldest" : "Latest"}`
 									}
 								</SelectValue>
 							</SelectTrigger>
@@ -162,12 +162,12 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 							}}>
 							<SelectTrigger
 								aria-label="Filter photobooks by tag"
-								className="sm:min-w-36">
-								<SelectValue>
+								className="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm">
+								<SelectValue className="min-w-0 flex-1 truncate whitespace-nowrap">
 									{(value: string | null) =>
 										value === "all" || value === null
-											? "Filter by tag · All tags"
-											: `Filter by tag · #${value}`
+											? "Tag · All"
+											: `Tag · #${value}`
 									}
 								</SelectValue>
 							</SelectTrigger>
@@ -202,15 +202,19 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 							},
 						}}>
 						<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4">
-							{visibleBooks.map((book) => (
-								<Link
-									key={book.slug}
-									href={`/photobook/${book.slug}`}
-									aria-label={`${book.title}, ${book.city}, ${book.country}`}
-									className="relative block aspect-4/5 w-full min-w-0 overflow-hidden rounded-xl border border-primarybrown/20 bg-primarymidnight shadow-md transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen">
-									<PhotoCards photoDetail={getPhotoDetail(book)} />
-								</Link>
-							))}
+							{visibleBooks.map((book) => {
+								return (
+									<Link
+										className="relative block aspect-4/5  transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4"
+										key={book.slug}
+										href={`/photobook/${book.slug}`}>
+										<PhotoCards
+											key={book.slug}
+											photoDetail={getPhotoDetail(book)}
+										/>
+									</Link>
+								);
+							})}
 						</div>
 					</motion.div>
 				</AnimatePresence>

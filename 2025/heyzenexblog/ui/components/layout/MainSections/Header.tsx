@@ -232,7 +232,7 @@ const Header = () => {
 							Home
 						</Link>
 						<Link
-							href="/error/construction"
+							href="/photobook"
 							className="block py-2 "
 							onClick={() => setIsBurgerMenuOpen(false)}>
 							PhotoBook
