@@ -191,7 +191,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 									key={story.slug}
 									href={`/storybook/${story.slug}`}
 									aria-label={`${story.title}, ${story.city}, ${story.country}`}
-									className="group relative block aspect-9/16 w-full min-w-0 overflow-hidden rounded-2xl border border-primarybrown/20 bg-primarymidnight shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen text-primarycream">
+									className="group relative block aspect-9/16 w-full min-w-0 overflow-hidden rounded-2xl  shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen text-primarycream">
 									<ImageWithSkeleton
 										src={story.cover}
 										alt={story.title}
