@@ -195,7 +195,7 @@ const Header = () => {
 					<Link href="/" className="block py-2 ">
 						Home
 					</Link>
-					<Link href="/error/construction" className="block py-2 ">
+					<Link href="/photobook" className="block py-2 ">
 						PhotoBook
 					</Link>
 					<Link href="/storybook" className="block py-2">

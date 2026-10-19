@@ -1,7 +1,9 @@
-import React from "react";
+import { getPaginatedPhotoBookMetas } from "@/lib/photobook";
+import PhotoBookGallery from "./PhotoBookGallery";
 
-const PhotoBook = () => {
-	return <div>photo book</div>;
+const PhotoBookPage = async () => {
+	const result = await getPaginatedPhotoBookMetas(1, 1000);
+	return <PhotoBookGallery books={result.stories} />;
 };
 
-export default PhotoBook;
+export default PhotoBookPage;
