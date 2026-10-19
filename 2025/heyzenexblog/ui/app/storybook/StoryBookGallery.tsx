@@ -90,7 +90,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 						}}
 						placeholder="Search stories, places, or tags"
 						aria-label="Search stories, places, or tags"
-						className="h-11 w-full rounded-md border border-primarybrown/25 bg-primarywhite pl-10 pr-10 text-sm text-primaryText outline-none transition-colors placeholder:text-primarygrey/80 focus:border-secondaryforestgreen"
+						className="h-11 w-full rounded-md border  bg-primarywhite pl-10 pr-10 text-sm text-primaryebony outline-none transition-colors placeholder:text-primaryaccent/50 focus:border-primaryaccent"
 					/>
 					{query && (
 						<button
@@ -100,7 +100,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 								setQuery(EMPTY_STRING);
 								setPage(1);
 							}}
-							className="absolute right-2 inline-flex size-8 items-center justify-center rounded text-primarygrey hover:bg-secondarywhite hover:text-primaryText">
+							className="absolute right-2 inline-flex size-8 items-center justify-center rounded text-primaryebony hover:bg-primaryaccent hover:text-primarycream">
 							<X size={16} />
 						</button>
 					)}
@@ -191,7 +191,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 									key={story.slug}
 									href={`/storybook/${story.slug}`}
 									aria-label={`${story.title}, ${story.city}, ${story.country}`}
-									className="group relative block aspect-9/16 w-full min-w-0 overflow-hidden rounded-2xl border border-primarybrown/20 bg-primarymidnight shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen">
+									className="group relative block aspect-9/16 w-full min-w-0 overflow-hidden rounded-2xl border border-primarybrown/20 bg-primarymidnight shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen text-primarycream">
 									<ImageWithSkeleton
 										src={story.cover}
 										alt={story.title}
@@ -200,31 +200,31 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 									/>
 									<div className="absolute inset-0 bg-linear-to-b from-primarymidnight/35 via-transparent to-primarymidnight/90" />
 									<div className="absolute inset-x-0 top-0 space-y-5 p-5 sm:space-y-7 sm:p-6">
-										<p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/75">
+										<p className="text-xs font-semibold uppercase tracking-[0.14em] text-primarycream">
 											StoryBook{" "}
-											<span className="text-primaryaccent">#{story.id}</span>
+											<span className="bg-primaryaccent p-2  items-center rounded">
+												<span className="text-primarycream">
+													<span className="text-dot">#</span>
+													{story.id}
+												</span>
+											</span>
 										</p>
-										<h2 className="line-clamp-4 text-3xl font-light leading-[1.08] text-white sm:text-4xl">
+										<h2 className="line-clamp-4 text-3xl font-extrabold leading-[1.08] text-primarycream sm:text-4xl">
 											{story.title}
 										</h2>
-										<div className="h-px w-full bg-white/60" />
-										<p className="text-sm font-medium text-white/85">
-											{story.city}
-											{story.city && story.country ? ", " : ""}
-											{story.country}
-										</p>
 									</div>
 									<div className="absolute inset-x-0 bottom-0 space-y-3 p-5 sm:p-6">
-										<p className="line-clamp-4 text-sm leading-5 text-white/85">
+										<p className="line-clamp-4 text-sm leading-5 text-primarycream">
 											{story.description}
 										</p>
 										<div className="flex items-center justify-between gap-3 border-t border-white/40 pt-3 text-xs text-white/80">
-											<span>{formatDate(story.datePublished)}</span>
-											<span className="truncate text-right">
-												{story.tags
-													.slice(0, 2)
-													.map((tag) => `#${tag}`)
-													.join("  ")}
+											<span className="text-primarycream">
+												{formatDate(story.datePublished)}
+											</span>
+											<span className="text-primarycream text-right">
+												{story.city}
+												{story.city && story.country ? ", " : ""}
+												{story.country}
 											</span>
 										</div>
 									</div>
