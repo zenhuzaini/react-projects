@@ -1,5 +1,7 @@
+"use client";
+
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
-import { photoMock } from "@/mock/photo";
 import PhotoCards from "../../molecule/Cards/PhotoCards";
 import Link from "next/link";
 import { PhotoBookMeta } from "@/types/data";
@@ -7,6 +9,7 @@ import { PhotoCardDetailType } from "@/types/components";
 import { EMPTY_STRING } from "@/const/vars";
 
 const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
+	const prefersReducedMotion = useReducedMotion();
 	const getPhotoDetail = (photo: PhotoBookMeta): PhotoCardDetailType => ({
 		title: photo.title,
 		photoUrl: photo.cover,
@@ -51,13 +54,38 @@ const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
 		}
 
 		return (
-			<div
-				key={idx}
+			<motion.div
+				key={photoDetail.slug}
+				initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 14 }}
+				animate={{ opacity: 1, y: 0 }}
+				exit={{ opacity: 0, y: prefersReducedMotion ? 0 : -8 }}
+				whileHover={
+					prefersReducedMotion
+						? undefined
+						: {
+								y: -4,
+								scale: 1.025,
+								transition: { duration: 0.22, ease: "easeOut" },
+							}
+				}
+				transition={{
+					opacity: {
+						duration: prefersReducedMotion ? 0.01 : 0.32,
+						delay: prefersReducedMotion ? 0 : idx * 0.04,
+					},
+					y: {
+						duration: prefersReducedMotion ? 0.01 : 0.32,
+						delay: prefersReducedMotion ? 0 : idx * 0.04,
+						ease: [0.22, 1, 0.36, 1],
+					},
+				}}
 				className={`${colspan} relative rounded-2xl overflow-hidden h-[30vh] sm:h-[40vh] md:h-[60vh] `}>
-				<Link key={idx} href={`/photobook/${photoDetail.slug}`}>
-					<PhotoCards key={idx} photoDetail={getPhotoDetail(photoDetail)} />
+				<Link
+					className="group block h-full w-full"
+					href={`/photobook/${photoDetail.slug}`}>
+					<PhotoCards photoDetail={getPhotoDetail(photoDetail)} />
 				</Link>
-			</div>
+			</motion.div>
 		);
 	});
 
@@ -65,7 +93,7 @@ const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
 		<div className="flex flex-col gap-5 sm:gap-10">
 			<SectionTitle />
 			<div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-				{photoContent}
+				<AnimatePresence>{photoContent}</AnimatePresence>
 			</div>
 		</div>
 	);
