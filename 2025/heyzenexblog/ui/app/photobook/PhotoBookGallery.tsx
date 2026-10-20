@@ -205,7 +205,7 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 							{visibleBooks.map((book) => {
 								return (
 									<Link
-										className="relative block aspect-4/5  transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4"
+										className="group relative block aspect-4/5 w-full min-w-0 overflow-hidden rounded-2xl shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondaryforestgreen"
 										key={book.slug}
 										href={`/photobook/${book.slug}`}>
 										<PhotoCards

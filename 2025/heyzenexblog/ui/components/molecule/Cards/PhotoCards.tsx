@@ -7,7 +7,10 @@ import { animationForArrow } from "@/animation/animation";
 const PhotoCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 	return (
 		<div className="w-full h-full hover:pointer-none:">
-			<ImageWithSkeleton src={photoDetail.photoUrl}></ImageWithSkeleton>
+			<ImageWithSkeleton
+				src={photoDetail.photoUrl}
+				customClassName="object-cover transition-transform duration-700 group-hover:scale-[1.1]"
+			/>
 			<div className="hidden absolute top-0 m-1 justify-end w-full  pt-3 pr-6">
 				<div
 					className={`bg-accenttext h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
