@@ -19,7 +19,13 @@ export default async function Home() {
 						<SeeMore url={"/storybook"}></SeeMore>
 					</div>
 				</div>
-				<PhotoCardsSection photoStory={photoStory.stories}></PhotoCardsSection>
+				<div className="flex flex-col gap-5 sm:gap-10">
+					<PhotoCardsSection
+						photoStory={photoStory.stories}></PhotoCardsSection>
+					<div className="flex justify-end">
+						<SeeMore url={"/photobook"}></SeeMore>
+					</div>
+				</div>
 			</div>
 		</>
 	);
