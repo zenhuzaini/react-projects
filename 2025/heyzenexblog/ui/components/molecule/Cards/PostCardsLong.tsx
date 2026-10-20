@@ -1,7 +1,7 @@
 import ArrowRight from "@/icons/ArrowRight";
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
 import { PhotoCardDetailType } from "@/types/components";
-import { animationForArrow } from "@/animation/animation";
+
 import ActivityAvatar from "../User/Avatar/ActivityAvatar";
 import { EMPTY_STRING } from "@/const/vars";
 
