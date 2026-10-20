@@ -5,6 +5,14 @@ import ArrowRight from "@/icons/ArrowRight";
 import { animationForArrow } from "@/animation/animation";
 
 const PhotoCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
+	const cityLength = photoDetail.city?.length ?? 0;
+	const citySizeClass =
+		cityLength > 15
+			? "text-[10px] sm:text-xs md:text-base"
+			: cityLength > 10
+				? "text-xs sm:text-sm md:text-xl"
+				: "text-sm sm:text-lg md:text-2xl";
+
 	return (
 		<div className="w-full h-full hover:pointer-none:">
 			<ImageWithSkeleton
@@ -21,18 +29,20 @@ const PhotoCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 				{/* Black fade background */}
 				<div className="absolute inset-0 bg-linear-to-t from-primarymidnight/50 to-transparent rounded-b-sm z-0"></div>
 
-				<div className="relative flex justify-between items-center lg:m-6">
-					<div className="flex">
-						<h2 className="text-accenttext text-base sm:text-3xl md:text-3xl font-semibold tracking-tighter leading-[0.8]">
+				<div className="relative flex min-w-0 items-center gap-2 lg:m-6">
+					<div className="min-w-0 flex-1">
+						<h2
+							title={photoDetail.city}
+							className={`truncate whitespace-nowrap font-semibold tracking-tighter leading-[0.8] text-accenttext ${citySizeClass}`}>
 							{photoDetail.city}
 							<span className="text-primaryaccent">.</span>
 						</h2>
 					</div>
-					<div className="flex-row text-xs font-extralight text-right">
-						<h2 className="text-accenttext font-semibold tracking-tight leading-[0.8]">
+					<div className="max-w-[38%] shrink-0 text-right text-xs font-extralight">
+						<h2 className="truncate whitespace-nowrap text-accenttext font-semibold tracking-tight leading-[0.8]">
 							{photoDetail.country}
 						</h2>
-						<p className="text-accenttext text-[9px] sm:text-xs  font-normal tracking-tight">
+						<p className="whitespace-nowrap text-accenttext text-[9px] sm:text-xs font-normal tracking-tight">
 							{photoDetail.month} {photoDetail.year}
 						</p>
 					</div>
