@@ -65,13 +65,15 @@ const DisqusComments = ({
 	return (
 		<section
 			aria-labelledby="comments-heading"
-			className="mt-8 border-t border-primarybrown/20 pt-6">
-			<h2
+			className="mt-8 border-t border-primaryaccent pt-6">
+			{/* <h2
 				id="comments-heading"
 				className="mb-4 text-xl font-semibold text-primaryText">
 				{TEXT.common.commentsHeading}
-			</h2>
-			<div id="disqus_thread" ref={threadRef} />
+			</h2> */}
+			<div className="bg-primarycream p-4 rounded-2xl ">
+				<div id="disqus_thread" ref={threadRef} />
+			</div>
 		</section>
 	);
 };
