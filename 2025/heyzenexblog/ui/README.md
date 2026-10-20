@@ -38,6 +38,9 @@ The server needs these environment variables:
   API key, and API secret. Never use a `NEXT_PUBLIC_` prefix or commit this value.
 - `GITHUB_BRANCH`: optional; defaults to `main`.
 - `GITHUB_REPOSITORY`: optional; defaults to `zenhuzaini/react-projects`.
+- `NEXT_PUBLIC_DISQUS_SHORTNAME`: the Disqus shortname used for StoryBook and
+  PhotoBook comments. Set it in `.env.local` for local development. Because it
+  uses the `NEXT_PUBLIC_` prefix, provide it before building the app.
 
 For local development, fill in the blank values in the ignored `.env.local`
 template, then restart the Next.js server. Do not add real secrets to
@@ -60,6 +63,7 @@ cf set-env heyzenex PUBLISH_SECRET "$(openssl rand -hex 32)"
 cf set-env heyzenex CLOUDINARY_URL "cloudinary://<api-key>:<api-secret>@<cloud-name>"
 cf set-env heyzenex GITHUB_BRANCH main
 cf set-env heyzenex GITHUB_REPOSITORY zenhuzaini/react-projects
+cf set-env heyzenex NEXT_PUBLIC_DISQUS_SHORTNAME "<disqus-shortname>"
 cf restage heyzenex
 ```
 

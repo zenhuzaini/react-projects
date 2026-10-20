@@ -2,6 +2,7 @@ import { animationForArrow } from "@/animation/animation";
 import PhotoCollectionGrid from "@/components/layout/StoryBookBlockLayouts/6_PhotoCollectionGrid/PhotoCollectionGrid";
 import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
+import DisqusComments from "@/components/molecule/DisqusComments";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
 import ChevronLeft from "@/icons/ChevronLeft";
 import ChevronRight from "@/icons/ChevronRight";
@@ -94,6 +95,10 @@ const PhotoBook = async ({ params }: { params: Promise<{ slug: string }> }) => {
 			<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-4 mt-[3%] ">
 				{/* <PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid> */}
 				<Content></Content>
+				<DisqusComments
+					identifier={`photobook/${metadata.slug}`}
+					title={metadata.title}
+				/>
 
 				<div className="flex justify-between mt-10">
 					<Link href={`/`}>

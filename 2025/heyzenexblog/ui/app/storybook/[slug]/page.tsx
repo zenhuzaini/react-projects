@@ -14,6 +14,7 @@ import Chip from "@/components/ui/chip";
 import { createBaseMetadata } from "@/lib/seo";
 import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import ActivityAvatar from "@/components/molecule/User/Avatar/ActivityAvatar";
+import DisqusComments from "@/components/molecule/DisqusComments";
 import { formatDate } from "@/lib/utils";
 
 export async function generateMetadata(props: {
@@ -136,6 +137,11 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 						))}
 					</div>
 				</div>
+
+				<DisqusComments
+					identifier={`storybook/${metadata.slug}`}
+					title={metadata.title}
+				/>
 
 				<div className="flex justify-between mt-[5%]">
 					<Link href={`/`}>
