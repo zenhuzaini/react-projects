@@ -62,7 +62,7 @@ function SelectItem({
 		<BaseSelect.Item
 			data-slot="select-item"
 			className={cn(
-				"relative flex min-h-9 w-full cursor-default items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none data-highlighted:bg-secondarywhite data-highlighted:text-primaryText data-disabled:pointer-events-none data-disabled:opacity-50",
+				"relative flex min-h-9 w-full cursor-default items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none data-highlighted:bg-secondarywhite data-highlighted:text-primaryebony data-disabled:pointer-events-none data-disabled:opacity-50",
 				className,
 			)}
 			{...props}>

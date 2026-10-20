@@ -82,7 +82,8 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 						className="pointer-events-none absolute left-3 text-primarygrey"
 					/>
 					<input
-						type="search"
+						type="text"
+						role="searchbox"
 						value={query}
 						onChange={(event) => {
 							setQuery(event.target.value);
@@ -90,7 +91,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 						}}
 						placeholder="Search stories, places, or tags"
 						aria-label="Search stories, places, or tags"
-						className="h-11 w-full rounded-md border  bg-primarywhite pl-10 pr-10 text-sm text-primaryebony outline-none transition-colors placeholder:text-primaryaccent/50 focus:border-primaryaccent"
+						className="h-11 w-full rounded-md border bg-primarywhite pl-10 pr-10 text-sm text-primaryebony outline-none transition-colors placeholder:text-primaryaccent/50 focus:border-primaryaccent"
 					/>
 					{query && (
 						<button
@@ -105,7 +106,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 						</button>
 					)}
 				</label>
-				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center ">
 					<div className="min-w-0">
 						<Select
 							items={[
@@ -117,14 +118,16 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 								if (value !== null) setSortOrder(value as SortOrder);
 								setPage(1);
 							}}>
-							<SelectTrigger aria-label="Sort stories" className="sm:min-w-36">
-								<SelectValue>
+							<SelectTrigger
+								aria-label="Sort stories"
+								className="text-primaryebony sm:min-w-36">
+								<SelectValue className="text-primaryaccent">
 									{(value: string | null) =>
 										`Sort by · ${value === "oldest" ? "Oldest first" : "Latest first"}`
 									}
 								</SelectValue>
 							</SelectTrigger>
-							<SelectContent>
+							<SelectContent className="text-primaryebony">
 								<SelectItem value="latest">Latest first</SelectItem>
 								<SelectItem value="oldest">Oldest first</SelectItem>
 							</SelectContent>
@@ -146,8 +149,8 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 							}}>
 							<SelectTrigger
 								aria-label="Filter stories by tag"
-								className="sm:min-w-36">
-								<SelectValue>
+								className="text-primaryebony sm:min-w-36">
+								<SelectValue className="text-primaryaccent">
 									{(value: string | null) =>
 										value === "all" || value === null
 											? "Filter by tag · All tags"
@@ -155,7 +158,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 									}
 								</SelectValue>
 							</SelectTrigger>
-							<SelectContent>
+							<SelectContent className="text-primaryebony">
 								<SelectItem value="all">All tags</SelectItem>
 								{tags.map((tag) => (
 									<SelectItem key={tag} value={tag.toLowerCase()}>
