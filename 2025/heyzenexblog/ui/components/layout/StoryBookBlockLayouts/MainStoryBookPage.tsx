@@ -21,8 +21,10 @@ import MapWithDescription from "./10_MapDescription/MapWithDescription";
 import Checklist from "./Lists/Lists";
 import ItemList from "./Lists/ItemLists";
 import { IframeWithLoader } from "@/components/molecule/Iframe/IframeWithLoader";
+import RelatedPosts from "@/components/molecule/RelatedPosts";
 
 const MainStoryBookPage = ({
+	storySlug,
 	createdAt,
 	storyCover,
 	storyId,
@@ -142,6 +144,16 @@ const MainStoryBookPage = ({
 						Imported MDX source is preserved and editable in the Story content
 						block.
 					</div>
+				);
+
+			case "layout17":
+				return (
+					<RelatedPosts
+						key={idx}
+						slugs={storyContent.relatedStorySlugs ?? []}
+						title={storyContent.textContent}
+						currentSlug={storySlug}
+					/>
 				);
 
 			default:

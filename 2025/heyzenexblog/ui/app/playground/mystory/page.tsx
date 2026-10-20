@@ -6,6 +6,7 @@ import {
 	ArrowDown,
 	ArrowDownToLine,
 	ArrowUp,
+	BookOpen,
 	Check,
 	ChevronDown,
 	ChevronLeft,
@@ -36,6 +37,7 @@ import {
 	X,
 } from "lucide-react";
 import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainStoryBookPage";
+import { TEXT } from "@/const/text";
 
 import {
 	Dialog,
@@ -70,6 +72,7 @@ type BlockType =
 	| "map"
 	| "divider"
 	| "highlight"
+	| "related"
 	| "raw";
 
 type StoryListItem = { label: string; done: boolean };
@@ -96,6 +99,7 @@ type StoryBlock = {
 	route: string;
 	shouldShowDownloadGPX: boolean;
 	mapTitle: string;
+	relatedStorySlugs: string[];
 	rawMdx: string;
 	insideCenter?: boolean;
 	rawOutsideCenter?: boolean;
@@ -176,6 +180,7 @@ const blockOptions: { type: BlockType; label: string; icon: typeof Text }[] = [
 	{ type: "map", label: "Map with description", icon: MapPin },
 	{ type: "divider", label: "Divider", icon: Minus },
 	{ type: "highlight", label: "Highlight", icon: Highlighter },
+	{ type: "related", label: "Related posts", icon: BookOpen },
 	{ type: "raw", label: "MDX source", icon: Code2 },
 ];
 
@@ -185,7 +190,12 @@ const createBlock = (
 ): StoryBlock => ({
 	id,
 	type,
-	text: type === "paragraph" ? "Write your story here..." : "",
+	text:
+		type === "paragraph"
+			? "Write your story here..."
+			: type === "related"
+				? TEXT.common.relatedPosts
+				: "",
 	imageUrl: "",
 	imageAlt: "",
 	gallery: [
@@ -199,6 +209,7 @@ const createBlock = (
 	route: "",
 	shouldShowDownloadGPX: false,
 	mapTitle: "",
+	relatedStorySlugs: [],
 	rawMdx: "",
 });
 
@@ -259,7 +270,14 @@ const normalizeSavedDraft = (saved: StoryDraft): StoryDraft => {
 					return {
 						...defaults,
 						...block,
-						text: typeof block.text === "string" ? block.text : defaults.text,
+						text:
+							block.type === "related"
+								? typeof block.text === "string" && block.text.trim()
+									? block.text
+									: defaults.text
+								: typeof block.text === "string"
+									? block.text
+									: defaults.text,
 						rawMdx: typeof block.rawMdx === "string" ? block.rawMdx : "",
 						gallery: Array.isArray(block.gallery)
 							? block.gallery.map((photo) => ({
@@ -273,6 +291,11 @@ const normalizeSavedDraft = (saved: StoryDraft): StoryDraft => {
 									done: item.done === true,
 								}))
 							: defaults.items,
+						relatedStorySlugs: Array.isArray(block.relatedStorySlugs)
+							? block.relatedStorySlugs.filter(
+									(slug): slug is string => typeof slug === "string",
+								)
+							: defaults.relatedStorySlugs,
 					};
 				})
 			: fallbackDraft.blocks,
@@ -465,6 +488,9 @@ const toStoryContent = (
 			case "highlight":
 				sectionID = "layout15";
 				break;
+			case "related":
+				sectionID = "layout17";
+				break;
 			case "map":
 				sectionID = "layout10";
 				break;
@@ -512,6 +538,21 @@ const toStoryContent = (
 		}
 		if (sectionID === "layout16") {
 			return [{ sectionID, textContent: "", photoUrls, rawMdx: block.rawMdx }];
+		}
+		if (sectionID === "layout17") {
+			const relatedStorySlugs = Array.from(
+				new Set(block.relatedStorySlugs.filter((slug) => slug.trim())),
+			);
+			return relatedStorySlugs.length
+				? [
+						{
+							sectionID,
+							textContent: block.text.trim() || TEXT.common.relatedPosts,
+							photoUrls,
+							relatedStorySlugs,
+						},
+					]
+				: [];
 		}
 
 		return block.text.trim()
@@ -610,6 +651,14 @@ const toMdx = (draft: StoryDraft) => {
 						return block.text.trim()
 							? `<Highlight>{${JSON.stringify(block.text)}}</Highlight>`
 							: "";
+					case "related": {
+						const slugs = Array.from(
+							new Set(block.relatedStorySlugs.filter((slug) => slug.trim())),
+						);
+						return slugs.length
+							? `<RelatedPosts title={${JSON.stringify(block.text.trim() || TEXT.common.relatedPosts)}} slugs={${JSON.stringify(slugs)}} currentSlug={${JSON.stringify(draft.slug || toSlug(draft.title))}} />`
+							: "";
+					}
 					case "raw":
 						return block.rawMdx;
 				}
@@ -664,6 +713,7 @@ const MystoryPlayground = () => {
 	const [existingStories, setExistingStories] = useState<
 		ExistingStorySummary[]
 	>([]);
+	const [isLoadingRelatedStories, setIsLoadingRelatedStories] = useState(true);
 	const [isLoadingStoryLibrary, setIsLoadingStoryLibrary] = useState(false);
 	const [isImportingExternalStory, setIsImportingExternalStory] =
 		useState(false);
@@ -690,6 +740,9 @@ const MystoryPlayground = () => {
 		(storyLibraryPage - 1) * STORY_LIBRARY_PAGE_SIZE,
 		storyLibraryPage * STORY_LIBRARY_PAGE_SIZE,
 	);
+	const relatedStoryOptions = existingStories.filter(
+		(story) => story.slug !== (draft.slug || toSlug(draft.title)),
+	);
 
 	useEffect(() => {
 		try {
@@ -706,6 +759,28 @@ const MystoryPlayground = () => {
 			datePublished: current.datePublished || toLocalDateTimeInput(new Date()),
 		}));
 		setIsHydrated(true);
+	}, []);
+
+	useEffect(() => {
+		let isActive = true;
+		const loadStories = async () => {
+			try {
+				const response = await fetch("/api/stories/library");
+				const result = (await response.json().catch(() => ({}))) as {
+					stories?: ExistingStorySummary[];
+				};
+				if (isActive && response.ok) setExistingStories(result.stories ?? []);
+			} catch {
+				if (isActive) setExistingStories([]);
+			} finally {
+				if (isActive) setIsLoadingRelatedStories(false);
+			}
+		};
+
+		void loadStories();
+		return () => {
+			isActive = false;
+		};
 	}, []);
 
 	useEffect(() => {
@@ -2126,6 +2201,62 @@ const MystoryPlayground = () => {
 												</button>
 											</div>
 										)}
+										{block.type === "related" && (
+											<div className="space-y-2">
+												<label className="grid gap-1 text-xs font-semibold text-primaryText">
+													Section title
+													<input
+														value={block.text}
+														onChange={(event) =>
+															updateBlock(block.id, {
+																text: event.target.value,
+															})
+														}
+														className="w-full rounded border border-primarybrown/20 bg-primarywhite px-3 py-2 text-sm font-normal outline-none focus:border-secondaryforestgreen"
+														placeholder={TEXT.common.relatedPosts}
+													/>
+												</label>
+												<p className="text-xs text-primarygrey">
+													Choose stories to show in a scrollable related-post
+													row.
+												</p>
+												<div className="max-h-48 space-y-1 overflow-y-auto rounded border border-primarybrown/20 bg-primarywhite p-2">
+													{isLoadingRelatedStories && (
+														<p className="p-2 text-sm text-primarygrey">
+															Loading stories...
+														</p>
+													)}
+													{!isLoadingRelatedStories &&
+														relatedStoryOptions.length === 0 && (
+															<p className="p-2 text-sm text-primarygrey">
+																No other stories are available.
+															</p>
+														)}
+													{relatedStoryOptions.map((story) => (
+														<label
+															key={story.slug}
+															className="flex cursor-pointer items-start gap-2 rounded px-2 py-2 text-sm hover:bg-secondarywhite">
+															<input
+																type="checkbox"
+																checked={block.relatedStorySlugs.includes(
+																	story.slug,
+																)}
+																onChange={(event) => {
+																	const relatedStorySlugs = event.target.checked
+																		? [...block.relatedStorySlugs, story.slug]
+																		: block.relatedStorySlugs.filter(
+																				(slug) => slug !== story.slug,
+																			);
+																	updateBlock(block.id, { relatedStorySlugs });
+																}}
+																className="mt-0.5 size-4 shrink-0 accent-primaryaccent"
+															/>
+															<span>{story.title}</span>
+														</label>
+													))}
+												</div>
+											</div>
+										)}
 									</div>
 								);
 							})}
@@ -2174,7 +2305,7 @@ const MystoryPlayground = () => {
 						{outputTab === "mdx" ? (
 							<pre
 								role="tabpanel"
-								className="max-h-[70vh] min-h-[340px] overflow-auto p-4 text-xs leading-5 sm:text-[13px]">
+								className="max-h-[70vh] min-h-[340px] overflow-y-auto overflow-x-hidden whitespace-pre-wrap wrap-break-word p-4 text-xs leading-5 sm:text-[13px]">
 								<code>{mdx}</code>
 							</pre>
 						) : (
@@ -2190,6 +2321,7 @@ const MystoryPlayground = () => {
 											: ""
 									}
 									storyCover={storyCover}
+									storySlug={draft.slug || toSlug(draft.title)}
 									storyId="2"
 									storyTitle={draft.title}
 									storyDescription={draft.description}

@@ -5,6 +5,7 @@ export const TEXT = {
 		oldestFirst: "Oldest first",
 		allTags: "All tags",
 		commentsHeading: "Comments",
+		relatedPosts: "Related posts",
 	},
 	storybook: {
 		searchPlaceholder: "Search stories, places, or tags",

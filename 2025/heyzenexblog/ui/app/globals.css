@@ -1,6 +1,24 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+.related-posts-scroller {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-primaryaccent) transparent;
+}
+
+.related-posts-scroller::-webkit-scrollbar {
+	height: 8px;
+}
+
+.related-posts-scroller::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.related-posts-scroller::-webkit-scrollbar-thumb {
+	border-radius: 9999px;
+	background-color: var(--color-primaryaccent);
+}
+
 /* this needs to be added for dark or light */
 @custom-variant dark (&:where(.dark, .dark *));
 

@@ -39,9 +39,11 @@ export type StoryContentType = {
 	shouldShowDownloadGPX?: boolean;
 	title?: string;
 	rawMdx?: string;
+	relatedStorySlugs?: string[];
 };
 
 export type MainStoryBookPageProps = {
+	storySlug?: string;
 	storyCover: string;
 	createdAt: string;
 	storyId: string;

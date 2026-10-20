@@ -280,6 +280,22 @@ const parseMdxBlocks = (source: string) => {
 				}
 			}
 		}
+		if (name === "RelatedPosts") {
+			const slugs = attribute(node, "slugs");
+			const title = attribute(node, "title");
+			if (
+				Array.isArray(slugs) &&
+				slugs.every((slug) => typeof slug === "string")
+			) {
+				blocks.push({
+					type: "related",
+					text: typeof title === "string" ? title : "Related posts",
+					relatedStorySlugs: slugs,
+					insideCenter,
+				});
+				return true;
+			}
+		}
 		if (name === "Checklist" || name === "ItemList") {
 			const values = attribute(node, "items");
 			if (Array.isArray(values)) {
