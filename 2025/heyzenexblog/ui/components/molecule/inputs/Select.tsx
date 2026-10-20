@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import {
 	Select as PrimitiveSelect,
 	SelectContent as PrimitiveSelectContent,
@@ -19,6 +20,7 @@ type SelectProps = {
 	value: string;
 	onValueChange: (value: string | null) => void;
 	formatValue: (value: string | null) => string;
+	leadingIcon?: ReactNode;
 	triggerClassName?: string;
 	valueClassName?: string;
 	contentClassName?: string;
@@ -30,14 +32,16 @@ const Select = ({
 	value,
 	onValueChange,
 	formatValue,
+	leadingIcon,
 	triggerClassName,
 	valueClassName,
 	contentClassName,
 }: SelectProps) => (
 	<PrimitiveSelect items={items} value={value} onValueChange={onValueChange}>
-		<PrimitiveSelectTrigger
-			aria-label={ariaLabel}
-			className={triggerClassName}>
+		<PrimitiveSelectTrigger aria-label={ariaLabel} className={triggerClassName}>
+			{leadingIcon && (
+				<span className="shrink-0 text-primarygrey">{leadingIcon}</span>
+			)}
 			<PrimitiveSelectValue className={valueClassName}>
 				{formatValue}
 			</PrimitiveSelectValue>

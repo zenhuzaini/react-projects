@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowDownUp, ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
@@ -78,7 +78,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 					}}
 					placeholder={TEXT.storybook.searchPlaceholder}
 					ariaLabel={TEXT.storybook.searchAriaLabel}
-					inputClassName="text-primaryebony placeholder:text-primaryaccent/50 focus:border-primaryaccent"
+					inputClassName="text-primaryebony placeholder:text-primaryebony/50 focus:border-primaryaccent"
 					clearButtonClassName="text-primaryebony hover:bg-primaryaccent hover:text-primarycream"
 				/>
 				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center ">
@@ -99,8 +99,9 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 									? TEXT.storybook.sortOldestValue
 									: TEXT.storybook.sortLatestValue
 							}
-							triggerClassName="text-primaryebony sm:min-w-36"
-							valueClassName="text-primaryaccent"
+							leadingIcon={<ArrowDownUp size={15} aria-hidden="true" />}
+							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
 							contentClassName="text-primaryebony"
 						/>
 					</div>
@@ -124,8 +125,9 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 									? TEXT.storybook.tagAllValue
 									: `${TEXT.storybook.tagValuePrefix}${value}`
 							}
-							triggerClassName="text-primaryebony sm:min-w-36"
-							valueClassName="text-primaryaccent"
+							leadingIcon={<Tag size={15} aria-hidden="true" />}
+							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
 							contentClassName="text-primaryebony"
 						/>
 					</div>

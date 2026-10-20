@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowDownUp, ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import Link from "next/link";
 import PhotoCards from "@/components/molecule/Cards/PhotoCards";
 import Search from "@/components/molecule/inputs/Search";
@@ -113,8 +113,10 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 									? TEXT.photobook.sortOldestValue
 									: TEXT.photobook.sortLatestValue
 							}
-							triggerClassName="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm"
-							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap"
+							leadingIcon={<ArrowDownUp size={15} aria-hidden="true" />}
+							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
+							contentClassName="text-primaryebony"
 						/>
 					</div>
 					<div className="min-w-0">
@@ -137,8 +139,10 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 									? TEXT.photobook.tagAllValue
 									: `${TEXT.photobook.tagValuePrefix}${value}`
 							}
-							triggerClassName="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm"
-							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap"
+							leadingIcon={<Tag size={15} aria-hidden="true" />}
+							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
+							contentClassName="text-primaryebony"
 						/>
 					</div>
 				</div>

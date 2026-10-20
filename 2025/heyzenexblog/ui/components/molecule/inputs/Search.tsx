@@ -41,7 +41,7 @@ const Search = ({
 			placeholder={placeholder}
 			aria-label={ariaLabel}
 			className={cn(
-				"h-11 w-full rounded-md border bg-primarywhite pl-10 pr-10 text-sm text-primaryebony outline-none transition-colors placeholder:text-primaryaccent/50 focus:border-primaryaccent",
+				"h-11 w-full rounded-md border bg-primarywhite pl-10 pr-10 text-sm text-primaryebony outline-none transition-colors placeholder:text-primaryebony/50 focus:border-primaryaccent",
 				inputClassName,
 			)}
 		/>
