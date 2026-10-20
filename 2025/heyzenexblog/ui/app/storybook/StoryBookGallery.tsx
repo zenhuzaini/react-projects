@@ -1,20 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
+import Search from "@/components/molecule/inputs/Search";
+import Select from "@/components/molecule/inputs/Select";
 import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { TEXT } from "@/const/text";
 import type { StoryBookMeta } from "@/types/data";
-import { EMPTY_STRING } from "@/const/vars";
 
 const PAGE_SIZE = 3;
 type SortOrder = "latest" | "oldest";
@@ -75,68 +70,45 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 			<SectionTitle left="My" right="STORIES" />
 
 			<div className="flex flex-col gap-3 border-y border-primarybrown/20 py-4 lg:flex-row lg:items-center lg:justify-between">
-				<label className="relative flex w-full min-w-0 flex-1 items-center">
-					<Search
-						size={18}
-						aria-hidden="true"
-						className="pointer-events-none absolute left-3 text-primarygrey"
-					/>
-					<input
-						type="text"
-						role="searchbox"
-						value={query}
-						onChange={(event) => {
-							setQuery(event.target.value);
-							setPage(1);
-						}}
-						placeholder="Search stories, places, or tags"
-						aria-label="Search stories, places, or tags"
-						className="h-11 w-full rounded-md border bg-primarywhite pl-10 pr-10 text-sm text-primaryebony outline-none transition-colors placeholder:text-primaryaccent/50 focus:border-primaryaccent"
-					/>
-					{query && (
-						<button
-							type="button"
-							aria-label="Clear search"
-							onClick={() => {
-								setQuery(EMPTY_STRING);
-								setPage(1);
-							}}
-							className="absolute right-2 inline-flex size-8 items-center justify-center rounded text-primaryebony hover:bg-primaryaccent hover:text-primarycream">
-							<X size={16} />
-						</button>
-					)}
-				</label>
+				<Search
+					value={query}
+					onValueChange={(value) => {
+						setQuery(value);
+						setPage(1);
+					}}
+					placeholder={TEXT.storybook.searchPlaceholder}
+					ariaLabel={TEXT.storybook.searchAriaLabel}
+					inputClassName="text-primaryebony placeholder:text-primaryaccent/50 focus:border-primaryaccent"
+					clearButtonClassName="text-primaryebony hover:bg-primaryaccent hover:text-primarycream"
+				/>
 				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center ">
 					<div className="min-w-0">
 						<Select
+							ariaLabel={TEXT.storybook.sortAriaLabel}
 							items={[
-								{ label: "Latest first", value: "latest" },
-								{ label: "Oldest first", value: "oldest" },
+								{ label: TEXT.common.latestFirst, value: "latest" },
+								{ label: TEXT.common.oldestFirst, value: "oldest" },
 							]}
 							value={sortOrder}
 							onValueChange={(value) => {
 								if (value !== null) setSortOrder(value as SortOrder);
 								setPage(1);
-							}}>
-							<SelectTrigger
-								aria-label="Sort stories"
-								className="text-primaryebony sm:min-w-36">
-								<SelectValue className="text-primaryaccent">
-									{(value: string | null) =>
-										`Sort by · ${value === "oldest" ? "Oldest first" : "Latest first"}`
-									}
-								</SelectValue>
-							</SelectTrigger>
-							<SelectContent className="text-primaryebony">
-								<SelectItem value="latest">Latest first</SelectItem>
-								<SelectItem value="oldest">Oldest first</SelectItem>
-							</SelectContent>
-						</Select>
+							}}
+							formatValue={(value) =>
+								value === "oldest"
+									? TEXT.storybook.sortOldestValue
+									: TEXT.storybook.sortLatestValue
+							}
+							triggerClassName="text-primaryebony sm:min-w-36"
+							valueClassName="text-primaryaccent"
+							contentClassName="text-primaryebony"
+						/>
 					</div>
 					<div className="min-w-0">
 						<Select
+							ariaLabel={TEXT.storybook.tagAriaLabel}
 							items={[
-								{ label: "All tags", value: "all" },
+								{ label: TEXT.common.allTags, value: "all" },
 								...tags.map((tag) => ({
 									label: `#${tag}`,
 									value: tag.toLowerCase(),
@@ -146,27 +118,16 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 							onValueChange={(value) => {
 								if (value !== null) setSelectedTag(value);
 								setPage(1);
-							}}>
-							<SelectTrigger
-								aria-label="Filter stories by tag"
-								className="text-primaryebony sm:min-w-36">
-								<SelectValue className="text-primaryaccent">
-									{(value: string | null) =>
-										value === "all" || value === null
-											? "Filter by tag · All tags"
-											: `Filter by tag · #${value}`
-									}
-								</SelectValue>
-							</SelectTrigger>
-							<SelectContent className="text-primaryebony">
-								<SelectItem value="all">All tags</SelectItem>
-								{tags.map((tag) => (
-									<SelectItem key={tag} value={tag.toLowerCase()}>
-										#{tag}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+							}}
+							formatValue={(value) =>
+								value === "all" || value === null
+									? TEXT.storybook.tagAllValue
+									: `${TEXT.storybook.tagValuePrefix}${value}`
+							}
+							triggerClassName="text-primaryebony sm:min-w-36"
+							valueClassName="text-primaryaccent"
+							contentClassName="text-primaryebony"
+						/>
 					</div>
 				</div>
 			</div>

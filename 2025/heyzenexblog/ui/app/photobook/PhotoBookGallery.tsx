@@ -2,18 +2,13 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import PhotoCards from "@/components/molecule/Cards/PhotoCards";
+import Search from "@/components/molecule/inputs/Search";
+import Select from "@/components/molecule/inputs/Select";
 import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { EMPTY_STRING } from "@/const/vars";
+import { TEXT } from "@/const/text";
 import type { PhotoBookMeta } from "@/types/data";
 
 const PAGE_SIZE = 8;
@@ -89,67 +84,44 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 			<SectionTitle left="My" right="PHOTOBOOK" />
 
 			<div className="flex flex-col gap-3 border-y border-primarybrown/20 py-4 lg:flex-row lg:items-center lg:justify-between">
-				<label className="relative flex w-full min-w-0 flex-1 items-center">
-					<Search
-						size={18}
-						aria-hidden="true"
-						className="pointer-events-none absolute left-3 text-primarygrey"
-					/>
-					<input
-						type="search"
-						value={query}
-						onChange={(event) => {
-							setQuery(event.target.value);
-							setPage(1);
-						}}
-						placeholder="Search photobooks, places, or tags"
-						aria-label="Search photobooks, places, or tags"
-						className="h-11 w-full rounded-md border border-primarybrown/25 bg-primarywhite pl-10 pr-10 text-sm text-primaryText outline-none transition-colors placeholder:text-primarygrey/80 focus:border-secondaryforestgreen"
-					/>
-					{query && (
-						<button
-							type="button"
-							aria-label="Clear search"
-							onClick={() => {
-								setQuery(EMPTY_STRING);
-								setPage(1);
-							}}
-							className="absolute right-2 inline-flex size-8 items-center justify-center rounded text-primarygrey hover:bg-secondarywhite hover:text-primaryText">
-							<X size={16} />
-						</button>
-					)}
-				</label>
+				<Search
+					value={query}
+					onValueChange={(value) => {
+						setQuery(value);
+						setPage(1);
+					}}
+					placeholder={TEXT.photobook.searchPlaceholder}
+					ariaLabel={TEXT.photobook.searchAriaLabel}
+					inputClassName="border-primarybrown/25 text-primaryText placeholder:text-primarygrey/80 focus:border-secondaryforestgreen"
+					clearButtonClassName="text-primarygrey hover:bg-secondarywhite hover:text-primaryText"
+				/>
 				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
 					<div className="min-w-0">
 						<Select
+							ariaLabel={TEXT.photobook.sortAriaLabel}
 							items={[
-								{ label: "Latest first", value: "latest" },
-								{ label: "Oldest first", value: "oldest" },
+								{ label: TEXT.common.latestFirst, value: "latest" },
+								{ label: TEXT.common.oldestFirst, value: "oldest" },
 							]}
 							value={sortOrder}
 							onValueChange={(value) => {
 								if (value !== null) setSortOrder(value as SortOrder);
 								setPage(1);
-							}}>
-							<SelectTrigger
-								aria-label="Sort photobooks"
-								className="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm">
-								<SelectValue className="min-w-0 flex-1 truncate whitespace-nowrap">
-									{(value: string | null) =>
-										`Sort · ${value === "oldest" ? "Oldest" : "Latest"}`
-									}
-								</SelectValue>
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="latest">Latest first</SelectItem>
-								<SelectItem value="oldest">Oldest first</SelectItem>
-							</SelectContent>
-						</Select>
+							}}
+							formatValue={(value) =>
+								value === "oldest"
+									? TEXT.photobook.sortOldestValue
+									: TEXT.photobook.sortLatestValue
+							}
+							triggerClassName="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm"
+							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap"
+						/>
 					</div>
 					<div className="min-w-0">
 						<Select
+							ariaLabel={TEXT.photobook.tagAriaLabel}
 							items={[
-								{ label: "All tags", value: "all" },
+								{ label: TEXT.common.allTags, value: "all" },
 								...tags.map((tag) => ({
 									label: `#${tag}`,
 									value: tag.toLowerCase(),
@@ -159,27 +131,15 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 							onValueChange={(value) => {
 								if (value !== null) setSelectedTag(value);
 								setPage(1);
-							}}>
-							<SelectTrigger
-								aria-label="Filter photobooks by tag"
-								className="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm">
-								<SelectValue className="min-w-0 flex-1 truncate whitespace-nowrap">
-									{(value: string | null) =>
-										value === "all" || value === null
-											? "Tag · All"
-											: `Tag · #${value}`
-									}
-								</SelectValue>
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="all">All tags</SelectItem>
-								{tags.map((tag) => (
-									<SelectItem key={tag} value={tag.toLowerCase()}>
-										#{tag}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+							}}
+							formatValue={(value) =>
+								value === "all" || value === null
+									? TEXT.photobook.tagAllValue
+									: `${TEXT.photobook.tagValuePrefix}${value}`
+							}
+							triggerClassName="h-11 min-w-0 px-2.5 text-xs sm:min-w-36 sm:px-3 sm:text-sm"
+							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap"
+						/>
 					</div>
 				</div>
 			</div>
