@@ -50,6 +50,7 @@ const DisqusComments = ({
 			return;
 		}
 
+		// If the script is already loading, it picks up window.disqus_config when it runs.
 		if (document.getElementById("disqus-embed")) return;
 
 		const script = document.createElement("script");
