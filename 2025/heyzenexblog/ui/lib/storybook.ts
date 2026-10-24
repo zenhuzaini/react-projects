@@ -1,23 +1,17 @@
 import { StoryBookMeta } from "@/types/data";
 import { cache } from "react";
-import { listSlugs, paginateMetas } from "./content";
+import { listSlugs, loadMdx, paginateMetas } from "./content";
 
 export function getAllSlugs() {
 	return listSlugs("mystorybook").map((slug) => ({ slug }));
 }
 
-export const getStoryBySlug = cache(async (slug: string) => {
-	try {
-		const story = await import(`@/contents/mystorybook/${slug}.mdx`);
-		return {
-			Content: story.default,
-			metadata: story.metadata as StoryBookMeta,
-		};
-	} catch (error) {
-		console.error("MDX not found:", slug, error);
-		return null;
-	}
-});
+export const getStoryBySlug = cache(async (slug: string) =>
+	loadMdx<StoryBookMeta>(
+		slug,
+		() => import(`@/contents/mystorybook/${slug}.mdx`),
+	),
+);
 
 // Helper: Returns just metadata from one MDX file
 export async function getStoryMetadataBySlug(

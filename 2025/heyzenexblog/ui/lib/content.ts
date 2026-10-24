@@ -3,6 +3,28 @@ import path from "path";
 
 export type ContentDir = "mystorybook" | "myphotobook";
 
+const SAFE_SLUG = /^[\w-]+$/;
+
+type MdxModule<M> = { default: React.ComponentType; metadata: M };
+
+// A missing file is an expected 404; any other failure (e.g. a broken MDX file) must surface.
+export async function loadMdx<M>(
+	slug: string,
+	importMdx: () => Promise<MdxModule<M>>,
+) {
+	if (!SAFE_SLUG.test(slug)) return null;
+
+	try {
+		const mdx = await importMdx();
+		return { Content: mdx.default, metadata: mdx.metadata };
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException)?.code === "MODULE_NOT_FOUND") {
+			return null;
+		}
+		throw error;
+	}
+}
+
 export function listSlugs(dir: ContentDir): string[] {
 	const dirPath = path.join(process.cwd(), "contents", dir);
 	return fs

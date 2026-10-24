@@ -1,23 +1,17 @@
 import { PhotoBookMeta } from "@/types/data";
 import { cache } from "react";
-import { listSlugs, paginateMetas } from "./content";
+import { listSlugs, loadMdx, paginateMetas } from "./content";
 
 export function getAllPhotoBookSlugs() {
 	return listSlugs("myphotobook").map((slug) => ({ slug }));
 }
 
-export const getPhotoBookBySlug = cache(async (slug: string) => {
-	try {
-		const photobook = await import(`@/contents/myphotobook/${slug}.mdx`);
-		return {
-			Content: photobook.default,
-			metadata: photobook.metadata as PhotoBookMeta,
-		};
-	} catch (error) {
-		console.error("MDX not found:", slug, error);
-		return null;
-	}
-});
+export const getPhotoBookBySlug = cache(async (slug: string) =>
+	loadMdx<PhotoBookMeta>(
+		slug,
+		() => import(`@/contents/myphotobook/${slug}.mdx`),
+	),
+);
 
 // Helper: Returns just metadata from one MDX file
 export async function getPhotoBookMetadataBySlug(
