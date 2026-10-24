@@ -27,7 +27,7 @@ const StatusPage = ({
 						className="absolute inset-0 translate-x-3 translate-y-3 rounded-3xl bg-primaryaccent/60"
 					/>
 					<div className="relative h-full w-full overflow-hidden rounded-3xl shadow-lg">
-						<ImageWithSkeleton src={imageSrc} alt={imageAlt} />
+						<ImageWithSkeleton loading="eager" src={imageSrc} alt={imageAlt} />
 					</div>
 				</div>
 
