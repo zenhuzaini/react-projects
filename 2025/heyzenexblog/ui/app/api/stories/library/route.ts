@@ -3,6 +3,16 @@ import path from "node:path";
 import { createProcessor } from "@mdx-js/mdx";
 import { NextResponse } from "next/server";
 import { getAllSlugs, getStoryMetadataBySlug } from "@/lib/storybook";
+import {
+	clientIp,
+	errorResponse,
+	rateLimit,
+	rejectOversizedBody,
+	tooManyRequests,
+} from "@/lib/server/api";
+
+const MAX_IMPORT_SIZE = 5 * 1024 * 1024;
+const IMPORTS_PER_MINUTE = 10;
 
 type MdxEsmNode = {
 	type?: string;
@@ -441,9 +451,6 @@ const parseMdxBlocks = (source: string) => {
 	return { blocks, supportingMdx: supportingMdx.join("\n\n") };
 };
 
-const errorResponse = (error: string, status: number) =>
-	NextResponse.json({ error }, { status });
-
 export async function GET(request: Request) {
 	try {
 		const slugs = getAllSlugs().map(({ slug }) => slug);
@@ -494,14 +501,25 @@ export async function GET(request: Request) {
 	}
 }
 
+// This endpoint is unauthenticated and parsing MDX is CPU-heavy, so it is throttled and size-capped.
 export async function POST(request: Request) {
+	const limit = rateLimit(
+		`library-import:${clientIp(request)}`,
+		IMPORTS_PER_MINUTE,
+		60_000,
+	);
+	if (!limit.ok) return tooManyRequests(limit.retryAfterSeconds);
+
+	const oversized = rejectOversizedBody(request, MAX_IMPORT_SIZE + 64 * 1024);
+	if (oversized) return oversized;
+
 	try {
 		const formData = await request.formData();
 		const file = formData.get("file");
 		if (
 			!(file instanceof File) ||
 			file.size === 0 ||
-			file.size > 5 * 1024 * 1024
+			file.size > MAX_IMPORT_SIZE
 		) {
 			return errorResponse("Choose an MDX file smaller than 5 MB.", 400);
 		}

@@ -1,5 +1,12 @@
-import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
+import {
+	authorizePublisher,
+	clientIp,
+	errorResponse,
+	rateLimit,
+	rejectOversizedBody,
+	tooManyRequests,
+} from "@/lib/server/api";
 
 export const runtime = "nodejs";
 
@@ -8,18 +15,7 @@ const DEFAULT_BRANCH = "main";
 const STORY_DIRECTORY = "2025/heyzenexblog/ui/contents/mystorybook";
 const PHOTOBOOK_DIRECTORY = "2025/heyzenexblog/ui/contents/myphotobook";
 const MAX_CONTENT_LENGTH = 1_000_000;
-
-const errorResponse = (error: string, status: number) =>
-	NextResponse.json({ error }, { status });
-
-const secretMatches = (provided: string, expected: string) => {
-	const providedBuffer = Buffer.from(provided);
-	const expectedBuffer = Buffer.from(expected);
-	return (
-		providedBuffer.length === expectedBuffer.length &&
-		timingSafeEqual(providedBuffer, expectedBuffer)
-	);
-};
+const PUBLISHES_PER_MINUTE = 10;
 
 export async function POST(request: Request) {
 	const token = process.env.GITHUB_TOKEN;
@@ -30,14 +26,20 @@ export async function POST(request: Request) {
 			503,
 		);
 	}
-	if (publishSecret.length < 32) {
-		return errorResponse("PUBLISH_SECRET must be at least 32 characters.", 503);
-	}
 
-	const suppliedSecret = request.headers.get("x-publish-secret") ?? "";
-	if (!secretMatches(suppliedSecret, publishSecret)) {
-		return errorResponse("Invalid publisher key.", 401);
-	}
+	const authFailure = authorizePublisher(request, publishSecret);
+	if (authFailure) return authFailure;
+
+	const limit = rateLimit(
+		`publish:${clientIp(request)}`,
+		PUBLISHES_PER_MINUTE,
+		60_000,
+	);
+	if (!limit.ok) return tooManyRequests(limit.retryAfterSeconds);
+
+	// Content is capped at 1 MB; the extra headroom covers the JSON envelope and escaping.
+	const oversized = rejectOversizedBody(request, MAX_CONTENT_LENGTH * 2);
+	if (oversized) return oversized;
 
 	let payload: unknown;
 	try {

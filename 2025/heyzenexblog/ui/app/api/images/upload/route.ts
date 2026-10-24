@@ -1,9 +1,19 @@
-import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
+import {
+	authorizePublisher,
+	clientIp,
+	errorResponse,
+	rateLimit,
+	rejectOversizedBody,
+	tooManyRequests,
+} from "@/lib/server/api";
+import { sniffImageType } from "@/lib/server/imageSniff";
 
 export const runtime = "nodejs";
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+const UPLOADS_PER_MINUTE = 20;
 const IMAGE_QUALITY_MODES = new Set(["auto:eco", "auto:good", "auto:best"]);
 const ALLOWED_IMAGE_TYPES = new Set([
 	"image/jpeg",
@@ -12,18 +22,6 @@ const ALLOWED_IMAGE_TYPES = new Set([
 	"image/avif",
 	"image/gif",
 ]);
-
-const errorResponse = (error: string, status: number) =>
-	NextResponse.json({ error }, { status });
-
-const secretMatches = (provided: string, expected: string) => {
-	const providedBuffer = Buffer.from(provided);
-	const expectedBuffer = Buffer.from(expected);
-	return (
-		providedBuffer.length === expectedBuffer.length &&
-		timingSafeEqual(providedBuffer, expectedBuffer)
-	);
-};
 
 export async function POST(request: Request) {
 	const publisherSecret = process.env.PUBLISH_SECRET;
@@ -34,14 +32,20 @@ export async function POST(request: Request) {
 			503,
 		);
 	}
-	if (publisherSecret.length < 32) {
-		return errorResponse("PUBLISH_SECRET must be at least 32 characters.", 503);
-	}
 
-	const providedSecret = request.headers.get("x-publish-secret") ?? "";
-	if (!secretMatches(providedSecret, publisherSecret)) {
-		return errorResponse("Invalid publisher key.", 401);
-	}
+	const authFailure = authorizePublisher(request, publisherSecret);
+	if (authFailure) return authFailure;
+
+	const limit = rateLimit(
+		`upload:${clientIp(request)}`,
+		UPLOADS_PER_MINUTE,
+		60_000,
+	);
+	if (!limit.ok) return tooManyRequests(limit.retryAfterSeconds);
+
+	// Form fields add a little on top of the file itself.
+	const oversized = rejectOversizedBody(request, MAX_IMAGE_SIZE + 64 * 1024);
+	if (oversized) return oversized;
 
 	let cloudinaryUrl: URL;
 	try {
@@ -79,6 +83,12 @@ export async function POST(request: Request) {
 	}
 	if (file.size === 0 || file.size > MAX_IMAGE_SIZE) {
 		return errorResponse("Images must be between 1 byte and 10 MB.", 413);
+	}
+
+	// The declared MIME type comes from the client, so confirm it against the file's bytes.
+	const header = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+	if (sniffImageType(header) !== file.type) {
+		return errorResponse("The file contents do not match its image type.", 415);
 	}
 
 	const timestamp = Math.floor(Date.now() / 1000).toString();

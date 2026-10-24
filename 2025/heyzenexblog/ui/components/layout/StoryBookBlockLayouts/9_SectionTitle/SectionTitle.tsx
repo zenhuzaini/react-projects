@@ -1,6 +1,8 @@
+import { slugify } from "@/lib/slug";
+
 const SectionTitle = ({ text }: { text: string }) => {
 	return (
-		<div className="flex w-full flex-col gap-3">
+		<div id={slugify(text)} className="flex w-full scroll-mt-24 flex-col gap-3">
 			<h2 className="text-2xl font-semibold leading-tight text-primaryText sm:text-3xl">
 				{text}
 				<span className="text-dot">.</span>

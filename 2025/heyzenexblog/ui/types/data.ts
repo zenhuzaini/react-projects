@@ -24,8 +24,12 @@ export type StoryBookMeta = {
 	tags: string[];
 	city: string;
 	country: string;
-	nextPostSlug: string;
-	prevPostSlug: string;
+	/** @deprecated Derived from datePublished by lib/posts.ts; kept so old files still type-check. */
+	nextPostSlug?: string;
+	/** @deprecated Derived from datePublished by lib/posts.ts; kept so old files still type-check. */
+	prevPostSlug?: string;
+	/** Posts sharing the same series name are linked together on the post page. */
+	series?: string;
 	activityType: string;
 };
 

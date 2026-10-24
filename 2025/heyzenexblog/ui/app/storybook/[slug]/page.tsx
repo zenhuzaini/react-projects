@@ -1,66 +1,63 @@
 import { animationForArrow } from "@/animation/animation";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
-import ChevronLeft from "@/icons/ChevronLeft";
-import ChevronRight from "@/icons/ChevronRight";
-
-import Link from "next/link";
 import EyeSymbol from "@/icons/EyeSymbol";
 import HeartOutlined from "@/icons/HeartOutlined";
 import { getAllSlugs, getStoryBySlug } from "@/lib/storybook";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
-import Chip from "@/components/ui/chip";
-import { createBaseMetadata } from "@/lib/seo";
+import {
+	createBlogPostingJsonLd,
+	createPostMetadata,
+	postOgImagePath,
+} from "@/lib/seo";
+import { getAdjacentPosts, getPost, getSeriesPosts } from "@/lib/posts";
+import {
+	getReadingMinutes,
+	getSectionHeadings,
+	readMdxSource,
+} from "@/lib/content";
 import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import ActivityAvatar from "@/components/molecule/User/Avatar/ActivityAvatar";
 import DisqusComments from "@/components/molecule/DisqusComments";
+import JsonLd from "@/components/molecule/JsonLd";
+import PostPagination from "@/components/molecule/PostPagination";
+import SeriesNav from "@/components/molecule/SeriesNav";
+import TableOfContents from "@/components/molecule/TableOfContents";
+import TagList from "@/components/molecule/TagList";
 import { formatDate } from "@/lib/utils";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-	// Unwrap the promise
 	const { slug } = await props.params;
+	const post = await getPost("storybook", slug);
 
-	// Fetch the story by slug
-	const story = await getStoryBySlug(slug);
-
-	if (!story?.metadata) {
-		return NOT_FOUND_METADATA;
-	}
-
-	const { metadata } = story;
-
-	const fullMetadata: Metadata = createBaseMetadata({
-		title: metadata.title,
-		description:
-			metadata.description ?? `${metadata.title} – a story by Zen Huzaini.`,
-		path: `/storybook/${metadata.slug}`,
-		keywords: metadata.tags,
-		ogImage: {
-			url: metadata.cover,
-			alt: metadata.title,
-		},
-		robotsIndex: true,
-	});
-
-	return fullMetadata;
+	return post ? createPostMetadata(post) : NOT_FOUND_METADATA;
 }
 
 const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 	const { slug } = await params;
 	const story = await getStoryBySlug(slug);
+	const post = await getPost("storybook", slug);
 
-	if (!story) return notFound();
+	if (!story || !post) return notFound();
 
 	const { Content, metadata } = story;
+	const [{ prev, next }, seriesPosts] = await Promise.all([
+		getAdjacentPosts("storybook", slug),
+		getSeriesPosts("storybook", post.series),
+	]);
+	const source = readMdxSource("mystorybook", slug) ?? "";
+	const readingMinutes = getReadingMinutes(source);
+	const headings = getSectionHeadings(source);
 
 	const formattedPublishedDate = formatDate(metadata.datePublished);
 	const formattedActivityDate = formatDate(metadata.eventDateTo);
 
 	return (
 		<article className="flex flex-col gap-2 ">
+			<JsonLd data={createBlogPostingJsonLd(post, postOgImagePath(post))} />
 			{/* info top */}
 			<HeaderInfoSection
 				date={formattedPublishedDate}
@@ -94,6 +91,9 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 						alt="User Avatar"
 						avatarName="Zen"
 						publishedDate={formattedActivityDate}></ActivityAvatar>
+					<span className="text-sm text-primarytextInvert">
+						{readingMinutes} min read
+					</span>
 					{/* love stats */}
 					<div className="hidden gap-0 sm:gap-2">
 						<div className="flex text-sm md:text-lg gap-1 sm:gap-2  pl-2 pr-2 rounded-lg items-center">
@@ -113,42 +113,22 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 			{/* content */}
 			<section className="lg:ml-[20%] lg:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
+				<SeriesNav
+					series={post.series}
+					posts={seriesPosts}
+					currentSlug={slug}
+				/>
+				<TableOfContents headings={headings} />
 				<Content></Content>
 
-				<div className="mt-6 flex flex-col gap-2">
-					<span className="text-sm font-medium text-primaryText justify-start md:justify-center flex">
-						Tags:{" "}
-					</span>
-
-					<div className="flex flex-wrap gap-2 justify-start md:justify-center">
-						{metadata.tags.map((tag) => (
-							<Chip key={tag} text={tag} />
-						))}
-					</div>
-				</div>
+				<TagList tags={metadata.tags} />
 
 				<DisqusComments
 					identifier={`storybook/${metadata.slug}`}
 					title={metadata.title}
 				/>
 
-				<div className="flex justify-between mt-[5%]">
-					<Link href={`/`}>
-						<div className="text-primaryText flex gap-1">
-							<ChevronLeft />
-							Home
-						</div>
-					</Link>
-
-					{metadata.nextPostSlug && (
-						<Link href={`/storybook/${metadata.nextPostSlug}`}>
-							<div className="text-primaryText flex gap-1">
-								<span>Next StoryBook</span>
-								<ChevronRight></ChevronRight>
-							</div>
-						</Link>
-					)}
-				</div>
+				<PostPagination prev={prev} next={next} className="mt-[5%]" />
 			</section>
 		</article>
 	);

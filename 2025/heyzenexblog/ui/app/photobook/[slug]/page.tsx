@@ -2,59 +2,45 @@ import { animationForArrow } from "@/animation/animation";
 import HeaderInfoSection from "@/components/layout/StoryBookBlockLayouts/HeaderInfoSection";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import DisqusComments from "@/components/molecule/DisqusComments";
+import JsonLd from "@/components/molecule/JsonLd";
+import PostPagination from "@/components/molecule/PostPagination";
+import TagList from "@/components/molecule/TagList";
 import { NOT_FOUND_METADATA } from "@/const/metadata";
-import ChevronLeft from "@/icons/ChevronLeft";
-import ChevronRight from "@/icons/ChevronRight";
 import { getAllPhotoBookSlugs, getPhotoBookBySlug } from "@/lib/photobook";
-import { createBaseMetadata } from "@/lib/seo";
+import { getAdjacentPosts, getPost } from "@/lib/posts";
+import {
+	createBlogPostingJsonLd,
+	createPostMetadata,
+	postOgImagePath,
+} from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata(props: {
 	params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-	// Unwrap the promise
 	const { slug } = await props.params;
+	const post = await getPost("photobook", slug);
 
-	// Fetch the story by slug
-	const story = await getPhotoBookBySlug(slug);
-
-	if (!story?.metadata) {
-		return NOT_FOUND_METADATA;
-	}
-
-	const { metadata } = story;
-
-	const fullMetadata: Metadata = createBaseMetadata({
-		title: metadata.title,
-		description:
-			metadata.description ?? `${metadata.title} – a story by Zen Huzaini.`,
-		path: `/photobook/${metadata.slug}`,
-		keywords: metadata.tags,
-		ogImage: {
-			url: metadata.cover,
-			alt: metadata.title,
-		},
-		robotsIndex: true,
-	});
-
-	return fullMetadata;
+	return post ? createPostMetadata(post) : NOT_FOUND_METADATA;
 }
 
 const PhotoBook = async ({ params }: { params: Promise<{ slug: string }> }) => {
 	const { slug } = await params;
 	const story = await getPhotoBookBySlug(slug);
+	const post = await getPost("photobook", slug);
 
-	if (!story) return notFound();
+	if (!story || !post) return notFound();
 
 	const { Content, metadata } = story;
+	const { prev, next } = await getAdjacentPosts("photobook", slug);
 
 	const formattedPublishedDate = formatDate(metadata.datePublished);
 
 	return (
 		<div className="flex flex-col gap-2">
+			<JsonLd data={createBlogPostingJsonLd(post, postOgImagePath(post))} />
 			{/* info top */}
 			<HeaderInfoSection
 				text="PhotoBook"
@@ -84,27 +70,13 @@ const PhotoBook = async ({ params }: { params: Promise<{ slug: string }> }) => {
 			<div className="md:ml-[22%] md:mr-[22%] flex flex-col gap-4 mt-[3%] ">
 				{/* <PhotoCollectionGrid photoUrls={5}></PhotoCollectionGrid> */}
 				<Content></Content>
+				<TagList tags={metadata.tags} />
 				<DisqusComments
 					identifier={`photobook/${metadata.slug}`}
 					title={metadata.title}
 				/>
 
-				<div className="flex justify-between mt-10">
-					<Link href={`/`}>
-						<div className="text-primaryText flex gap-1">
-							<ChevronLeft />
-							Home
-						</div>
-					</Link>
-
-					{metadata.nextPostSlug && (
-						<Link href={`/photobook/${metadata.nextPostSlug}`}>
-							<div className="text-primaryText flex gap-1">
-								Next PhotoBook<ChevronRight></ChevronRight>
-							</div>
-						</Link>
-					)}
-				</div>
+				<PostPagination prev={prev} next={next} className="mt-10" />
 			</div>
 		</div>
 	);

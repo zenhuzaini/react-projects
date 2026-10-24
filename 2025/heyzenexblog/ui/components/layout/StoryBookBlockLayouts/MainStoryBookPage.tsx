@@ -11,7 +11,6 @@ import FullPhoto from "./5_FullPhoto/FullPhoto";
 import PhotoCollectionGrid from "./6_PhotoCollectionGrid/PhotoCollectionGrid";
 import Link from "next/link";
 import { MainStoryBookPageProps, StoryContentType } from "@/types/components";
-import { photoMockStatic } from "@/mock/photo";
 import SectionTitle from "./9_SectionTitle/SectionTitle";
 import EyeSymbol from "@/icons/EyeSymbol";
 import HeartOutlined from "@/icons/HeartOutlined";
@@ -154,12 +153,7 @@ const MainStoryBookPage = ({
 				);
 
 			default:
-				return (
-					<PhotoCollectionGrid
-						key={idx}
-						photo={photoMockStatic}></PhotoCollectionGrid>
-				);
-				break;
+				return null;
 		}
 	};
 

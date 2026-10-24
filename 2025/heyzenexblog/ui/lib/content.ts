@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { slugify } from "./slug";
 
 export type ContentDir = "mystorybook" | "myphotobook";
 
@@ -31,6 +32,43 @@ export function listSlugs(dir: ContentDir): string[] {
 		.readdirSync(dirPath)
 		.filter((file) => file.endsWith(".mdx"))
 		.map((file) => file.replace(/\.mdx$/, ""));
+}
+
+export function readMdxSource(dir: ContentDir, slug: string): string | null {
+	if (!SAFE_SLUG.test(slug)) return null;
+	try {
+		return fs.readFileSync(
+			path.join(process.cwd(), "contents", dir, `${slug}.mdx`),
+			"utf8",
+		);
+	} catch {
+		return null;
+	}
+}
+
+const WORDS_PER_MINUTE = 220;
+
+export function getReadingMinutes(source: string): number {
+	const text = source
+		// Drops the leading `export const metadata = {...};` style blocks.
+		.replace(/^export const [\s\S]*?^[\]}];?\s*$/gm, "")
+		.replace(/https?:\/\/\S+/g, "")
+		.replace(/<[^>]*>/g, " ");
+	const words = text.match(/[\p{L}\p{N}]+/gu)?.length ?? 0;
+	return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
+}
+
+export type SectionHeading = { text: string; id: string };
+
+export function getSectionHeadings(source: string): SectionHeading[] {
+	const headings: SectionHeading[] = [];
+	for (const match of source.matchAll(
+		/<Section\s+text=(?:"([^"]+)"|\{`([^`]+)`\})\s*\/>/g,
+	)) {
+		const text = match[1] ?? match[2];
+		headings.push({ text, id: slugify(text) });
+	}
+	return headings;
 }
 
 export async function paginateMetas<T>(
