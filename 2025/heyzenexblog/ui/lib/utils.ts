@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDate(
 	dateString: string,
-	isValidDate: boolean = true,
+	isValidDate: boolean = !isNaN(new Date(dateString).getTime()),
 	dateOptions?: Intl.DateTimeFormatOptions,
 	locale: string = "en-US",
 ): string {

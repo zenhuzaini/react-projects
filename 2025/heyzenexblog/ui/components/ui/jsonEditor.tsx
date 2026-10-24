@@ -1,7 +1,6 @@
 import React from "react";
 import { JsonEditor } from "json-edit-react";
 import { MyJSONEditorProps } from "@/types/components";
-import { InputGroupInput } from "./input-group";
 
 const MyJsonEditor = ({
 	content,

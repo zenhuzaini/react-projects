@@ -8,7 +8,7 @@ const LightDarkSwitcher = ({
 	toggleDarkMode,
 }: {
 	isDark: boolean;
-	toggleDarkMode: (param: any) => void;
+	toggleDarkMode: () => void;
 }) => {
 	return (
 		<div className="relative h-6 w-6 overflow-hidden">

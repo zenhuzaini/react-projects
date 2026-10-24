@@ -1,7 +1,6 @@
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
-import { photoMock, photoMockStatic } from "@/mock/photo";
+import { photoMockStatic } from "@/mock/photo";
 import { PhotoCardDetailType } from "@/types/components";
-import { faker } from "@faker-js/faker";
 import React from "react";
 
 const FullPhoto = ({

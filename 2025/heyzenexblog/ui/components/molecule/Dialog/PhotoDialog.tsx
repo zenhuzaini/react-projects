@@ -2,7 +2,6 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
-	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog"; // adjust import path
 import { ImageWithSkeleton } from "../ImageWithSkeleton";
@@ -69,6 +68,7 @@ export default function PhotoDialog({
 							}
 							fill={false}
 							fadeSpeed={fadeSpeed}
+							alt={alt}
 							src={src}></ImageWithSkeleton>
 					</div>
 				</div>

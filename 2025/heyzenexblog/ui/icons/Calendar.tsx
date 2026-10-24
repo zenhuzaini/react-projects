@@ -1,4 +1,3 @@
-import { animationForArrow } from "@/animation/animation";
 import React from "react";
 
 const Calendar = ({

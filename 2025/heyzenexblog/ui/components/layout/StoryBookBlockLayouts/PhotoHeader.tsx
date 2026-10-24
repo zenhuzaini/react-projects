@@ -1,14 +1,10 @@
-import { animationForArrow } from "@/animation/animation";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { photoMock } from "@/mock/photo";
-import { faker } from "@faker-js/faker";
 
 export const PhotoHeaderSection = ({
 	photoLength = 5,
-	articleTitle = "My Adventure in the Mountains",
 }: {
 	photoLength?: number;
-	articleTitle?: string;
 }) => {
 	const photos = photoMock({ length: Math.min(photoLength, 5) });
 

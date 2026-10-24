@@ -1,7 +1,9 @@
 import ArrowRight from "@/icons/ArrowRight";
 import Link from "next/link";
 import { ImageWithSkeleton } from "../../molecule/ImageWithSkeleton";
-import { faker } from "@faker-js/faker";
+
+const PLACEHOLDER_IMAGE =
+	"https://picsum.photos/seed/under-development/1200/800";
 
 const UnderDevelopment = () => {
 	return (
@@ -9,7 +11,7 @@ const UnderDevelopment = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-7 lg:gap-4 w-full  md:items-center">
 				{/* Left image */}
 				<div className="rounded-2xl w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
-					<ImageWithSkeleton src={faker.image.url()} />
+					<ImageWithSkeleton src={PLACEHOLDER_IMAGE} />
 				</div>
 
 				{/* Right text */}

@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import React from "react";
 
 const Paragraph = ({ text }: { text: string }) => {

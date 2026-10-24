@@ -1,6 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import ChevronRight from "@/icons/ChevronRight";
 import Link from "next/link";
 
 const SeeMore = ({ url }: { url: string }) => {

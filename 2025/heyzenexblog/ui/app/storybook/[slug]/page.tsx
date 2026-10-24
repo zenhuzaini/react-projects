@@ -56,19 +56,8 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 	const { Content, metadata } = story;
 
-	const publishedDate = new Date(metadata.datePublished);
-	const isValidPublishedDate = !isNaN(publishedDate.getTime());
-	const formattedPublishedDate = formatDate(
-		metadata.datePublished,
-		isValidPublishedDate,
-	);
-
-	const activityDate = new Date(metadata.eventDateTo);
-	const isValidActivityDate = !isNaN(activityDate.getTime());
-	const formattedActivityDate = formatDate(
-		metadata.eventDateTo,
-		isValidActivityDate,
-	);
+	const formattedPublishedDate = formatDate(metadata.datePublished);
+	const formattedActivityDate = formatDate(metadata.eventDateTo);
 
 	return (
 		<article className="flex flex-col gap-2 ">
@@ -151,12 +140,14 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 						</div>
 					</Link>
 
-					<Link href={`/storybook/${metadata.nextPostSlug}`}>
-						<div className="text-primaryText flex gap-1">
-							<span>Next StoryBook</span>
-							<ChevronRight></ChevronRight>
-						</div>
-					</Link>
+					{metadata.nextPostSlug && (
+						<Link href={`/storybook/${metadata.nextPostSlug}`}>
+							<div className="text-primaryText flex gap-1">
+								<span>Next StoryBook</span>
+								<ChevronRight></ChevronRight>
+							</div>
+						</Link>
+					)}
 				</div>
 			</section>
 		</article>

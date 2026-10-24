@@ -2,7 +2,6 @@ import { animationForArrow } from "@/animation/animation";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import ChevronLeft from "@/icons/ChevronLeft";
 import ChevronRight from "@/icons/ChevronRight";
-import { faker } from "@faker-js/faker";
 import { Separator } from "@radix-ui/react-separator";
 import ShortDescription from "./1_ShortDescription/ShortDescription";
 import Paragraph from "./2_BasicPharagraph/Paragraph";
@@ -12,7 +11,6 @@ import FullPhoto from "./5_FullPhoto/FullPhoto";
 import PhotoCollectionGrid from "./6_PhotoCollectionGrid/PhotoCollectionGrid";
 import Link from "next/link";
 import { MainStoryBookPageProps, StoryContentType } from "@/types/components";
-import { EMPTY_STRING } from "@/const/vars";
 import { photoMockStatic } from "@/mock/photo";
 import SectionTitle from "./9_SectionTitle/SectionTitle";
 import EyeSymbol from "@/icons/EyeSymbol";
@@ -31,7 +29,6 @@ const MainStoryBookPage = ({
 	storyTitle,
 	storyDescription,
 	storyTags = [],
-	storyPhotoUrls,
 	storyContent,
 	totalView,
 	totalLike,

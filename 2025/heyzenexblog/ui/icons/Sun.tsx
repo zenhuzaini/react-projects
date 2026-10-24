@@ -7,7 +7,8 @@ const Sun = ({ size = 6 }: { size?: number }) => {
 				viewBox="0 0 24 24"
 				strokeWidth="1.5"
 				stroke="currentColor"
-				className={`size-6 text-primaryText`}>
+				className="text-primaryText"
+				style={{ width: `${size / 4}rem`, height: `${size / 4}rem` }}>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
