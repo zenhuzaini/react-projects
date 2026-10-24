@@ -7,6 +7,7 @@ import PostCard from "../../molecule/Cards/PostCard";
 import Link from "next/link";
 import { StoryBookMeta } from "@/types/data";
 import { PhotoCardDetailType } from "@/types/components";
+import { getMonthYear } from "@/lib/utils";
 
 const StoryPost = ({ stories }: { stories: StoryBookMeta[] }) => {
 	const prefersReducedMotion = useReducedMotion();
@@ -40,8 +41,7 @@ const StoryPost = ({ stories }: { stories: StoryBookMeta[] }) => {
 		description: story.description,
 		city: story.city,
 		country: story.country,
-		year: Number(story.eventDateFrom.split(" ")[3]),
-		month: story.eventDateFrom.split(" ")[1],
+		...getMonthYear(story.eventDateFrom),
 		activityType: story.activityType,
 		activityDate: story.eventDateFrom,
 	});

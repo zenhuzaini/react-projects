@@ -7,6 +7,7 @@ import Link from "next/link";
 import { PhotoBookMeta } from "@/types/data";
 import { PhotoCardDetailType } from "@/types/components";
 import { EMPTY_STRING } from "@/const/vars";
+import { getMonthYear } from "@/lib/utils";
 
 const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
 	const prefersReducedMotion = useReducedMotion();
@@ -16,8 +17,7 @@ const PhotoCardsSection = ({ photoStory }: { photoStory: PhotoBookMeta[] }) => {
 		description: photo.description,
 		city: photo.city,
 		country: photo.country,
-		year: Number(photo.eventDateFrom.split(" ")[3]),
-		month: photo.eventDateFrom.split(" ")[1],
+		...getMonthYear(photo.eventDateFrom),
 		activityType: photo.activityType,
 		activityDate: photo.eventDateFrom,
 	});

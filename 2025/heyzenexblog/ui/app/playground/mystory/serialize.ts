@@ -162,6 +162,7 @@ export const toMdx = (draft: StoryDraft) => {
 		city: draft.city,
 		country: draft.country,
 		activityType: draft.activityType,
+		...(draft.series.trim() ? { series: draft.series.trim() } : {}),
 		nextPostSlug: draft.nextPostSlug,
 		prevPostSlug: draft.prevPostSlug,
 	};

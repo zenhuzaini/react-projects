@@ -222,6 +222,7 @@ export function useDraftManager() {
 			city: metadata.city || "",
 			country: metadata.country || "",
 			activityType: metadata.activityType || "bikepacking",
+			series: metadata.series || "",
 			tags: metadata.tags?.join(", ") || "",
 			views: metadata.views ?? 0,
 			likes: metadata.likes ?? 0,

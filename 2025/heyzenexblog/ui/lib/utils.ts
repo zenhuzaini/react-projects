@@ -28,3 +28,16 @@ export function formatDate(
 
 	return `${parts.weekday}, ${parts.month} ${parts.day} ${parts.year}`;
 }
+
+// Works for ISO dates ("2024-08-14") and Date strings; returns no parts when the date is invalid.
+export function getMonthYear(dateString: string): {
+	month?: string;
+	year?: number;
+} {
+	const date = new Date(dateString);
+	if (Number.isNaN(date.getTime())) return {};
+	return {
+		month: date.toLocaleDateString("en-US", { month: "short" }),
+		year: date.getFullYear(),
+	};
+}

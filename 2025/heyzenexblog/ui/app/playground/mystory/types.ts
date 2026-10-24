@@ -64,6 +64,7 @@ export type ExistingStoryResponse = {
 		city?: string;
 		country?: string;
 		activityType?: string;
+		series?: string;
 		tags?: string[];
 		views?: number;
 		likes?: number;
@@ -87,6 +88,7 @@ export type StoryDraft = {
 	city: string;
 	country: string;
 	activityType: string;
+	series: string;
 	tags: string;
 	views: number;
 	likes: number;

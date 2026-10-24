@@ -205,6 +205,12 @@ const StoryMetadataForm = ({
 					placeholder="solo, nature"
 				/>
 				<TextField
+					label="Series (optional)"
+					value={draft.series}
+					onChange={(event) => updateDraft({ series: event.target.value })}
+					placeholder="Velo Dunajec"
+				/>
+				<TextField
 					label="Views"
 					type="number"
 					min={0}

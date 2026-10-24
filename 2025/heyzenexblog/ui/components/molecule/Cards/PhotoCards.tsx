@@ -43,7 +43,7 @@ const PhotoCards = ({ photoDetail }: { photoDetail: PhotoCardDetailType }) => {
 							{photoDetail.country}
 						</h2>
 						<p className="whitespace-nowrap text-accenttext text-[9px] sm:text-xs font-normal tracking-tight">
-							{photoDetail.month} {photoDetail.year}
+							{[photoDetail.month, photoDetail.year].filter(Boolean).join(" ")}
 						</p>
 					</div>
 				</div>
