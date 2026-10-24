@@ -3,7 +3,7 @@
 import { Plus, X } from "lucide-react";
 import { TEXT } from "@/const/text";
 import { cn } from "@/lib/utils";
-import ImageUploadButton from "./ImageUploadButton";
+import ImageUploadButton from "../shared/ImageUploadButton";
 import { blockInputClass } from "./styles";
 import type {
 	ExistingStorySummary,

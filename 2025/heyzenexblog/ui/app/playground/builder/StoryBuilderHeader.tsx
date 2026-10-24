@@ -12,6 +12,8 @@ import Heading from "@/components/molecule/Headings/Heading";
 import { outlineButtonClass } from "./styles";
 
 type Props = {
+	title: string;
+	description: string;
 	notice: string;
 	showSaveStatus: boolean;
 	isDraftSaved: boolean;
@@ -22,6 +24,8 @@ type Props = {
 };
 
 const StoryBuilderHeader = ({
+	title,
+	description,
 	notice,
 	showSaveStatus,
 	isDraftSaved,
@@ -31,10 +35,7 @@ const StoryBuilderHeader = ({
 	onPublish,
 }: Props) => (
 	<header className="mb-7 flex flex-col gap-4 border-b border-primarybrown/20 pb-6 md:flex-row md:items-stretch">
-		<Heading
-			title="Story builder"
-			description="Arrange story blocks, save drafts in this browser, and export a ready-to-edit MDX file."
-		/>
+		<Heading title={title} description={description} />
 		<div className="flex flex-wrap items-center gap-2 md:justify-end">
 			{notice && (
 				<span

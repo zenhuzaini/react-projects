@@ -5,10 +5,12 @@ import MainStoryBookPage from "@/components/layout/StoryBookBlockLayouts/MainSto
 import type { PhotoCardDetailType, StoryContentType } from "@/types/components";
 import { parseTags, toSlug } from "./draft";
 import type { StoryDraft } from "./types";
+import type { BuilderConfig } from "./config";
 
 export type OutputTab = "mdx" | "preview";
 
 type Props = {
+	config: BuilderConfig;
 	draft: StoryDraft;
 	mdx: string;
 	storyContent: StoryContentType[];
@@ -20,6 +22,7 @@ type Props = {
 };
 
 const OutputPanel = ({
+	config,
 	draft,
 	mdx,
 	storyContent,
@@ -53,7 +56,9 @@ const OutputPanel = ({
 					<Eye size={15} /> Preview
 				</button>
 			</div>
-			<span className="text-xs text-white/50">{draft.slug || "story"}.mdx</span>
+			<span className="text-xs text-white/50">
+				{draft.slug || config.noun}.mdx
+			</span>
 		</div>
 		{tab === "mdx" ? (
 			<pre
@@ -86,7 +91,7 @@ const OutputPanel = ({
 		)}
 		<div className="flex items-center justify-between border-t border-primarybrown/15 px-4 py-3 text-xs text-primarygrey">
 			<span>
-				{tab === "mdx" ? "Generated MDX source" : "Live story preview"}
+				{tab === "mdx" ? "Generated MDX source" : `Live ${config.noun} preview`}
 			</span>
 			<button
 				type="button"

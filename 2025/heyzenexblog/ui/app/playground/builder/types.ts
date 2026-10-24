@@ -1,3 +1,7 @@
+import type { ImageQuality } from "../shared/cloudinaryUpload";
+
+export type { ImageQuality };
+
 export type BlockType =
 	| "paragraph"
 	| "quote"
@@ -14,14 +18,9 @@ export type BlockType =
 	| "raw";
 
 export type StoryListItem = { label: string; done: boolean };
-export type ImageQuality = "auto:eco" | "auto:good" | "auto:best";
 export type ImageUploadTarget =
 	| { kind: "cover" }
 	| { kind: "block"; blockId: string; galleryIndex?: number };
-export type PendingImageUpload = ImageUploadTarget & {
-	file: File;
-	imageQuality: ImageQuality;
-};
 
 export type StoryBlock = {
 	id: string;

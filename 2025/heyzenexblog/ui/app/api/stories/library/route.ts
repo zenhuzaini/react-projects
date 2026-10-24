@@ -4,6 +4,10 @@ import { createProcessor } from "@mdx-js/mdx";
 import { NextResponse } from "next/server";
 import { getAllSlugs, getStoryMetadataBySlug } from "@/lib/storybook";
 import {
+	getAllPhotoBookSlugs,
+	getPhotoBookMetadataBySlug,
+} from "@/lib/photobook";
+import {
 	clientIp,
 	errorResponse,
 	rateLimit,
@@ -451,15 +455,40 @@ const parseMdxBlocks = (source: string) => {
 	return { blocks, supportingMdx: supportingMdx.join("\n\n") };
 };
 
+const COLLECTIONS = {
+	story: {
+		directory: "mystorybook",
+		label: "Story",
+		getSlugs: getAllSlugs,
+		getMetadata: getStoryMetadataBySlug,
+	},
+	photobook: {
+		directory: "myphotobook",
+		label: "PhotoBook",
+		getSlugs: getAllPhotoBookSlugs,
+		getMetadata: getPhotoBookMetadataBySlug,
+	},
+} as const;
+
 export async function GET(request: Request) {
 	try {
-		const slugs = getAllSlugs().map(({ slug }) => slug);
-		const requestedSlug = new URL(request.url).searchParams.get("slug");
+		const { searchParams } = new URL(request.url);
+		const collectionName = searchParams.get("collection") ?? "story";
+		if (!(collectionName in COLLECTIONS)) {
+			return errorResponse("Collection is invalid.", 400);
+		}
+		const collection = COLLECTIONS[collectionName as keyof typeof COLLECTIONS];
+		const getMetadata: (
+			slug: string,
+		) => Promise<Awaited<ReturnType<typeof getStoryMetadataBySlug>>> =
+			collection.getMetadata as never;
+		const slugs = collection.getSlugs().map(({ slug }) => slug);
+		const requestedSlug = searchParams.get("slug");
 
 		if (!requestedSlug) {
 			const stories = await Promise.all(
 				slugs.map(async (slug) => {
-					const metadata = await getStoryMetadataBySlug(slug);
+					const metadata = await getMetadata(slug);
 					return metadata ? { slug, title: metadata.title } : null;
 				}),
 			);
@@ -467,19 +496,21 @@ export async function GET(request: Request) {
 		}
 
 		if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(requestedSlug)) {
-			return errorResponse("Story slug is invalid.", 400);
+			return errorResponse(`${collection.label} slug is invalid.`, 400);
 		}
 		if (!slugs.includes(requestedSlug)) {
-			return errorResponse("Story was not found.", 404);
+			return errorResponse(`${collection.label} was not found.`, 404);
 		}
 
-		const metadata = await getStoryMetadataBySlug(requestedSlug);
-		if (!metadata) return errorResponse("Story metadata was not found.", 404);
+		const metadata = await getMetadata(requestedSlug);
+		if (!metadata) {
+			return errorResponse(`${collection.label} metadata was not found.`, 404);
+		}
 
 		const storyPath = path.join(
 			process.cwd(),
 			"contents",
-			"mystorybook",
+			collection.directory,
 			`${requestedSlug}.mdx`,
 		);
 		const source = await readFile(storyPath, "utf8");

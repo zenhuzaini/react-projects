@@ -1,9 +1,11 @@
 "use client";
 
 import { PanelLeftClose, PanelLeftOpen, Trash2 } from "lucide-react";
+import type { BuilderConfig } from "./config";
 import type { StoryDraft } from "./types";
 
 type Props = {
+	config: BuilderConfig;
 	isExpanded: boolean;
 	onToggle: () => void;
 	isHydrated: boolean;
@@ -14,6 +16,7 @@ type Props = {
 };
 
 const DraftsSidebar = ({
+	config,
 	isExpanded,
 	onToggle,
 	isHydrated,
@@ -32,11 +35,13 @@ const DraftsSidebar = ({
 					type="button"
 					aria-expanded={isExpanded}
 					aria-controls="saved-stories-content"
-					aria-label={`${isExpanded ? "Collapse" : "Expand"} saved stories panel`}
-					title={`${isExpanded ? "Collapse" : "Expand"} saved stories`}
+					aria-label={`${isExpanded ? "Collapse" : "Expand"} saved ${config.nounPlural} panel`}
+					title={`${isExpanded ? "Collapse" : "Expand"} saved ${config.nounPlural}`}
 					onClick={onToggle}
 					className="flex min-h-7 w-full items-center gap-2 text-left">
-					<span className={isExpanded ? "" : "sr-only"}>Saved stories</span>
+					<span className={isExpanded ? "first-letter:uppercase" : "sr-only"}>
+						Saved {config.nounPlural}
+					</span>
 					<span className="rounded bg-secondarywhite px-2 py-1 text-xs font-normal text-primarygrey">
 						{drafts.length}
 					</span>

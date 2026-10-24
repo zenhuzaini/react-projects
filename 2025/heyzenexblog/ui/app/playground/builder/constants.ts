@@ -15,10 +15,8 @@ import {
 } from "lucide-react";
 import type { BlockType } from "./types";
 
-export const STORAGE_KEY = "heyzenex-mystory-drafts";
 export const MAX_GPX_FILE_SIZE = 20 * 1024 * 1024;
 export const MAX_GPX_ROUTE_POINTS = 2000;
-export const MAX_IMAGE_UPLOAD_SIZE = 10 * 1024 * 1024;
 export const STORY_LIBRARY_PAGE_SIZE = 5;
 
 export const blockOptions: {

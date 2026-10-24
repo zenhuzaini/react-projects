@@ -64,6 +64,7 @@ export const createBlock = (
 export const createDraft = (
 	id = crypto.randomUUID(),
 	blockId = crypto.randomUUID(),
+	defaults: Partial<StoryDraft> = {},
 ): StoryDraft => ({
 	id,
 	storyId: 1,
@@ -93,10 +94,48 @@ export const createDraft = (
 	],
 	createdAt: "",
 	updatedAt: "",
+	...defaults,
 });
 
-export const normalizeSavedDraft = (saved: StoryDraft): StoryDraft => {
-	const fallbackDraft = createDraft(saved.id);
+// Drafts saved by the old photobook builder used a "photo" block and a `photos` list.
+const upgradeLegacyBlock = (raw: StoryBlock): StoryBlock => {
+	const legacy = raw as unknown as {
+		type: string;
+		url?: string;
+		alt?: string;
+		photos?: { url?: string; alt?: string }[];
+	};
+	if (legacy.type === "photo") {
+		return {
+			...raw,
+			type: "image",
+			imageUrl: legacy.url ?? "",
+			imageAlt: legacy.alt ?? "",
+			url: "",
+		};
+	}
+	if (
+		legacy.type === "gallery" &&
+		Array.isArray(legacy.photos) &&
+		!Array.isArray(raw.gallery)
+	) {
+		return {
+			...raw,
+			gallery: legacy.photos.map((photo) => ({
+				url: photo.url ?? "",
+				alt: photo.alt ?? "",
+			})),
+			url: "",
+		};
+	}
+	return raw;
+};
+
+export const normalizeSavedDraft = (
+	saved: StoryDraft,
+	defaults: Partial<StoryDraft> = {},
+): StoryDraft => {
+	const fallbackDraft = createDraft(saved.id, undefined, defaults);
 	const fallbackDate = new Date(saved.createdAt || saved.updatedAt || "");
 	return {
 		...fallbackDraft,
@@ -106,8 +145,8 @@ export const normalizeSavedDraft = (saved: StoryDraft): StoryDraft => {
 		nextPostSlug: saved.nextPostSlug ?? "",
 		prevPostSlug: saved.prevPostSlug ?? "",
 		imageQuality: saved.imageQuality ?? "auto:good",
-		views: saved.views ?? 100,
-		likes: saved.likes ?? 10,
+		views: saved.views ?? fallbackDraft.views,
+		likes: saved.likes ?? fallbackDraft.likes,
 		supportingMdx: saved.supportingMdx ?? "",
 		datePublished:
 			saved.datePublished ||
@@ -115,7 +154,7 @@ export const normalizeSavedDraft = (saved: StoryDraft): StoryDraft => {
 				? toLocalDateTimeInput(new Date())
 				: toLocalDateTimeInput(fallbackDate)),
 		blocks: Array.isArray(saved.blocks)
-			? saved.blocks.map((block) => {
+			? saved.blocks.map(upgradeLegacyBlock).map((block) => {
 					const defaults = createBlock(block.type, block.id);
 					return {
 						...defaults,

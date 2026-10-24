@@ -18,8 +18,15 @@ import {
 } from "@/components/ui/dialog";
 import { STORY_LIBRARY_PAGE_SIZE } from "./constants";
 import type { StoryLibrary } from "./useStoryLibrary";
+import type { BuilderConfig } from "./config";
 
-const StoryLibraryDialog = ({ library }: { library: StoryLibrary }) => {
+const StoryLibraryDialog = ({
+	library,
+	config,
+}: {
+	library: StoryLibrary;
+	config: BuilderConfig;
+}) => {
 	const {
 		isOpen,
 		setIsOpen,
@@ -44,10 +51,10 @@ const StoryLibraryDialog = ({ library }: { library: StoryLibrary }) => {
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Open existing story</DialogTitle>
+					<DialogTitle>Open existing {config.noun}</DialogTitle>
 					<DialogDescription>
-						Choose an MDX story from the project library to edit its metadata
-						and source.
+						Choose an MDX {config.noun} from the project library to edit its
+						metadata and source.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex flex-col gap-2 sm:flex-row">
@@ -60,8 +67,8 @@ const StoryLibraryDialog = ({ library }: { library: StoryLibrary }) => {
 							type="search"
 							value={searchQuery}
 							onChange={(event) => search(event.target.value)}
-							placeholder="Search stories"
-							aria-label="Search stories by title or filename"
+							placeholder={`Search ${config.nounPlural}`}
+							aria-label={`Search ${config.nounPlural} by title or filename`}
 							className="h-10 w-full rounded-md border border-primarybrown/25 bg-primarywhite pl-9 pr-3 text-sm outline-none focus:border-secondaryforestgreen"
 						/>
 					</label>
@@ -88,8 +95,8 @@ const StoryLibraryDialog = ({ library }: { library: StoryLibrary }) => {
 				<div className="max-h-[min(60vh,28rem)] space-y-2 overflow-y-auto">
 					{isLoading && (
 						<p className="flex items-center gap-2 py-6 text-sm text-primarygrey">
-							<LoaderCircle size={16} className="animate-spin" /> Loading
-							stories...
+							<LoaderCircle size={16} className="animate-spin" /> Loading{" "}
+							{config.nounPlural}...
 						</p>
 					)}
 					{error && (
@@ -99,14 +106,14 @@ const StoryLibraryDialog = ({ library }: { library: StoryLibrary }) => {
 					)}
 					{hasLoadedList && stories.length === 0 && (
 						<p className="py-6 text-sm text-primarygrey">
-							No MDX stories were found in the library.
+							No MDX {config.nounPlural} were found in the library.
 						</p>
 					)}
 					{hasLoadedList &&
 						stories.length > 0 &&
 						filteredStories.length === 0 && (
 							<p className="py-6 text-sm text-primarygrey">
-								No stories match “{searchQuery}”.
+								No {config.nounPlural} match “{searchQuery}”.
 							</p>
 						)}
 					{!error &&
@@ -129,7 +136,7 @@ const StoryLibraryDialog = ({ library }: { library: StoryLibrary }) => {
 									<LoaderCircle
 										size={16}
 										className="shrink-0 animate-spin"
-										aria-label="Loading story"
+										aria-label={`Loading ${config.noun}`}
 									/>
 								)}
 							</button>

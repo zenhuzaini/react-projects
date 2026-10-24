@@ -9,10 +9,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import ImageUploadButton from "./ImageUploadButton";
+import ImageUploadButton from "../shared/ImageUploadButton";
+import UploadSettingsCard from "../shared/UploadSettingsCard";
 import { captionClass, detailInputClass } from "./styles";
 import { toSlug } from "./draft";
-import type { ImageQuality, ImageUploadTarget, StoryDraft } from "./types";
+import type { ImageUploadTarget, StoryDraft } from "./types";
 
 const ACTIVITIES = [
 	"bikepacking",
@@ -21,12 +22,6 @@ const ACTIVITIES = [
 	"travel",
 	"photography",
 	"other",
-];
-
-const IMAGE_QUALITY_OPTIONS: { label: string; value: ImageQuality }[] = [
-	{ label: "Smaller files", value: "auto:eco" },
-	{ label: "Balanced", value: "auto:good" },
-	{ label: "Highest quality", value: "auto:best" },
 ];
 
 const TextField = ({
@@ -231,40 +226,10 @@ const StoryMetadataForm = ({
 			</div>
 		</div>
 
-		<div className="rounded-lg border border-primarybrown/20 bg-primarywhite p-4 sm:p-5">
-			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-				<div>
-					<h2 className="font-bold">Upload settings</h2>
-					<p className="mt-1 text-xs text-primarygrey">
-						Quality applies to new cover, photo, and gallery uploads.
-					</p>
-				</div>
-				<label className="flex flex-col gap-1 text-xs font-semibold text-primarygrey sm:w-64">
-					<span>Cloudinary image quality</span>
-					<Select
-						items={IMAGE_QUALITY_OPTIONS}
-						value={draft.imageQuality}
-						onValueChange={(value) => {
-							if (typeof value === "string") {
-								updateDraft({ imageQuality: value as ImageQuality });
-							}
-						}}>
-						<SelectTrigger
-							aria-label="Cloudinary image quality"
-							className="w-full bg-mybackground">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent>
-							{IMAGE_QUALITY_OPTIONS.map(({ label, value }) => (
-								<SelectItem key={value} value={value}>
-									{label}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				</label>
-			</div>
-		</div>
+		<UploadSettingsCard
+			value={draft.imageQuality}
+			onChange={(imageQuality) => updateDraft({ imageQuality })}
+		/>
 	</>
 );
 

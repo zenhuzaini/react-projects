@@ -11,6 +11,3 @@ export const blockInputClass =
 
 export const outlineButtonClass =
 	"inline-flex h-10 items-center gap-2 rounded-md border border-primarybrown/30 px-3 text-sm font-semibold hover:bg-primarywhite";
-
-export const IMAGE_ACCEPT =
-	"image/jpeg,image/png,image/webp,image/avif,image/gif";

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { PLACEHOLDER_COVER_URL } from "@/const/vars";
-import { STORAGE_KEY } from "./constants";
+import type { BuilderConfig } from "./config";
 import {
 	createBlock,
-	createDraft,
-	normalizeSavedDraft,
+	createDraft as createBaseDraft,
+	normalizeSavedDraft as normalizeBaseDraft,
 	stampDraft,
 	toLocalDateInput,
 	toLocalDateTimeInput,
@@ -21,7 +21,13 @@ import type {
 } from "./types";
 
 // Owns the draft being edited, the drafts saved in this browser, and their persistence.
-export function useDraftManager() {
+export function useDraftManager(config: BuilderConfig) {
+	const { storageKey, draftDefaults } = config;
+	const STORAGE_KEY = storageKey;
+	const createDraft = (id?: string, blockId?: string) =>
+		createBaseDraft(id, blockId, draftDefaults);
+	const normalizeSavedDraft = (saved: StoryDraft) =>
+		normalizeBaseDraft(saved, draftDefaults);
 	const [draft, setDraft] = useState<StoryDraft>(() =>
 		createDraft("initial-draft", "initial-paragraph"),
 	);
@@ -32,10 +38,12 @@ export function useDraftManager() {
 
 	useEffect(() => {
 		try {
-			const storedDrafts = localStorage.getItem(STORAGE_KEY);
+			const storedDrafts = localStorage.getItem(storageKey);
 			if (storedDrafts) {
 				const drafts = JSON.parse(storedDrafts) as StoryDraft[];
-				setSavedDrafts(drafts.map(normalizeSavedDraft));
+				setSavedDrafts(
+					drafts.map((saved) => normalizeBaseDraft(saved, draftDefaults)),
+				);
 			}
 		} catch {
 			setNotice("Saved drafts could not be read from this browser.");
@@ -45,7 +53,7 @@ export function useDraftManager() {
 			datePublished: current.datePublished || toLocalDateTimeInput(new Date()),
 		}));
 		setIsHydrated(true);
-	}, []);
+	}, [storageKey, draftDefaults]);
 
 	// Autosave the active draft shortly after the last change.
 	useEffect(() => {
@@ -70,7 +78,7 @@ export function useDraftManager() {
 		}, 500);
 
 		return () => window.clearTimeout(timeout);
-	}, [activeDraftId, draft, isHydrated, savedDrafts]);
+	}, [activeDraftId, draft, isHydrated, savedDrafts, STORAGE_KEY]);
 
 	const updateDraft = (updates: Partial<StoryDraft>) =>
 		setDraft((current) => ({ ...current, ...updates }));
@@ -103,7 +111,10 @@ export function useDraftManager() {
 
 	const addBlock = (type: BlockType, index = draft.blocks.length) => {
 		const nextBlocks = [...draft.blocks];
-		nextBlocks.splice(index, 0, createBlock(type));
+		nextBlocks.splice(index, 0, {
+			...createBlock(type),
+			...(config.showCenterToggle && { insideCenter: true }),
+		});
 		updateDraft({ blocks: nextBlocks });
 	};
 

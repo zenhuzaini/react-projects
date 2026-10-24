@@ -5,6 +5,7 @@ import type { DragEvent } from "react";
 import { ArrowDown, ArrowUp, GripVertical, Plus, X } from "lucide-react";
 import BlockFields from "./BlockFields";
 import { blockOptions } from "./constants";
+import type { BuilderConfig } from "./config";
 import type {
 	BlockType,
 	ExistingStorySummary,
@@ -14,6 +15,7 @@ import type {
 } from "./types";
 
 type Props = {
+	config: BuilderConfig;
 	blocks: StoryBlock[];
 	addBlock: (type: BlockType, index?: number) => void;
 	moveBlock: (from: number, to: number) => void;
@@ -31,6 +33,7 @@ type Props = {
 };
 
 const BlockEditor = ({
+	config,
 	blocks,
 	addBlock,
 	moveBlock,
@@ -78,7 +81,9 @@ const BlockEditor = ({
 		<div className="rounded-lg border border-primarybrown/20 bg-primarywhite p-4 sm:p-5">
 			<div className="mb-4 flex items-center justify-between">
 				<div>
-					<h2 className="font-bold">Story content</h2>
+					<h2 className="font-bold first-letter:uppercase">
+						{config.noun} content
+					</h2>
 					<p className="mt-1 text-xs text-primarygrey">
 						Drag a block into the canvas, or drag blocks to reorder.
 					</p>
@@ -90,20 +95,22 @@ const BlockEditor = ({
 				</div>
 			</div>
 			<div className="mb-4 flex flex-wrap gap-2">
-				{blockOptions.map(({ type, label, icon: Icon }) => (
-					<button
-						key={type}
-						type="button"
-						draggable
-						onDragStart={(event) =>
-							event.dataTransfer.setData("application/story-block", type)
-						}
-						onClick={() => handleAdd(type)}
-						className="inline-flex h-9 items-center gap-2 rounded-md border border-primarybrown/25 px-2.5 text-xs font-semibold hover:border-secondaryforestgreen hover:bg-secondaryforestgreen/5"
-						title={`Drag or click to add ${label}`}>
-						<Icon size={15} /> {label}
-					</button>
-				))}
+				{blockOptions
+					.filter(({ type }) => !config.disabledBlocks.includes(type))
+					.map(({ type, label, icon: Icon }) => (
+						<button
+							key={type}
+							type="button"
+							draggable
+							onDragStart={(event) =>
+								event.dataTransfer.setData("application/story-block", type)
+							}
+							onClick={() => handleAdd(type)}
+							className="inline-flex h-9 items-center gap-2 rounded-md border border-primarybrown/25 px-2.5 text-xs font-semibold hover:border-secondaryforestgreen hover:bg-secondaryforestgreen/5"
+							title={`Drag or click to add ${label}`}>
+							<Icon size={15} /> {label}
+						</button>
+					))}
 			</div>
 			<div
 				{...endDropHandlers}
@@ -184,6 +191,20 @@ const BlockEditor = ({
 								relatedStoryOptions={relatedStoryOptions}
 								isLoadingRelatedStories={isLoadingRelatedStories}
 							/>
+							{config.showCenterToggle && (
+								<label className="mt-3 flex items-center gap-2 text-xs text-primarygrey">
+									<input
+										type="checkbox"
+										checked={block.insideCenter ?? false}
+										onChange={(event) =>
+											updateBlock(block.id, {
+												insideCenter: event.target.checked,
+											})
+										}
+									/>{" "}
+									Place inside centered content
+								</label>
+							)}
 						</div>
 					);
 				})}

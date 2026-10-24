@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { toSlug } from "./draft";
 import type { StoryDraft } from "./types";
+import type { BuilderConfig } from "./config";
 import type { Publisher } from "./usePublisher";
 
 const SubmitLabel = ({
@@ -33,9 +34,11 @@ const SubmitLabel = ({
 const PublishDialog = ({
 	publisher,
 	draft,
+	config,
 }: {
 	publisher: Publisher;
 	draft: StoryDraft;
+	config: BuilderConfig;
 }) => {
 	const {
 		isDialogOpen,
@@ -56,7 +59,7 @@ const PublishDialog = ({
 					<DialogTitle>
 						{isUpload
 							? "Authorize Cloudinary upload"
-							: "Publish story to GitHub"}
+							: `Publish ${config.noun} to GitHub`}
 					</DialogTitle>
 					<DialogDescription>
 						{pendingImageUpload ? (
@@ -66,13 +69,13 @@ const PublishDialog = ({
 									{pendingImageUpload.file.name}
 								</span>{" "}
 								securely to Cloudinary. The returned image URL will be added to
-								the story draft.
+								the {config.noun} draft.
 							</>
 						) : (
 							<>
 								This creates or updates{" "}
 								<span className="font-medium text-primaryText">
-									{draft.slug || toSlug(draft.title) || "story"}.mdx
+									{draft.slug || toSlug(draft.title) || config.noun}.mdx
 								</span>{" "}
 								on the configured branch. Enter the publisher key to authorize
 								this commit.

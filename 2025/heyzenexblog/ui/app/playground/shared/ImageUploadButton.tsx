@@ -2,7 +2,7 @@
 
 import { Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { IMAGE_ACCEPT } from "./styles";
+import { IMAGE_ACCEPT } from "./cloudinaryUpload";
 
 const ImageUploadButton = ({
 	label,

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { STORY_LIBRARY_PAGE_SIZE } from "./constants";
+import type { BuilderConfig } from "./config";
 import { toSlug } from "./draft";
 import type { ExistingStoryResponse, ExistingStorySummary } from "./types";
 
@@ -16,8 +17,21 @@ type ApiResult<T> = T | { error?: string };
 const failureMessage = (error: unknown, fallback: string) =>
 	error instanceof Error ? error.message : fallback;
 
+// Stories are the API's default collection, so only other collections add a query parameter.
+const libraryUrl = (collection: BuilderConfig["collection"], slug?: string) => {
+	const params = new URLSearchParams();
+	if (collection !== "story") params.set("collection", collection);
+	if (slug) params.set("slug", slug);
+	const query = params.toString();
+	return `/api/stories/library${query ? `?${query}` : ""}`;
+};
+
 // Talks to /api/stories/library: lists stories, loads one, or imports an uploaded MDX file.
-export function useStoryLibrary(onStoryLoaded: ImportedStoryHandler) {
+export function useStoryLibrary(
+	config: BuilderConfig,
+	onStoryLoaded: ImportedStoryHandler,
+) {
+	const { collection, noun } = config;
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [page, setPage] = useState(1);
@@ -33,7 +47,7 @@ export function useStoryLibrary(onStoryLoaded: ImportedStoryHandler) {
 		let isActive = true;
 		const loadStories = async () => {
 			try {
-				const response = await fetch("/api/stories/library");
+				const response = await fetch(libraryUrl(collection));
 				const result = (await response.json().catch(() => ({}))) as {
 					stories?: ExistingStorySummary[];
 				};
@@ -49,7 +63,7 @@ export function useStoryLibrary(onStoryLoaded: ImportedStoryHandler) {
 		return () => {
 			isActive = false;
 		};
-	}, []);
+	}, [collection]);
 
 	const query = searchQuery.trim().toLowerCase();
 	const filteredStories = stories.filter(
@@ -79,17 +93,17 @@ export function useStoryLibrary(onStoryLoaded: ImportedStoryHandler) {
 		setIsLoading(true);
 		setError("");
 		try {
-			const response = await fetch("/api/stories/library");
+			const response = await fetch(libraryUrl(collection));
 			const result = (await response.json().catch(() => ({}))) as {
 				error?: string;
 				stories?: ExistingStorySummary[];
 			};
 			if (!response.ok) {
-				throw new Error(result.error || "Could not load the story library.");
+				throw new Error(result.error || `Could not load the ${noun} library.`);
 			}
 			setStories(result.stories ?? []);
 		} catch (caught) {
-			setError(failureMessage(caught, "Could not load the story library."));
+			setError(failureMessage(caught, `Could not load the ${noun} library.`));
 		} finally {
 			setIsLoading(false);
 		}
@@ -137,24 +151,22 @@ export function useStoryLibrary(onStoryLoaded: ImportedStoryHandler) {
 		setLoadingSlug(slug);
 		setError("");
 		try {
-			const response = await fetch(
-				`/api/stories/library?slug=${encodeURIComponent(slug)}`,
-			);
+			const response = await fetch(libraryUrl(collection, slug));
 			const result = (await response
 				.json()
 				.catch(() => ({}))) as ApiResult<ExistingStoryResponse>;
 			if (!response.ok || !("metadata" in result)) {
 				throw new Error(
 					"error" in result
-						? result.error || "Could not load this story."
-						: "Could not load this story.",
+						? result.error || `Could not load this ${noun}.`
+						: `Could not load this ${noun}.`,
 				);
 			}
 
 			onStoryLoaded(result, result.slug, result.metadata.title || result.slug);
 			setIsOpen(false);
 		} catch (caught) {
-			setError(failureMessage(caught, "Could not load this story."));
+			setError(failureMessage(caught, `Could not load this ${noun}.`));
 		} finally {
 			setLoadingSlug(null);
 		}
