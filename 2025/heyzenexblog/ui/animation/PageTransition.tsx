@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 export default function PageTransition({
@@ -10,16 +10,15 @@ export default function PageTransition({
 }) {
 	const pathname = usePathname();
 
+	// No AnimatePresence: with the App Router it keeps stale route content and breaks child animations on re-entry.
 	return (
-		<AnimatePresence>
-			<motion.div
-				key={pathname}
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				exit={undefined} // Disable exit animation for no fade-out
-				transition={{ duration: 0.7, ease: "easeInOut" }}>
-				{children}
-			</motion.div>
-		</AnimatePresence>
+		<motion.div
+			key={pathname}
+			className="flex flex-1 flex-col"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.3, ease: "easeInOut" }}>
+			{children}
+		</motion.div>
 	);
 }

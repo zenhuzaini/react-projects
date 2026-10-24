@@ -1,9 +1,32 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+
+const securityHeaders = [
+	{ key: "X-Content-Type-Options", value: "nosniff" },
+	{ key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+	{ key: "X-Frame-Options", value: "SAMEORIGIN" },
+	{
+		key: "Strict-Transport-Security",
+		value: "max-age=63072000; includeSubDomains",
+	},
+	// The map's "locate me" control needs geolocation for this origin only.
+	{
+		key: "Permissions-Policy",
+		value: "camera=(), microphone=(), geolocation=(self)",
+	},
+];
+
 const nextConfig: NextConfig = {
+	poweredByHeader: false,
+	async headers() {
+		return [{ source: "/:path*", headers: securityHeaders }];
+	},
 	// cacheComponents: true,
-	allowedDevOrigins: ["https://heyzenex.pl", "https://www.heyzenex.pl"],
+	allowedDevOrigins: siteUrl
+		? [siteUrl, siteUrl.replace("://", "://www.")]
+		: [],
 	images: {
 		remotePatterns: [
 			{

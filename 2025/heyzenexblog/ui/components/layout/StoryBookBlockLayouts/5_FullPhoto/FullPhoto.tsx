@@ -1,14 +1,8 @@
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
-import { photoMock, photoMockStatic } from "@/mock/photo";
 import { PhotoCardDetailType } from "@/types/components";
-import { faker } from "@faker-js/faker";
 import React from "react";
 
-const FullPhoto = ({
-	photo = photoMockStatic[0],
-}: {
-	photo: PhotoCardDetailType;
-}) => {
+const FullPhoto = ({ photo }: { photo: PhotoCardDetailType }) => {
 	return (
 		<div className="grid grid-cols-1  h-full w-full ">
 			{/* Right text */}

@@ -1,6 +1,24 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+.related-posts-scroller {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-primaryaccent) transparent;
+}
+
+.related-posts-scroller::-webkit-scrollbar {
+	height: 8px;
+}
+
+.related-posts-scroller::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.related-posts-scroller::-webkit-scrollbar-thumb {
+	border-radius: 9999px;
+	background-color: var(--color-primaryaccent);
+}
+
 /* this needs to be added for dark or light */
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -196,6 +214,12 @@
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
+	}
+
+	/* Playground panels stay light in dark mode, so their text must stay dark. */
+	.playground-form .bg-primarywhite {
+		--color-primaryText: var(--color-primaryebony);
+		color: var(--color-primaryebony);
 	}
 
 	h1,

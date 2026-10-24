@@ -1,5 +1,4 @@
 import { ChecklistItem } from "@/types/components";
-import { ReactNode } from "react";
 
 export default function Checklist({ items }: { items: ChecklistItem[] }) {
 	return (

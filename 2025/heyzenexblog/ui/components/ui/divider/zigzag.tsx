@@ -15,7 +15,7 @@ export const ZigzagCurveDivider = ({
 		const upDown = index % 2 == 0 ? 40 : 0;
 		currentStartTop = currentStartTop + 40;
 		currentStopValue = currentStopValue + 40;
-		let newDot = `Q ${currentStartTop} ${upDown}, ${currentStopValue} 20`;
+		const newDot = `Q ${currentStartTop} ${upDown}, ${currentStopValue} 20`;
 
 		zigzagPathLength += newDot;
 	}

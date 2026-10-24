@@ -32,14 +32,24 @@ export type StoryContentType = {
 	sectionID: string;
 	textContent: string;
 	photoUrls: PhotoCardDetailType[];
+	items?: { label: string; done?: boolean }[];
+	url?: string;
+	center?: [number, number];
+	route?: [number, number][];
+	shouldShowDownloadGPX?: boolean;
+	title?: string;
+	rawMdx?: string;
+	relatedStorySlugs?: string[];
 };
 
 export type MainStoryBookPageProps = {
+	storySlug?: string;
 	storyCover: string;
 	createdAt: string;
 	storyId: string;
 	storyTitle: string;
 	storyDescription: string;
+	storyTags?: string[];
 	storyPhotoUrls: PhotoCardDetailType[];
 	storyContent: StoryContentType[];
 	totalView: number;

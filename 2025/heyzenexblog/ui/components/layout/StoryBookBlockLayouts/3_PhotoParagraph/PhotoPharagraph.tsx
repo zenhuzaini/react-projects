@@ -1,10 +1,9 @@
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { EMPTY_STRING } from "@/const/vars";
-import { photoMockStatic } from "@/mock/photo";
 import { PhotoCardDetailType } from "@/types/components";
 
 const PhotoPharagraph = ({
-	photo = photoMockStatic[0],
+	photo,
 	text = EMPTY_STRING,
 }: {
 	text: string;

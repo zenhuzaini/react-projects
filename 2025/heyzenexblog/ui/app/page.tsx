@@ -1,3 +1,4 @@
+import { animationForLift } from "@/animation/animation";
 import Hero from "@/components/layout/HomepageBlockLayouts/Hero";
 import PhotoCardsSection from "@/components/layout/HomepageBlockLayouts/PhotoCards";
 import SeeMore from "@/components/layout/HomepageBlockLayouts/SeeMore";
@@ -15,11 +16,17 @@ export default async function Home() {
 			<div className="mt-8 sm:mt-5 flex flex-col gap-10 sm:gap-15">
 				<div className="flex flex-col gap-5 sm:gap-10">
 					<StoryPost stories={story.stories}></StoryPost>
-					<div className="flex justify-end">
+					<div className={`flex justify-end ${animationForLift}`}>
 						<SeeMore url={"/storybook"}></SeeMore>
 					</div>
 				</div>
-				<PhotoCardsSection photoStory={photoStory.stories}></PhotoCardsSection>
+				<div className="flex flex-col gap-5 sm:gap-10">
+					<PhotoCardsSection
+						photoStory={photoStory.stories}></PhotoCardsSection>
+					<div className={`flex justify-end ${animationForLift}`}>
+						<SeeMore url={"/photobook"}></SeeMore>
+					</div>
+				</div>
 			</div>
 		</>
 	);

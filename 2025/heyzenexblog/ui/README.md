@@ -24,8 +24,55 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Publishing Story Drafts
+
+The Story Builder's Publish action creates or updates an MDX file in
+`2025/heyzenexblog/ui/contents/mystorybook` on the configured GitHub branch.
+The server needs these environment variables:
+
+- `GITHUB_TOKEN`: a fine-grained GitHub token with Contents read/write access to
+  `zenhuzaini/react-projects`.
+- `PUBLISH_SECRET`: a random key of at least 32 characters entered in the Publish dialog. It is not
+  stored by the browser or sent to GitHub.
+- `CLOUDINARY_URL`: the server-only Cloudinary URL containing the account name,
+  API key, and API secret. Never use a `NEXT_PUBLIC_` prefix or commit this value.
+- `GITHUB_BRANCH`: optional; defaults to `main`.
+- `GITHUB_REPOSITORY`: optional; defaults to `zenhuzaini/react-projects`.
+- `NEXT_PUBLIC_DISQUS_SHORTNAME`: the Disqus shortname used for StoryBook and
+  PhotoBook comments. Set it in `.env.local` for local development. Because it
+  uses the `NEXT_PUBLIC_` prefix, provide it before building the app.
+- `NEXT_PUBLIC_SITE_URL`: the public site origin (for example
+  `https://heyzenex.pl`, no trailing slash) used for canonical URLs, Open Graph,
+  the sitemap and robots. Required at build time.
+
+For local development, fill in the blank values in the ignored `.env.local`
+template, then restart the Next.js server. Do not add real secrets to
+`manifest.yml` or commit them.
+The `dev` and `start` scripts use Node's system CA store (`--use-system-ca`) so
+TLS works in environments whose trusted certificates are installed at the OS
+level. Use a Node version that supports this option (Node 22.15 or newer).
+
+The Story Builder's image optimization selector applies an incoming quality
+transformation to new uploads: `auto:eco` prioritizes smaller files,
+`auto:good` is balanced, and `auto:best` prioritizes image detail. This changes
+the stored Cloudinary image; existing images are unchanged. Delivery uses
+`f_auto` to choose an efficient format for the visitor's browser.
+
+For Cloud Foundry, set the server environment and restage the app:
+
+```bash
+cf set-env heyzenex GITHUB_TOKEN "<fine-grained-token>"
+cf set-env heyzenex PUBLISH_SECRET "$(openssl rand -hex 32)"
+cf set-env heyzenex CLOUDINARY_URL "cloudinary://<api-key>:<api-secret>@<cloud-name>"
+cf set-env heyzenex GITHUB_BRANCH main
+cf set-env heyzenex GITHUB_REPOSITORY zenhuzaini/react-projects
+cf set-env heyzenex NEXT_PUBLIC_DISQUS_SHORTNAME "<disqus-shortname>"
+cf set-env heyzenex NEXT_PUBLIC_SITE_URL "https://heyzenex.pl"
+cf restage heyzenex
+```
+
+Never commit the token or publisher key. Publishing commits directly to the
+configured branch, so that branch must allow the app's GitHub token to write.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 

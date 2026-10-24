@@ -20,7 +20,7 @@ import AtSymbol from "@/icons/AtSymbol";
 import { storyContentsMock } from "@/mock/storyContent";
 import MyJsonEditor from "@/components/ui/jsonEditor";
 import { PhotoCardDetailType, StoryContentType } from "@/types/components";
-import { photoMockStatic } from "@/mock/photo";
+import { photoMockStatic } from "@/mock/photoStatic";
 import CheckSymbol from "@/icons/CheckSymbol";
 import { useEffect, useState } from "react";
 import InputWithIconAndValidation from "@/components/molecule/inputs/InputWithIconAndValidation";

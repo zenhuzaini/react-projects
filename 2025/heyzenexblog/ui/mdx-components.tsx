@@ -17,6 +17,8 @@ import ItemList from "./components/layout/StoryBookBlockLayouts/Lists/ItemLists"
 import HastagSymbol from "./icons/Hastag";
 import { AccordionComponent } from "./components/molecule/Accordion/Accordion";
 import { IframeWithLoader } from "./components/molecule/Iframe/IframeWithLoader";
+import MapWithDescription from "./components/layout/StoryBookBlockLayouts/10_MapDescription/MapWithDescription";
+import RelatedPosts from "./components/molecule/RelatedPosts";
 
 const components: MDXComponents = {
 	Par: (props) => {
@@ -117,6 +119,16 @@ const components: MDXComponents = {
 	IframeWithLoader: ({ url }: { url: string }) => {
 		return <IframeWithLoader src={url}></IframeWithLoader>;
 	},
+	MapWithDescription: (props) => <MapWithDescription {...props} />,
+	RelatedPosts: (props) => (
+		<RelatedPosts
+			{...(props as {
+				slugs: string[];
+				title?: string;
+				currentSlug?: string;
+			})}
+		/>
+	),
 } satisfies MDXComponents;
 
 export function useMDXComponents(): MDXComponents {

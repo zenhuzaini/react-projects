@@ -10,18 +10,34 @@ import Link from "next/link";
 import TerminalIcon from "@/icons/TerminalIcon";
 import { motion } from "framer-motion";
 import LightDarkSwitcher from "@/components/molecule/Switch/LightDarkSwitcher";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "radix-ui";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const NAV_LINKS = [
+	{ href: "/", label: "Home" },
+	{ href: "/photobook", label: "PhotoBook" },
+	{ href: "/storybook", label: "StoryBook" },
+	{ href: "/me/about", label: "Me" },
+];
+
+const PLAYGROUND_LINKS = [
+	{ href: "/playground/mystory", label: "StoryBook" },
+	{ href: "/playground/myphotobook", label: "PhotoBook" },
+	{ href: "/playground/settings", label: "Settings" },
+];
 
 const Header = () => {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 	const [isDark, setIsDark] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
-	const [lastScrollY, setLastScrollY] = useState(0);
+	const lastScrollYRef = useRef(0);
 	const [bg, setBG] = useState("");
 	const [hovered, setHovered] = useState(false);
-	const [isMobile, setIsMobile] = useState(false);
-	const [isAdventureMode, setIsAdventureMode] = useState(false);
 
 	const toggleDarkMode = () => {
 		const html = document.documentElement;
@@ -49,14 +65,14 @@ const Header = () => {
 			const currentScrollY = window.scrollY;
 			if (!ticking) {
 				window.requestAnimationFrame(() => {
-					if (currentScrollY < 80 || currentScrollY < lastScrollY) {
+					if (currentScrollY < 80 || currentScrollY < lastScrollYRef.current) {
 						setShowHeader(true);
 						setBG("bg-mybackground");
 					} else {
 						setShowHeader(false);
-						if (isBurgerMenuOpen) setIsBurgerMenuOpen(false);
+						setIsBurgerMenuOpen(false);
 					}
-					setLastScrollY(currentScrollY);
+					lastScrollYRef.current = currentScrollY;
 					ticking = false;
 				});
 				ticking = true;
@@ -64,16 +80,6 @@ const Header = () => {
 		}
 		window.addEventListener("scroll", handleScroll);
 		return () => window.removeEventListener("scroll", handleScroll);
-	}, [lastScrollY, isBurgerMenuOpen]);
-
-	useEffect(() => {
-		const pathname = window.location.pathname;
-		setIsAdventureMode(pathname.includes("/storybook"));
-
-		const handleResize = () => setIsMobile(window.innerWidth < 640);
-		handleResize();
-		window.addEventListener("resize", handleResize);
-		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	// -----------------------
@@ -98,28 +104,19 @@ const Header = () => {
 		// Recalculate on resize
 		window.addEventListener("resize", updateShift);
 
-		// Use ResizeObserver so changes in font or layout also update the measurement
-		let ro: ResizeObserver | null = null;
-		try {
-			ro = new ResizeObserver(updateShift);
-			if (logoContainerRef.current) ro.observe(logoContainerRef.current);
-			if (secondLogoRef.current) ro.observe(secondLogoRef.current);
-		} catch (e) {
-			// ResizeObserver isn't supported -> fallback handled by window resize
-		}
+		// ResizeObserver is available in all supported browsers.
+		const ro = new ResizeObserver(updateShift);
+		const container = logoContainerRef.current;
+		const secondLogo = secondLogoRef.current;
+		if (container) ro.observe(container);
+		if (secondLogo) ro.observe(secondLogo);
 
 		// Minor safeguard: recalc after fonts load (some custom fonts change metrics)
 		const t = setTimeout(updateShift, 300);
 
 		return () => {
 			window.removeEventListener("resize", updateShift);
-			if (ro) {
-				try {
-					if (logoContainerRef.current) ro.unobserve(logoContainerRef.current);
-					if (secondLogoRef.current) ro.unobserve(secondLogoRef.current);
-					ro.disconnect();
-				} catch (e) {}
-			}
+			ro.disconnect();
 			clearTimeout(t);
 		};
 	}, []);
@@ -132,10 +129,7 @@ const Header = () => {
 				lg:rounded-br-2xl ml-4 mr-4 sm:ml-20 sm:mr-20 sticky top-0 z-50
 				${showHeader ? "translate-y-0 " + bg : "-translate-y-full"}
       `}>
-			<div
-				className={`flex items-center col-span ${
-					isMobile && "col-start-1 col-end-4"
-				}`}>
+			<div className="flex items-center max-sm:col-start-1 max-sm:col-end-4">
 				<Link href={"/"}>
 					<div
 						onMouseEnter={() => setHovered(true)}
@@ -183,18 +177,11 @@ const Header = () => {
 
 			<div className="hidden lg:flex col-span-2 col-start-2 col-end-4 place-self-center">
 				<nav className="flex gap-4 text-primaryText">
-					<Link href="/" className="block py-2 ">
-						Home
-					</Link>
-					<Link href="/error/construction" className="block py-2 ">
-						PhotoBook
-					</Link>
-					<Link href="/storybook" className="block py-2">
-						StoryBook
-					</Link>
-					<Link href="/me/about" className="block py-2">
-						Me
-					</Link>
+					{NAV_LINKS.map(({ href, label }) => (
+						<Link key={href} href={href} className="block py-2">
+							{label}
+						</Link>
+					))}
 				</nav>
 			</div>
 
@@ -216,45 +203,45 @@ const Header = () => {
 						!isBurgerMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"
 					}`}>
 					<nav className="text-primaryText">
-						<Link
-							href="/"
-							className="block py-2 "
-							onClick={() => setIsBurgerMenuOpen(false)}>
-							Home
-						</Link>
-						<Link
-							href="/error/construction"
-							className="block py-2 "
-							onClick={() => setIsBurgerMenuOpen(false)}>
-							PhotoBook
-						</Link>
-						<Link
-							href="/storybook"
-							className="block py-2 "
-							onClick={() => setIsBurgerMenuOpen(false)}>
-							StoryBook
-						</Link>
-						<Link
-							href="/me/about"
-							className="block py-2 "
-							onClick={() => setIsBurgerMenuOpen(false)}>
-							Me
-						</Link>
+						{NAV_LINKS.map(({ href, label }) => (
+							<Link
+								key={href}
+								href={href}
+								className="block py-2"
+								onClick={() => setIsBurgerMenuOpen(false)}>
+								{label}
+							</Link>
+						))}
 					</nav>
 				</div>
 			</div>
 
 			{/* Desktop switch */}
 			<div className="hidden lg:flex col-start-7">
-				<Link href="/playground/content" className="flex items-center gap-1 ">
-					<div>
-						<TerminalIcon size={5}></TerminalIcon>
-					</div>
-					<span>
-						playground
-						<span className="text-dot font-extrabold">.</span>
-					</span>
-				</Link>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<div className="flex items-center gap-1 text-primaryText">
+							<div>
+								<TerminalIcon size={5}></TerminalIcon>
+							</div>
+							<span>
+								playground
+								<span className="text-dot font-extrabold">.</span>
+							</span>
+						</div>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent className="w-9" align="start">
+						<DropdownMenuGroup>
+							{PLAYGROUND_LINKS.map(({ href, label }) => (
+								<DropdownMenuItem key={href}>
+									<Link href={href} className="text-primaryebony">
+										{label}
+									</Link>
+								</DropdownMenuItem>
+							))}
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 			<div className="hidden lg:flex col-start-8 col-end-8 justify-center items-center bg-primaryaccent rounded-b-2xl">
 				<div className="flex gap-3 items-center">

@@ -1,24 +1,18 @@
-import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
+import type { Metadata } from "next";
 import { getPaginatedStoryMetas } from "@/lib/storybook";
-import Link from "next/link";
+import { createBaseMetadata } from "@/lib/seo";
+import StoryBookGallery from "./StoryBookGallery";
 
-const page = async () => {
-	const story = await getPaginatedStoryMetas(1, 50);
-	const stories = story.stories.map((story, idx) => {
-		return (
-			<li key={story.slug} className="flex gap-3">
-				<span>{idx}.</span>
-				<Link href={`/storybook/${story.slug}`}>{story.title}</Link>
-			</li>
-		);
-	});
-	return (
-		<div className="text-primarytextInvert flex flex-col gap-2">
-			<SectionTitle left={"My"} right={"STORIES"}></SectionTitle>
+export const metadata: Metadata = createBaseMetadata({
+	title: "Storybook",
+	description:
+		"Travel, hiking and bikepacking stories written by Zen Huzaini.",
+	path: "/storybook",
+});
 
-			<ul>{stories}</ul>
-		</div>
-	);
+const StoryBookIndexPage = async () => {
+	const result = await getPaginatedStoryMetas(1, 1000);
+	return <StoryBookGallery stories={result.stories} />;
 };
 
-export default page;
+export default StoryBookIndexPage;

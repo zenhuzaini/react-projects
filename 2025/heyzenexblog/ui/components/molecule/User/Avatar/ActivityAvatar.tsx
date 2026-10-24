@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatDate } from "@/lib/utils";
 
 type Variant = "default" | "light" | "dark";
 const ActivityAvatar = ({
@@ -22,14 +23,7 @@ const ActivityAvatar = ({
 	variant?: Variant;
 	// noAvatar?: boolean;
 }) => {
-	const date = new Date(publishedDate);
-
-	const formattedDate = date.toLocaleDateString("en-US", {
-		weekday: "short",
-		month: "short",
-		day: "2-digit",
-		year: "numeric",
-	});
+	const formattedDate = formatDate(publishedDate);
 
 	let textVariant;
 	let textAccentVariant;
@@ -82,7 +76,7 @@ const ActivityAvatar = ({
 						</span>
 
 						<span className="flex items-center gap-1">
-							<span className={`rounded-3xl h-3 w-0.5 bg-dot ${textVariant}`} />
+							<span className={`rounded-3xl h-4 w-0.5 bg-dot ${textVariant}`} />
 							<span className={`${textVariant} font-extralight`}>
 								{formattedDate}
 							</span>

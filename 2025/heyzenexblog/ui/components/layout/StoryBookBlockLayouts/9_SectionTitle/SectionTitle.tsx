@@ -1,18 +1,15 @@
-import { ZigzagCurveDivider } from "@/components/ui/divider/zigzag";
+import { slugify } from "@/lib/slug";
 
 const SectionTitle = ({ text }: { text: string }) => {
 	return (
-		<div>
-			<div className="items-center">
-				<h2 className="flex col-span-2 gap-2 sm:items-center">
-					<div className="text-primaryText text-3xl sm:text-2xl font-light  ">
-						{text}
-						<span className="text-dot">.</span>
-					</div>
-				</h2>
-			</div>
-			<div className="sm:flex justify-end items-center w-[10vw]">
-				<div className="bg-primaryaccent w-full h-1 rounded-2xl"></div>
+		<div id={slugify(text)} className="flex w-full scroll-mt-24 flex-col gap-3">
+			<h2 className="text-2xl font-semibold leading-tight text-primaryText sm:text-3xl">
+				{text}
+				<span className="text-dot">.</span>
+			</h2>
+			<div aria-hidden="true" className="flex w-full items-center gap-3">
+				<span className="h-1.5 w-12 shrink-0 rounded-full bg-primaryaccent" />
+				<span className="h-px flex-1 bg-primaryaccent/25" />
 			</div>
 		</div>
 	);
