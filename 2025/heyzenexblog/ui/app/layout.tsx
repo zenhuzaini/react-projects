@@ -9,7 +9,7 @@ import PageTransition from "@/animation/PageTransition";
 import { createBaseMetadata } from "../lib/seo";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/toast";
-import { SpeedInsights } from "@vercel/speed-insights/nuxt/runtime";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = createBaseMetadata({
 	title: "Zen Huzaini's Photography and Travel Blog",
