@@ -80,7 +80,7 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					<div className="absolute bottom-0 left-0 m-4 w-3/4 max-w-2xl sm:m-5">
 						<div
 							className={` h-fit w-fit rounded-2xl p-1 ${animationForArrow}`}>
-							<h1 className="wrap-break-words text-2xl font-extrabold leading-[0.95] text-accenttext sm:text-4xl md:text-5xl">
+							<h1 className="wrap-break-words text-2xl font-extrabold leading-[0.8] text-accenttext sm:text-4xl md:text-5xl">
 								{metadata.title}
 								<span className="text-dot">.</span>
 							</h1>
