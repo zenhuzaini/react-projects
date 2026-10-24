@@ -111,6 +111,11 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					</div>
 					{/* Tags */}
 				</div>
+				<SeriesNav
+					series={post.series}
+					posts={seriesPosts}
+					currentSlug={slug}
+				/>
 			</section>
 
 			{/* content */}
@@ -122,12 +127,6 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 				<Content></Content>
 
 				<TagList tags={metadata.tags} />
-
-				<SeriesNav
-					series={post.series}
-					posts={seriesPosts}
-					currentSlug={slug}
-				/>
 
 				<DisqusComments
 					identifier={`storybook/${metadata.slug}`}
