@@ -1,4 +1,10 @@
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import Mountains from "@/icons/Mountains";
 import type { Post } from "@/lib/posts";
 
@@ -21,35 +27,37 @@ const SeriesNav = ({
 			aria-label={`${series} series`}
 			className="flex items-start gap-3 text-sm text-primaryText/80">
 			<Mountains size={6} className="mt-1 shrink-0 text-primaryText" />
-			<details className="group min-w-0 border-l-2 border-primaryaccent/60 pl-3">
-				<summary className="flex cursor-pointer list-none items-center gap-2 py-1 marker:hidden [&::-webkit-details-marker]:hidden">
+			<Collapsible className="min-w-0 border-l-2 rounded-xs border-dot pl-3">
+				<CollapsibleTrigger className="group flex cursor-pointer items-center gap-2 py-1 text-left">
 					<span>
 						<span className="font-semibold text-primaryaccent">{series}</span>
 						{" · "}
 						{position > 0 ? `Part ${position} of ${posts.length}` : "Series"}
 					</span>
-					<span
+					<ChevronDown
+						size={14}
 						aria-hidden="true"
-						className="text-xs transition-transform group-open:rotate-180">
-						▾
-					</span>
-				</summary>
-				<ol className="mt-1 flex list-decimal flex-col gap-1 pb-1 pl-5">
-					{posts.map((post) => (
-						<li key={post.slug}>
-							{post.slug === currentSlug ? (
-								<span aria-current="page" className="font-semibold">
-									{post.title}
-								</span>
-							) : (
-								<Link href={post.href} className="hover:underline">
-									{post.title}
-								</Link>
-							)}
-						</li>
-					))}
-				</ol>
-			</details>
+						className="transition-transform group-data-panel-open:rotate-180"
+					/>
+				</CollapsibleTrigger>
+				<CollapsibleContent>
+					<ol className="mt-1 flex list-decimal flex-col gap-1 pb-1 pl-5">
+						{posts.map((post) => (
+							<li key={post.slug}>
+								{post.slug === currentSlug ? (
+									<span aria-current="page" className="font-semibold">
+										{post.title}
+									</span>
+								) : (
+									<Link href={post.href} className="hover:underline">
+										{post.title}
+									</Link>
+								)}
+							</li>
+						))}
+					</ol>
+				</CollapsibleContent>
+			</Collapsible>
 		</nav>
 	);
 };

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { animationForLift } from "@/animation/animation";
 import { getAllTags } from "@/lib/posts";
 import { createBaseMetadata } from "@/lib/seo";
 
@@ -22,7 +23,7 @@ const TagsPage = async () => {
 					<li key={slug}>
 						<Link
 							href={`/tags/${slug}`}
-							className="inline-block rounded-2xl border border-primaryaccent px-4 py-2 text-primaryText transition-transform duration-300 hover:-translate-y-0.5">
+							className={`inline-block rounded-2xl border border-primaryaccent px-4 py-2 text-primaryText ${animationForLift}`}>
 							<span className="text-dot">#</span>
 							{label}{" "}
 							<span className="text-sm text-primaryText/70">({count})</span>

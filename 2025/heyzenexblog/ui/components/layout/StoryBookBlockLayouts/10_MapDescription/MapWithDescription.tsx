@@ -4,6 +4,7 @@ import { Download } from "lucide-react";
 import dynamic from "next/dynamic";
 import { LatLngExpression } from "leaflet";
 import type { LatLngTuple } from "leaflet";
+import { animationForLift } from "@/animation/animation";
 
 const BasicMap = dynamic(() => import("@/components/molecule/Map/BasicMap"), {
 	ssr: false,
@@ -84,7 +85,7 @@ const MapWithDescription = ({
 						<button
 							type="button"
 							onClick={downloadGpx}
-							className="inline-flex shrink-0 items-center gap-2 rounded-md bg-primaryaccent px-3 py-2 text-sm font-semibold text-primarycream hover:brightness-95">
+							className={`inline-flex shrink-0 items-center gap-2 rounded-md bg-primaryaccent px-3 py-2 text-sm font-semibold text-primarycream ${animationForLift}`}>
 							<Download size={15} /> GPX
 						</button>
 					)}

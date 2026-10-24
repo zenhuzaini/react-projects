@@ -8,6 +8,7 @@ import Search from "@/components/molecule/inputs/Search";
 import Select from "@/components/molecule/inputs/Select";
 import SectionTitle from "@/components/layout/HomepageBlockLayouts/SectionTitle";
 import { TEXT } from "@/const/text";
+import { animationForLift } from "@/animation/animation";
 import type { StoryBookMeta } from "@/types/data";
 
 const PAGE_SIZE = 3;
@@ -175,7 +176,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 							aria-label="Previous page"
 							disabled={currentPage === 1}
 							onClick={() => setPage((value) => Math.max(1, value - 1))}
-							className="inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText transition-colors hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40">
+							className={`inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40 ${animationForLift}`}>
 							<ChevronLeft size={18} />
 						</button>
 						<span
@@ -188,7 +189,7 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 							aria-label="Next page"
 							disabled={currentPage === pageCount}
 							onClick={() => setPage((value) => Math.min(pageCount, value + 1))}
-							className="inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText transition-colors hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40">
+							className={`inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40 ${animationForLift}`}>
 							<ChevronRight size={18} />
 						</button>
 					</div>

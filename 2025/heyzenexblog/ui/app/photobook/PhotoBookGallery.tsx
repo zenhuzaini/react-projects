@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDownUp, ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import Link from "next/link";
+import { animationForLift } from "@/animation/animation";
 import PhotoCards from "@/components/molecule/Cards/PhotoCards";
 import Search from "@/components/molecule/inputs/Search";
 import Select from "@/components/molecule/inputs/Select";
@@ -207,7 +208,7 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 							aria-label="Previous page"
 							disabled={currentPage === 1}
 							onClick={() => setPage((value) => Math.max(1, value - 1))}
-							className="inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText transition-colors hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40">
+							className={`inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40 ${animationForLift}`}>
 							<ChevronLeft size={18} />
 						</button>
 						<span
@@ -220,7 +221,7 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 							aria-label="Next page"
 							disabled={currentPage === pageCount}
 							onClick={() => setPage((value) => Math.min(pageCount, value + 1))}
-							className="inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText transition-colors hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40">
+							className={`inline-flex size-10 items-center justify-center rounded-md border border-primarybrown/25 text-primaryText hover:bg-primarywhite disabled:cursor-not-allowed disabled:opacity-40 ${animationForLift}`}>
 							<ChevronRight size={18} />
 						</button>
 					</div>

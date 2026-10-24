@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { animationForLift } from "@/animation/animation";
 import Chip from "@/components/ui/chip";
 import { tagSlug } from "@/lib/slug";
 
@@ -15,7 +16,7 @@ const TagList = ({ tags }: { tags: string[] }) => {
 					<li key={tag}>
 						<Link
 							href={`/tags/${tagSlug(tag)}`}
-							className="block transition-transform duration-300 hover:-translate-y-0.5">
+							className={`block ${animationForLift}`}>
 							<Chip text={tag} />
 						</Link>
 					</li>
