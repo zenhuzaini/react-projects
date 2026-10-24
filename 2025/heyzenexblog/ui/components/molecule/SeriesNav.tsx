@@ -12,14 +12,18 @@ const SeriesNav = ({
 }) => {
 	if (!series || posts.length < 2) return null;
 
+	const position = posts.findIndex((post) => post.slug === currentSlug) + 1;
+
+	// Sits after the story so it works as a "keep reading" list rather than an interruption.
 	return (
 		<nav
 			aria-label={`${series} series`}
-			className="rounded-2xl border border-primaryaccent p-4">
-			<p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primaryaccent">
-				Part of the series: {series}
+			className="border-t border-primaryaccent/30 pt-4 text-sm text-primaryText/80">
+			<p className="mb-2">
+				<span className="font-semibold text-primaryaccent">{series}</span>
+				{position > 0 && ` · Part ${position} of ${posts.length}`}
 			</p>
-			<ol className="flex list-decimal flex-col gap-1 pl-5 text-primaryText">
+			<ol className="flex list-decimal flex-col gap-1 pl-5">
 				{posts.map((post) => (
 					<li key={post.slug}>
 						{post.slug === currentSlug ? (

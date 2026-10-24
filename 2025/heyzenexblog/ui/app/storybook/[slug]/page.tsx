@@ -1,4 +1,5 @@
 import { animationForArrow } from "@/animation/animation";
+import { Clock } from "lucide-react";
 import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import EyeSymbol from "@/icons/EyeSymbol";
 import HeartOutlined from "@/icons/HeartOutlined";
@@ -85,13 +86,14 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					</div>
 				</div>
 				{/* Stats */}
-				<div className="flex justify-between">
+				<div className="flex items-center justify-between">
 					<ActivityAvatar
 						activityType={metadata.activityType}
 						alt="User Avatar"
 						avatarName="Zen"
 						publishedDate={formattedActivityDate}></ActivityAvatar>
-					<span className="text-sm text-primarytextInvert">
+					<span className="flex items-center gap-1 text-xs font-extralight tracking-tight text-primarytextInvert md:text-sm">
+						<Clock size={14} aria-hidden="true" />
 						{readingMinutes} min read
 					</span>
 					{/* love stats */}
@@ -113,15 +115,19 @@ const Story = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
 			{/* content */}
 			<section className="lg:ml-[20%] lg:mr-[20%] flex flex-col gap-2 sm:gap-5 mt-[3%] rounded-3xl dark:bg-transparent ">
+				<div className="hidden justify-center lg:flex">
+					<TableOfContents headings={headings} />
+				</div>
+
+				<Content></Content>
+
+				<TagList tags={metadata.tags} />
+
 				<SeriesNav
 					series={post.series}
 					posts={seriesPosts}
 					currentSlug={slug}
 				/>
-				<TableOfContents headings={headings} />
-				<Content></Content>
-
-				<TagList tags={metadata.tags} />
 
 				<DisqusComments
 					identifier={`storybook/${metadata.slug}`}
