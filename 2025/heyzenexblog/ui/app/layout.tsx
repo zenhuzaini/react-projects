@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/layout/MainSections/Footer";
 import Header from "@/components/layout/MainSections/Header";
 import ScrollToTop from "@/components/layout/OtherLayouts/ScrollToTop";
+import AccentThemeLoader from "@/components/layout/OtherLayouts/AccentThemeLoader";
 import { schibstedGrotesk } from "@/components/ui/fonts";
 import PageTransition from "@/animation/PageTransition";
 import { createBaseMetadata } from "../lib/seo";
@@ -35,6 +36,7 @@ export default function RootLayout({
 			{/* add this if there will be scrollbar horizontal in the bottom overflow-x-hidden  */}
 			<body className={`${schibstedGrotesk.className}  antialiased`}>
 				<ScrollToTop />
+				<AccentThemeLoader />
 				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen">
 					<Header></Header>
 					<PageTransition>

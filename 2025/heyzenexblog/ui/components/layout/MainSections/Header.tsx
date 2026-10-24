@@ -281,6 +281,11 @@ const Header = () => {
 									PhotoBook
 								</Link>
 							</DropdownMenuItem>
+							<DropdownMenuItem>
+								<Link href="/playground/settings" className="text-primaryebony">
+									Settings
+								</Link>
+							</DropdownMenuItem>
 						</DropdownMenuGroup>
 					</DropdownMenuContent>
 				</DropdownMenu>
