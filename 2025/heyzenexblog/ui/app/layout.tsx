@@ -9,6 +9,7 @@ import PageTransition from "@/animation/PageTransition";
 import { createBaseMetadata } from "../lib/seo";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/toast";
+import { SpeedInsights } from "@vercel/speed-insights/nuxt/runtime";
 
 export const metadata: Metadata = createBaseMetadata({
 	title: "Zen Huzaini's Photography and Travel Blog",
@@ -37,6 +38,7 @@ export default function RootLayout({
 			<body className={`${schibstedGrotesk.className}  antialiased`}>
 				<ScrollToTop />
 				<AccentThemeLoader />
+				<SpeedInsights />
 				<div className="flex flex-col gap-5 sm:gap-10 min-h-screen">
 					<Header></Header>
 					<PageTransition>
