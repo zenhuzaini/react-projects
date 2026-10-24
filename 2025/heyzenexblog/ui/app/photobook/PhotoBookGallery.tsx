@@ -82,69 +82,71 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 
 	return (
 		<section className="flex flex-col gap-4 sm:gap-5">
-			<SectionTitle left="My" right="PHOTOBOOK" />
+			<div className="flex flex-col md:flex-row md:justify-between gap-4 sm:gap-5">
+				<SectionTitle left="My" right="PHOTOBOOK" />
 
-			<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-				<Search
-					value={query}
-					onValueChange={(value) => {
-						setQuery(value);
-						setPage(1);
-					}}
-					placeholder={TEXT.photobook.searchPlaceholder}
-					ariaLabel={TEXT.photobook.searchAriaLabel}
-					inputClassName="border-primarybrown/25 text-primaryText placeholder:text-primarygrey/80 focus:border-secondaryforestgreen"
-					clearButtonClassName="text-primarygrey hover:bg-secondarywhite hover:text-primaryText"
-				/>
-				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
-					<div className="min-w-0">
-						<Select
-							ariaLabel={TEXT.photobook.sortAriaLabel}
-							items={[
-								{ label: TEXT.common.latestFirst, value: "latest" },
-								{ label: TEXT.common.oldestFirst, value: "oldest" },
-							]}
-							value={sortOrder}
-							onValueChange={(value) => {
-								if (value !== null) setSortOrder(value as SortOrder);
-								setPage(1);
-							}}
-							formatValue={(value) =>
-								value === "oldest"
-									? TEXT.photobook.sortOldestValue
-									: TEXT.photobook.sortLatestValue
-							}
-							leadingIcon={<ArrowDownUp size={15} aria-hidden="true" />}
-							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
-							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
-							contentClassName="text-primaryebony"
-						/>
-					</div>
-					<div className="min-w-0">
-						<Select
-							ariaLabel={TEXT.photobook.tagAriaLabel}
-							items={[
-								{ label: TEXT.common.allTags, value: "all" },
-								...tags.map((tag) => ({
-									label: `#${tag}`,
-									value: tag.toLowerCase(),
-								})),
-							]}
-							value={selectedTag}
-							onValueChange={(value) => {
-								if (value !== null) setSelectedTag(value);
-								setPage(1);
-							}}
-							formatValue={(value) =>
-								value === "all" || value === null
-									? TEXT.photobook.tagAllValue
-									: `${TEXT.photobook.tagValuePrefix}${value}`
-							}
-							leadingIcon={<Tag size={15} aria-hidden="true" />}
-							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
-							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
-							contentClassName="text-primaryebony"
-						/>
+				<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+					<Search
+						value={query}
+						onValueChange={(value) => {
+							setQuery(value);
+							setPage(1);
+						}}
+						placeholder={TEXT.photobook.searchPlaceholder}
+						ariaLabel={TEXT.photobook.searchAriaLabel}
+						inputClassName="border-primarybrown/25 text-primaryText placeholder:text-primarygrey/80 focus:border-secondaryforestgreen"
+						clearButtonClassName="text-primarygrey hover:bg-secondarywhite hover:text-primaryText"
+					/>
+					<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+						<div className="min-w-0">
+							<Select
+								ariaLabel={TEXT.photobook.sortAriaLabel}
+								items={[
+									{ label: TEXT.common.latestFirst, value: "latest" },
+									{ label: TEXT.common.oldestFirst, value: "oldest" },
+								]}
+								value={sortOrder}
+								onValueChange={(value) => {
+									if (value !== null) setSortOrder(value as SortOrder);
+									setPage(1);
+								}}
+								formatValue={(value) =>
+									value === "oldest"
+										? TEXT.photobook.sortOldestValue
+										: TEXT.photobook.sortLatestValue
+								}
+								leadingIcon={<ArrowDownUp size={15} aria-hidden="true" />}
+								triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+								valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
+								contentClassName="text-primaryebony"
+							/>
+						</div>
+						<div className="min-w-0">
+							<Select
+								ariaLabel={TEXT.photobook.tagAriaLabel}
+								items={[
+									{ label: TEXT.common.allTags, value: "all" },
+									...tags.map((tag) => ({
+										label: `#${tag}`,
+										value: tag.toLowerCase(),
+									})),
+								]}
+								value={selectedTag}
+								onValueChange={(value) => {
+									if (value !== null) setSelectedTag(value);
+									setPage(1);
+								}}
+								formatValue={(value) =>
+									value === "all" || value === null
+										? TEXT.photobook.tagAllValue
+										: `${TEXT.photobook.tagValuePrefix}${value}`
+								}
+								leadingIcon={<Tag size={15} aria-hidden="true" />}
+								triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+								valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
+								contentClassName="text-primaryebony"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>

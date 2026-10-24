@@ -59,70 +59,72 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 	);
 
 	return (
-		<section className="flex flex-col gap-5 sm:gap-8">
-			<SectionTitle left="My" right="STORIES" />
+		<section className="flex flex-col gap-4 sm:gap-5">
+			<div className="flex flex-col gap-4 sm:gap-5 md:flex-row md:justify-between">
+				<SectionTitle left="My" right="STORIES" />
 
-			<div className="flex flex-col gap-3 border-y border-primarybrown/20 py-4 lg:flex-row lg:items-center lg:justify-between">
-				<Search
-					value={query}
-					onValueChange={(value) => {
-						setQuery(value);
-						setPage(1);
-					}}
-					placeholder={TEXT.storybook.searchPlaceholder}
-					ariaLabel={TEXT.storybook.searchAriaLabel}
-					inputClassName="text-primaryebony placeholder:text-primaryebony/50 focus:border-primaryaccent"
-					clearButtonClassName="text-primaryebony hover:bg-primaryaccent hover:text-primarycream"
-				/>
-				<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center ">
-					<div className="min-w-0">
-						<Select
-							ariaLabel={TEXT.storybook.sortAriaLabel}
-							items={[
-								{ label: TEXT.common.latestFirst, value: "latest" },
-								{ label: TEXT.common.oldestFirst, value: "oldest" },
-							]}
-							value={sortOrder}
-							onValueChange={(value) => {
-								if (value !== null) setSortOrder(value as SortOrder);
-								setPage(1);
-							}}
-							formatValue={(value) =>
-								value === "oldest"
-									? TEXT.storybook.sortOldestValue
-									: TEXT.storybook.sortLatestValue
-							}
-							leadingIcon={<ArrowDownUp size={15} aria-hidden="true" />}
-							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
-							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
-							contentClassName="text-primaryebony"
-						/>
-					</div>
-					<div className="min-w-0">
-						<Select
-							ariaLabel={TEXT.storybook.tagAriaLabel}
-							items={[
-								{ label: TEXT.common.allTags, value: "all" },
-								...tags.map((tag) => ({
-									label: `#${tag}`,
-									value: tag.toLowerCase(),
-								})),
-							]}
-							value={selectedTag}
-							onValueChange={(value) => {
-								if (value !== null) setSelectedTag(value);
-								setPage(1);
-							}}
-							formatValue={(value) =>
-								value === "all" || value === null
-									? TEXT.storybook.tagAllValue
-									: `${TEXT.storybook.tagValuePrefix}${value}`
-							}
-							leadingIcon={<Tag size={15} aria-hidden="true" />}
-							triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
-							valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
-							contentClassName="text-primaryebony"
-						/>
+				<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+					<Search
+						value={query}
+						onValueChange={(value) => {
+							setQuery(value);
+							setPage(1);
+						}}
+						placeholder={TEXT.storybook.searchPlaceholder}
+						ariaLabel={TEXT.storybook.searchAriaLabel}
+						inputClassName="text-primaryebony placeholder:text-primaryebony/50 focus:border-primaryaccent"
+						clearButtonClassName="text-primaryebony hover:bg-primaryaccent hover:text-primarycream"
+					/>
+					<div className="grid grid-cols-2 gap-2 sm:flex sm:items-center ">
+						<div className="min-w-0">
+							<Select
+								ariaLabel={TEXT.storybook.sortAriaLabel}
+								items={[
+									{ label: TEXT.common.latestFirst, value: "latest" },
+									{ label: TEXT.common.oldestFirst, value: "oldest" },
+								]}
+								value={sortOrder}
+								onValueChange={(value) => {
+									if (value !== null) setSortOrder(value as SortOrder);
+									setPage(1);
+								}}
+								formatValue={(value) =>
+									value === "oldest"
+										? TEXT.storybook.sortOldestValue
+										: TEXT.storybook.sortLatestValue
+								}
+								leadingIcon={<ArrowDownUp size={15} aria-hidden="true" />}
+								triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+								valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
+								contentClassName="text-primaryebony"
+							/>
+						</div>
+						<div className="min-w-0">
+							<Select
+								ariaLabel={TEXT.storybook.tagAriaLabel}
+								items={[
+									{ label: TEXT.common.allTags, value: "all" },
+									...tags.map((tag) => ({
+										label: `#${tag}`,
+										value: tag.toLowerCase(),
+									})),
+								]}
+								value={selectedTag}
+								onValueChange={(value) => {
+									if (value !== null) setSelectedTag(value);
+									setPage(1);
+								}}
+								formatValue={(value) =>
+									value === "all" || value === null
+										? TEXT.storybook.tagAllValue
+										: `${TEXT.storybook.tagValuePrefix}${value}`
+								}
+								leadingIcon={<Tag size={15} aria-hidden="true" />}
+								triggerClassName="h-11 min-w-0 gap-1.5 px-2.5 text-xs text-primaryebony sm:min-w-36 sm:gap-2 sm:px-3 sm:text-sm"
+								valueClassName="min-w-0 flex-1 truncate whitespace-nowrap text-primaryebony"
+								contentClassName="text-primaryebony"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
