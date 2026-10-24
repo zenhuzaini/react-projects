@@ -483,7 +483,7 @@ const PhotoBookPlayground = () => {
 		});
 
 	return (
-		<main className="mx-auto w-full max-w-[1600px] pb-12 text-primaryText">
+		<main className="playground-form mx-auto w-full max-w-[1600px] pb-12 text-primaryText">
 			<header className="mb-7 flex flex-col gap-4 border-b border-primarybrown/20 pb-6 md:flex-row md:items-stretch">
 				<Heading
 					title="PhotoBook builder"

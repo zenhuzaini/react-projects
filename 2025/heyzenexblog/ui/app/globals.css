@@ -216,6 +216,12 @@
 		@apply border-border outline-ring/50;
 	}
 
+	/* Playground panels stay light in dark mode, so their text must stay dark. */
+	.playground-form .bg-primarywhite {
+		--color-primaryText: var(--color-primaryebony);
+		color: var(--color-primaryebony);
+	}
+
 	h1,
 	span {
 		@apply text-primaryText;
