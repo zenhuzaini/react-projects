@@ -41,6 +41,9 @@ The server needs these environment variables:
 - `NEXT_PUBLIC_DISQUS_SHORTNAME`: the Disqus shortname used for StoryBook and
   PhotoBook comments. Set it in `.env.local` for local development. Because it
   uses the `NEXT_PUBLIC_` prefix, provide it before building the app.
+- `NEXT_PUBLIC_SITE_URL`: the public site origin (for example
+  `https://heyzenex.pl`, no trailing slash) used for canonical URLs, Open Graph,
+  the sitemap and robots. Required at build time.
 
 For local development, fill in the blank values in the ignored `.env.local`
 template, then restart the Next.js server. Do not add real secrets to
@@ -64,6 +67,7 @@ cf set-env heyzenex CLOUDINARY_URL "cloudinary://<api-key>:<api-secret>@<cloud-n
 cf set-env heyzenex GITHUB_BRANCH main
 cf set-env heyzenex GITHUB_REPOSITORY zenhuzaini/react-projects
 cf set-env heyzenex NEXT_PUBLIC_DISQUS_SHORTNAME "<disqus-shortname>"
+cf set-env heyzenex NEXT_PUBLIC_SITE_URL "https://heyzenex.pl"
 cf restage heyzenex
 ```
 

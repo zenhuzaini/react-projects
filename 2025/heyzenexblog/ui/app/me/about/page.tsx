@@ -1,9 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import Paragraph from "@/components/layout/StoryBookBlockLayouts/2_BasicPharagraph/Paragraph";
+import { createBaseMetadata } from "@/lib/seo";
 
 const ABOUT_IMAGE =
 	"https://res.cloudinary.com/djufavji1/image/upload/v1762553883/IMG_0139_Original_bu30wv.jpg";
+
+const ABOUT_DESCRIPTION =
+	"About Zen Huzaini: a sky watcher, hiker and cyclist who shares photography, bikepacking and travel stories on Heyzenex.";
+
+export const metadata: Metadata = createBaseMetadata({
+	title: "About Zen Huzaini",
+	description: ABOUT_DESCRIPTION,
+	path: "/me/about",
+	keywords: ["about", "Zen Huzaini", "heyzenex", "hiking", "bikepacking"],
+	ogImage: { url: ABOUT_IMAGE, alt: "Portrait of Zen Huzaini" },
+});
 
 const interests = [
 	"Stargazing",
@@ -71,7 +84,7 @@ const page = () => {
 			<nav className="flex flex-wrap gap-3" aria-label="Explore the blog">
 				<Link
 					href="/storybook"
-					className="rounded-2xl bg-accentbackground px-5 py-2 text-accenttext transition-transform duration-300 hover:-translate-y-0.5">
+					className="rounded-2xl bg-primaryaccent px-5 py-2 text-accenttext transition-transform duration-300 hover:-translate-y-0.5">
 					Read my stories
 				</Link>
 				<Link

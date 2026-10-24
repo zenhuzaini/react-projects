@@ -1,9 +1,13 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+
 const nextConfig: NextConfig = {
 	// cacheComponents: true,
-	allowedDevOrigins: ["https://heyzenex.pl", "https://www.heyzenex.pl"],
+	allowedDevOrigins: siteUrl
+		? [siteUrl, siteUrl.replace("://", "://www.")]
+		: [],
 	images: {
 		remotePatterns: [
 			{

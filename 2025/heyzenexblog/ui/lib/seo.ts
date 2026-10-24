@@ -1,5 +1,6 @@
 // app/seo.ts
 import type { Metadata } from "next";
+import { SITE_URL } from "./site";
 
 type BaseMetaOptions = {
 	title?: string;
@@ -13,7 +14,6 @@ type BaseMetaOptions = {
 	robotsIndex?: boolean;
 };
 
-const SITE_URL = "https://heyzenex.pl"; // change to your real domain
 const DEFAULT_OG = "/zenog.png"; // put this in /app or /public
 const DEFAULT_LOCALE = "en_US";
 const SITE_NAME = "Heyzenex";
