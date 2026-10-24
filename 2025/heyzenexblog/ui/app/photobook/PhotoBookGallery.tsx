@@ -81,10 +81,10 @@ const PhotoBookGallery = ({ books }: { books: PhotoBookMeta[] }) => {
 	);
 
 	return (
-		<section className="flex flex-col gap-5 sm:gap-8">
+		<section className="flex flex-col gap-4 sm:gap-5">
 			<SectionTitle left="My" right="PHOTOBOOK" />
 
-			<div className="flex flex-col gap-3 border-y border-primarybrown/20 py-4 lg:flex-row lg:items-center lg:justify-between">
+			<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 				<Search
 					value={query}
 					onValueChange={(value) => {
