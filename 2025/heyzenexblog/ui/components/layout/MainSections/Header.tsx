@@ -270,10 +270,16 @@ const Header = () => {
 					<DropdownMenuContent className="w-9" align="start">
 						<DropdownMenuGroup>
 							<DropdownMenuItem>
-								<Link href="/playground/mystory">StoryBook</Link>
+								<Link href="/playground/mystory" className="text-primaryebony">
+									StoryBook
+								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<Link href="/playground/myphotobook">PhotoBook</Link>
+								<Link
+									href="/playground/myphotobook"
+									className="text-primaryebony">
+									PhotoBook
+								</Link>
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 					</DropdownMenuContent>
