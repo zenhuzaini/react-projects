@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Paragraph from "@/components/layout/StoryBookBlockLayouts/2_BasicPharagraph/Paragraph";
 import { createBaseMetadata } from "@/lib/seo";
+import { SOCIAL_LINKS } from "@/const/vars";
 
 const ABOUT_IMAGE =
 	"https://res.cloudinary.com/djufavji1/image/upload/v1762553883/IMG_0139_Original_bu30wv.jpg";
@@ -93,6 +94,25 @@ const page = () => {
 					Check my photos
 				</Link>
 			</nav>
+
+			<section className="flex flex-col gap-3">
+				<h2 className="text-xl font-semibold text-primaryText">
+					Find me online
+				</h2>
+				<ul className="flex flex-wrap gap-3">
+					{SOCIAL_LINKS.map(({ label, href }) => (
+						<li key={label}>
+							<a
+								href={href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-block rounded-2xl border border-primaryaccent px-5 py-2 text-primaryText transition-transform duration-300 hover:-translate-y-0.5">
+								{label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
 		</div>
 	);
 };
