@@ -147,8 +147,12 @@ const StoryBookGallery = ({ stories }: { stories: StoryBookMeta[] }) => {
 							},
 						}}>
 						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
-							{visibleStories.map((story) => (
-								<StoryBookCard key={story.slug} story={story} />
+							{visibleStories.map((story, index) => (
+								<StoryBookCard
+									key={story.slug}
+									story={story}
+									loading={"eager"}
+								/>
 							))}
 						</div>
 					</motion.div>

@@ -18,17 +18,18 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const PLAYGROUND_LINKS = [
+	{ href: "/playground/mystory", label: "StoryBook" },
+	{ href: "/playground/myphotobook", label: "PhotoBook" },
+	{ href: "/playground/settings", label: "Settings" },
+];
+
 const NAV_LINKS = [
 	{ href: "/", label: "Home" },
 	{ href: "/photobook", label: "PhotoBook" },
 	{ href: "/storybook", label: "StoryBook" },
 	{ href: "/me/about", label: "Me" },
-];
-
-const PLAYGROUND_LINKS = [
-	{ href: "/playground/mystory", label: "StoryBook" },
-	{ href: "/playground/myphotobook", label: "PhotoBook" },
-	{ href: "/playground/settings", label: "Settings" },
+	PLAYGROUND_LINKS[2], // Settings link
 ];
 
 const Header = () => {

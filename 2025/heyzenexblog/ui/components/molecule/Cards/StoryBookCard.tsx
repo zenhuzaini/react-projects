@@ -3,7 +3,13 @@ import { ImageWithSkeleton } from "@/components/molecule/ImageWithSkeleton";
 import { formatDate } from "@/lib/utils";
 import type { StoryBookMeta } from "@/types/data";
 
-const StoryBookCard = ({ story }: { story: StoryBookMeta }) => {
+const StoryBookCard = ({
+	story,
+	loading = "lazy",
+}: {
+	story: StoryBookMeta;
+	loading?: "eager" | "lazy";
+}) => {
 	const date = new Date(story.datePublished);
 	const formattedDate = Number.isNaN(date.getTime())
 		? "StoryBook"
@@ -23,6 +29,7 @@ const StoryBookCard = ({ story }: { story: StoryBookMeta }) => {
 				src={story.cover}
 				alt={story.title}
 				rounded="rounded-2xl"
+				loading={loading}
 				customClassName="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
 			/>
 			<div className="absolute inset-0 bg-linear-to-b from-primarymidnight/35 via-transparent to-primarymidnight/90" />

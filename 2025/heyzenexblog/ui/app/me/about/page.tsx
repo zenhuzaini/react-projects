@@ -91,7 +91,7 @@ const page = () => {
 				</Link>
 				<Link
 					href="/photobook"
-					className={`rounded-2xl border border-primaryyellow px-5 py-2 text-primaryText ${animationForLift}`}>
+					className={`rounded-2xl border border-primaryaccent px-5 py-2 text-primaryText ${animationForLift}`}>
 					Check my photos
 				</Link>
 			</nav>
